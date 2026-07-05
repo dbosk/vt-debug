@@ -1,0 +1,159 @@
+\mode*
+\section{Debugging as self-directed learning}
+\label{debugging-as-learning}
+
+In this section we develop the theoretical argument: that debugging is
+learning, that the debugger must generate the patterns of variation for
+themselves, and that this ability is the same as the one exercised in the deep
+approach to learning.
+
+\subsection{A bug is an unknown}
+
+A bug, from the programmer's point of view, is a discrepancy: the program
+behaves in one way, the programmer expects another.
+In variation-theoretic terms, the programmer has not discerned some critical
+aspect of the program (or of the language, or of the environment)---if she
+had, there would be no surprise.
+Fixing the bug requires discerning exactly that aspect.
+Debugging is thus learning: the object of learning is the not-yet-discerned
+critical aspect, and the debugging session is over precisely when it has been
+discerned.
+
+\begin{frame}<presentation>
+  \begin{idea}
+    \begin{itemize}
+      \item A bug is an unknown that we need to discover.
+      \item The bug marks a critical aspect the programmer hasn't discerned.
+      \item Debugging \(=\) learning that critical aspect.
+    \end{itemize}
+  \end{idea}
+\end{frame}
+
+But there is a crucial difference from the classroom: when debugging, there is
+no teacher who has already identified the critical aspect and prepared a
+pattern of variation for it.
+The debugger must open up the dimensions of variation themselves.
+
+\subsection{Learning without a teacher: discovery}
+
+\Textcite[Ch.~5]{NCOL} accounts for exactly this situation---learning where
+nobody yet knows the answer---in his discussion of scientific discovery.
+Science is collective learning, and the great discoveries can be described as
+opening up new dimensions of variation.
+
+\mode<presentation>{%
+\begin{frame}
+  \begin{example}<+>[Copernicus and science, {\cite[pp.~155--156]{NCOL}}]
+    \begin{itemize}
+      \item Science: collective learning.
+      \item Copernicus' contribution was not the heliocentric view, it was
+        \emph{centricity}.
+      \item He opened the dimension of centricity, where heliocentric is a
+        feature different from geocentric.
+      \item But that allowed us to consider centricity of many other systems.
+    \end{itemize}
+  \end{example}
+
+  \begin{example}<+>[Darwin and evolution, {\cite[pp.~157--160]{NCOL}}]
+    \begin{itemize}
+      \item Darwin also opened a dimension: species adapt, not replaced.
+      \item Reproduced by Wallace doing the same thing independently.
+    \end{itemize}
+  \end{example}
+\end{frame}%
+}
+
+Copernicus' contribution, in this account, was not the heliocentric view
+itself but the dimension of \emph{centricity}: once that dimension is opened,
+heliocentric and geocentric become two features that can vary, and the
+centricity of other systems can be considered \autocite[pp.~155--156]{NCOL}.
+Darwin similarly opened the dimension along which species adapt rather than
+being replaced \autocite[pp.~157--160]{NCOL}.
+The researcher is a learner who must introduce the variation themselves---and the scientific method, with its controlled experiments varying one thing
+at a time, is a systematic way of doing precisely that.
+We will see in \cref{debugging} that the generalisation pattern in particular
+coincides with the scientific method, and that debugging follows the same
+logic: the debugger runs experiments on the program, varying one aspect at a
+time, until the critical aspect reveals itself.
+
+\subsection{Learning without a teacher: the deep approach}
+
+The second account of teacher-less learning in \citetitle{NCOL} is the deep
+approach to learning (\cref{approaches}).
+\Citeauthor{NCOL} argues that what distinguishes the deep approach is that the
+learner attends to the object of learning---the meaning---and thereby
+introduces the appropriate patterns of variation for themselves:
+\textcquote[p.~145]{NCOL}{the learner has to create the necessary patterns of
+variation and invariance. This is the deep approach to learning in terms of
+the theory of variation}.
+The claim rests on a series of studies that \citeauthor{NCOL} reviews
+\autocite[pp.~142--151]{NCOL}: medical students in a problem-based programme
+took the initiative to seek variation
+themselves~\autocites{Silen2000}{FyreniusWirellSilen2007}; Chinese university
+students' accounts of how they study exhibit the generalisation and contrast
+patterns almost verbatim~\autocite{MartonWenWong2005}, while the students
+exhibiting a surface approach instead \enquote{read it over and over again}---repetition without variation; and repeated readings of a difficult text
+did not improve understanding unless the reader varied the focus and
+perspective adopted~\autocite{MartonWenestam1988}.
+% XXX The studies are cited here as reviewed in NCOL; read the originals
+% before attributing anything to them directly.
+
+Support for the idea that the ability to generate patterns of variation can be
+acquired---and keeps working after instruction ends---comes from what
+Marton calls generative learning, an observation due to
+\textcite{HolmqvistGustavssonWernberg2007} across several learning studies.
+As \citeauthor{NCOL} reports, \textcquote[pp.~227--228]{NCOL}{[t]he outcomes
+of learning turned out to be better some time after the learning occasion than
+immediately after it in certain classes}---those taught with patterns of
+variation---with no such effect where patterns were not used
+\autocite[pp.~227--228]{NCOL}; further demonstrations of the effect, across
+several school subjects, are reviewed there as well
+\autocite[p.~228]{NCOL}.
+The students taught with patterns of variation apparently continued to
+generate variation for themselves after the teaching ended.
+
+\mode<presentation>{%
+\begin{frame}
+  \begin{block}{Generative learning~\autocite[pp.~227--228]{NCOL}}
+    \begin{itemize}
+      \item Some studies observed delayed learning effects.
+      \item Outcomes better some time after instruction with patterns.
+      \item No such effect for those instructed without patterns.
+    \end{itemize}
+  \end{block}
+\end{frame}%
+}
+
+\subsection{Hypotheses}
+\label{hypotheses}
+
+Putting the pieces together: debugging is learning without a teacher; learning
+requires patterns of variation; without a teacher the learner must generate
+them; and the deep approach is exactly the disposition to generate them.
+This yields our overarching hypothesis---that debugging skill and the deep
+approach to learning are expressions of the same underlying ability---which
+we operationalise as follows.
+
+\begin{frame}
+  \begin{hypothesis}\label{h:patterns}
+    \hpatterns
+  \end{hypothesis}
+  \begin{hypothesis}\label{h:deep}
+    \hdeep
+  \end{hypothesis}
+  \begin{hypothesis}\label{h:success}
+    \hsuccess
+  \end{hypothesis}
+\end{frame}
+
+A corollary, which follows from generative learning, is that teaching
+programming with patterns of variation should over time also improve the
+students' debugging---since debugging draws on the same ability to vary one
+aspect while holding the others invariant.
+We can probe this corollary within the course cohort: not all students use
+the course material---some study on their own---so we can compare the
+patterns generated by those who have experienced the material's patterns of
+variation with those who have not (\cref{method}).
+Thanks to generative learning, the former should generate more, and more
+complete, patterns of variation of their own.
+We return to this in \cref{discussion}.

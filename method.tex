@@ -1,0 +1,244 @@
+\mode*
+\section{Method}
+\label{method}
+
+% TODO Anonymise the course (and institution) before submission; keep the
+% concrete details for now.
+We will study the students of prgi26, the autumn 2026 instance of the
+introductory programming course DD1317 at KTH Royal Institute of Technology.
+The course teaches Python to first-year students and is organised around a
+series of laboratory assignments---from a first \enquote{Hello World} lab,
+through functions and variables, input and error handling, repetitions and
+lists, classes and objects, containers, and file handling---followed by an
+individual project.
+The course design of prgi26 will be based on the findings of the companion
+paper \autocite{VTProgMisconceptions}: the teaching material is structured
+around the patterns of variation derived there.
+% XXX Update this paragraph when prgi26 is finalised in Canvas; the design is
+% based on prgi25 with the variation-theory patterns from the companion paper.
+This matters for the present study in two ways: the students will have
+\emph{experienced} the patterns of variation as learners, and by the
+generative-learning effect (\cref{debugging-as-learning}) we expect some of
+them to start generating such patterns for themselves.
+
+Not all students use the course material, however: some study on their own,
+from other sources.
+These students form a natural comparison group \emph{within} the cohort: they
+do the same labs, but without experiencing the material's patterns of
+variation.
+We therefore also record which students use the course material, through the
+learning platform's activity data complemented by self-report in the
+questionnaire (\cref{material-use}).
+
+\mode<presentation>{%
+\begin{frame}
+  \begin{block}{Setting}
+    \begin{itemize}
+      \item prgi26: introductory Python programming (DD1317, KTH), autumn
+        2026.
+      \item Labs 0--6 plus an individual project.
+      \item Course design based on the companion paper's patterns of
+        variation.
+      \item Some students study on their own instead \(\to\) within-cohort
+        comparison group.
+    \end{itemize}
+  \end{block}
+\end{frame}%
+}
+
+\subsection{Data collection}
+
+\subsubsection{Recording the students' programming: learnlog}
+
+We record the students' programming with the \texttt{learnlog} tool
+\autocite{learnlog}.
+The students run \texttt{learnlog init} once in their project directory; the
+tool then installs itself into the project's virtual environment and
+activates on every Python run, so that every program run is recorded
+transparently---even runs that fail before the program starts, such as
+syntax errors: source code changes, command-line arguments, standard
+input/output/error, and unhandled exceptions.
+The data is stored in a hidden local Git repository, which gives a complete
+timeline of the students' edit--run cycles.
+The students push their logs to per-student Git repositories (or export them
+as bundle files and submit them through the course platform), and tag the
+events per lab so that episodes can be attributed to assignments.
+
+\begin{frame}<presentation>[fragile]
+  \begin{block}{learnlog\only<presentation>{~\autocite{learnlog}}}
+    \begin{itemize}
+      \item \texttt{learnlog init} once per project.
+      \item Records every run: source diff, arguments, I/O, exceptions.
+      \item Hidden local Git repo \(\to\) complete edit--run timeline.
+      \item Students push logs or submit bundles; events tagged per lab.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+For the debugger, an edit--run cycle is exactly one experiment: a variation of
+the program followed by an observation of its behaviour.
+The sequence of edit--run cycles is therefore precisely the data in which
+patterns of variation---what was varied, what was kept invariant, and in
+what order---should be visible, if our hypotheses hold.
+Recall the phenomenographic stance
+(\cref{background}): acts express understanding, so the recorded acts are the
+appropriate data for a second-order analysis.
+
+\subsubsection{Measuring the approach to learning: R-SPQ-2F}
+\label{approach-measure}
+
+We measure the students' approaches to learning with the revised two-factor
+Study Process Questionnaire (R-SPQ-2F), which yields a deep-approach and a
+surface-approach score from ten items each \autocite{RSPQ2F}.
+Since the approach is not a fixed trait---students adapt it to their
+conception of the task \autocite{MartonSaljo1976II}---we administer the
+questionnaire twice, at the start and at the end of the course, and treat the
+scores as measurements of the approach in the context of this course rather
+than as a stable property of the student.
+
+\paragraph{Classifying the students compatibly with the original studies}
+
+Some care is needed for our classification of students to be compatible with
+the studies our theory rests on.
+In the original studies the approaches were identified phenomenographically
+and per task:
+\textcquote[p.~142]{NCOL}{\textins{t}he distinction was based on the
+learners' own accounts of how they went about learning (i.e., how they
+experienced their own attempts to learn)}---the students were interviewed
+about how they set about reading a particular text
+\autocite{MartonSaljo1976I}.
+The R-SPQ-2F is instead a self-report questionnaire; it does not classify an
+actual learning episode but the student's reported way of studying.
+We bridge this gap in three ways.
+\begin{enumerate}
+  \item We administer the R-SPQ-2F with instructions to answer with respect
+    to \emph{this course}, in line with the instrument's intended use by
+    teachers evaluating the approaches of their own students
+    \autocite{RSPQ2F} and with the task-dependence of the approach
+    \autocite{MartonSaljo1976II}.
+    The resulting scores are comparable with the questionnaire-based
+    literature.
+  \item In the think-aloud subsample we additionally classify the students
+    the way \textcite{MartonSaljo1976I} did: we ask them to recount how they
+    went about the lab and the debugging, and classify the accounts as deep
+    or surface.
+    This classification is the one compatible with \citeauthor{NCOL}'s
+    variation-theoretic reinterpretation, and we report the agreement between
+    it and the questionnaire classification.
+  \item We guard against circularity.
+    \Citeauthor{NCOL}'s reinterpretation \emph{defines} the deep approach as
+    creating the necessary patterns of variation
+    \autocite[p.~145]{NCOL}; if we were to classify the students' approaches
+    from the same edit--run logs that we code for patterns of variation,
+    \cref{h:deep} would hold by construction.
+    The approach classification therefore uses only the questionnaire and the
+    interview accounts, never the logs.
+\end{enumerate}
+
+\subsubsection{Course material use}
+\label{material-use}
+
+To identify the within-cohort comparison group we measure each student's use
+of the course material: the learning platform (Canvas) records which pages,
+modules and embedded activities each student has worked through, and we
+complement this with a self-report item alongside the R-SPQ-2F asking how the
+student mainly studies (from the course material, from other sources, or a
+mix).
+% XXX Decide the exact operationalisation (threshold on activity data vs
+% self-report) once the prgi26 Canvas course is finalised.
+
+\subsubsection{Debugging outcomes}
+
+For each debugging episode we record whether the bug was fixed, the number of
+edit--run cycles, and the wall-clock time from the first failing run to the
+first passing run.
+These constitute our measures of debugging success for \cref{h:success}.
+
+\subsubsection{The teachers' debugging: an expert baseline}
+\label{teacher-baseline}
+
+\Cref{rq:experts} asks about expert debuggers.
+We cannot sample expert debuggers in general, so we use the course's teachers
+and teaching assistants as our approximation of experts, and collect the same
+kind of data from them as from the students.
+They run learnlog while preparing course material and during live-coding
+sessions (learnlog is designed for recording and replaying such sessions
+\autocite{learnlog}), and we complement this with think-aloud debugging
+sessions of the kind piloted in \cref{pilot}.
+The approximation is imperfect---the teaching assistants in particular vary
+in experience---so we record their programming experience alongside, which
+also lets us relate pattern completeness to expertise within the group.
+Their episodes are coded identically to the students'
+(\cref{episode-coding}), giving an expert baseline: which patterns experts
+generate, in what order, and how complete their episodes are.
+
+\subsection{Analysis}
+
+We define a \emph{debugging episode} as the sequence of edit--run cycles from
+a run that surprises the student (typically a failing run, an unhandled
+exception, or wrong output) to the run where the behaviour is understood and
+fixed.
+The \texttt{learnlog analyse} command generates reports of the edit--run
+cycles \autocite{learnlog}; on these we perform a qualitative,
+variation-theoretic coding:\label{episode-coding}
+
+\begin{frame}
+\begin{enumerate}
+  \item For each consecutive pair of runs in an episode: what did the student
+    vary, and what did they keep invariant?
+  \item Classify the steps into the patterns: \emph{contrast} (varying the
+    suspected critical aspect against the surprising behaviour),
+    \emph{generalisation} (varying non-critical aspects, keeping the suspected
+    aspect invariant---the experiments), and \emph{fusion} (varying the
+    aspects together, reconciling the new understanding with the old).
+  \item Rate the episode's pattern completeness: which of the patterns are
+    present, and whether the episode ends in a fix.
+\end{enumerate}
+\end{frame}
+
+This coding answers \cref{rq:patterns} (which patterns appear).
+For \cref{rq:deep,rq:success} we relate the coded episodes to the R-SPQ-2F
+scores and the debugging outcomes: correlating deep-approach scores with
+pattern counts and completeness (\cref{h:deep}), and both with debugging
+success (\cref{h:success}).
+
+The within-cohort comparison group (\cref{material-use}) additionally lets us
+probe the generative-learning corollary of \cref{hypotheses} already in this
+study: if experiencing patterns of variation breeds generating them, then the
+students who use the course material should generate more, and more complete,
+patterns in their debugging than the students who study on their own---controlling for approach (R-SPQ-2F) and prior programming experience.
+The groups are self-selected, not randomised, so this comparison is
+correlational; we discuss the resulting confounds in \cref{discussion}.
+
+For \cref{rq:experts} we compare the students' coded episodes with the
+teachers' expert baseline (\cref{teacher-baseline}): which patterns each group generates, in
+what order, and with what completeness.
+If the overarching hypothesis is right, the experts' episodes should look
+like the deep-approach students' episodes, only more so---and the
+differences between the two should point out precisely what debugging
+instruction needs to provide.
+
+\subsection{Pilot}
+
+As reported in \cref{pilot}, we have piloted the variation-theoretic coding on
+think-aloud recordings of experienced programmers debugging the
+default-argument phenomenon of \cref{debugging}.
+The patterns were identifiable in the recordings, and the successful episodes
+contained all of them.
+The pilot used screen and voice recordings; the main study instead uses
+learnlog's edit--run data, which scales to a full course but does not capture
+the students' reasoning between runs.
+We therefore complement the logs with think-aloud sessions with a smaller
+sample of student volunteers, to validate that the patterns coded from the
+logs correspond to the patterns in the students' reasoning.
+
+\subsection{Ethics}
+
+Participation in the study is opt-in and requires informed consent; the
+students' grades are unaffected by participation, and the logs are collected
+and analysed pseudonymously.
+The learnlog data contains the students' source code and program
+interactions, but no more than what the students already submit with their
+lab solutions.
+% XXX Ethical review application for prgi26 data collection: reference number
+% and details to be added.

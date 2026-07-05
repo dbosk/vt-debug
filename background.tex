@@ -1,0 +1,261 @@
+\mode*
+\section{Theoretical background}
+\label{background}
+
+The background necessary to understand the rest of this paper is
+phenomenography, variation theory, and the approaches to learning.
+We briefly recap these concepts; for a fuller treatment in the context of
+introductory programming, see the companion paper
+\autocite{VTProgMisconceptions}.
+
+\subsection{Phenomenography}
+
+\begin{frame}
+  \textcquote[pp.~112--113]{NCOL}{%
+    \textins{U}nderstanding does not cause acts; instead, acts express
+    understanding%
+  }.
+\end{frame}
+This quote captures the core of phenomenography and the essence of the type of
+data we need: we cannot observe understanding directly, but we can observe
+acts---and debugging is very much a sequence of acts.
+
+Phenomenography rests on two premises: that reality is always experienced
+rather than apprehended directly, and that people interpret the significant
+aspects of that reality in different ways. From this follows a distinction
+between two perspectives. A \emph{first-order} perspective describes various
+aspects of the world as they are taken to be; a \emph{second-order} perspective
+instead describes how people \emph{experience} those aspects. Phenomenography
+adopts the second-order perspective: its object of study is not the world itself
+but the qualitatively different ways in which people experience it
+\autocite{Phenomenography}.
+
+\mode<presentation>{%
+\begin{frame}
+  \begin{block}<1-2>{Phenomenography~\autocite{Phenomenography}}
+    \begin{itemize}
+      \item Reality is experienced.
+      \item People interpret significant aspects of reality.
+    \end{itemize}
+    \pause
+    \begin{description}
+      \item[First-order perspective] describes various aspects of the world.
+      \item[Second-order perspective] describes people's experiences of various
+        aspects of the world---phenomenography.
+    \end{description}
+  \end{block}
+
+  \pause
+
+  \begin{remark}
+    \textcquote[pp.~112--113]{NCOL}{%
+      \textins{U}nderstanding does not cause acts; instead, acts express
+      understanding%
+    }.
+  \end{remark}
+\end{frame}%
+}
+
+For debugging, the second-order perspective is what matters: the bug exists
+precisely in the gap between the program as it is (first order) and the
+program as the programmer experiences it (second order).
+
+\subsection{Variation theory}
+
+\begin{frame}
+  \blockcquote[p.~44]{NCOL}{%
+    Imagine that you live in an entirely green world!
+    Everything is equally green and is always green.
+    Exactly the same nuance, no difference at all.
+    Do you think that you would notice the greenness of the grass in that
+    world, and would you know what \enquote{green} is at all?
+    \textelp{}
+    Would it be possible for you to learn to see greenness if a teacher coming
+    from another world tried to help you by pointing to all kind of green
+    things \textelp{} saying \enquote{green} each time?%
+  }
+\end{frame}
+
+These ideas form a chain: there is no learning without discernment, and no
+discernment without variation. Learning therefore depends on discernment, which
+in turn depends on the learner experiencing a pattern of variation
+\autocites[Ch.~3]{NCOL}{VariationTheory}.
+
+\mode<presentation>{%
+\begin{frame}
+  \begin{block}{Variation theory~\autocite{VariationTheory}}
+    \vspace{-0.5em}
+    \[
+      \text{learning}
+      \quad\leftarrow\quad
+      \text{discernment}
+      \quad\leftarrow\quad
+      \text{variation}
+    \]
+  \end{block}
+
+  \pause
+
+  \begin{remark}
+    \begin{itemize}
+      \item There must be a pattern of variation to experience.
+      \item \emph{This pattern must be experienced} for learning to happen.
+    \end{itemize}
+  \end{remark}
+\end{frame}%
+}
+
+Each educational objective can be divided into \emph{aspects}
+\autocite[Ch.~2]{NCOL}.
+Aspects that the learner has not yet discerned are the \emph{critical}
+aspects.
+To discern a critical aspect the learner must experience variation in the
+dimension of that aspect.
+The patterns of variation are (with the example of learning what the colour
+green is):
+
+\begin{description}
+  \item[Contrast] Vary the critical aspect, keep the rest invariant: show a
+    green circle next to a blue circle.
+    This opens up the dimension of variation (colour) and separates the
+    critical feature (green) from other features.
+  \item[Generalisation] Vary the non-critical aspects, keep the critical
+    aspect invariant: show several green figures of different shapes.
+    This separates the critical aspect from the incidental ones.
+    (Called induction if it comes before contrast.)
+  \item[Fusion] Vary the aspects in focus together: show figures varying in
+    both colour and shape at once, bringing together what contrast and
+    generalisation separated.
+\end{description}
+
+\begin{frame}\label<1>{vtsummary}
+  \begin{figure}
+    \begin{subfigure}{0.3\columnwidth}
+      \centering
+      \includegraphics{figs/contrast-color.tikz}
+      \caption{Contrast}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3\columnwidth}
+      \centering
+      \includegraphics{figs/generalization-color.tikz}
+      \caption{Generalization}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3\columnwidth}
+      \centering
+      \includegraphics{figs/fusion-color.tikz}
+      \caption{Fusion}
+    \end{subfigure}
+    \caption{%
+      Illustrating the patterns of variation for aspects color and shape.
+    }\label{fig:vt-patterns}
+  \end{figure}
+
+  \begin{onlyenv}<1>
+    \mode<presentation>{%
+      \begin{example}
+        \begin{itemize}
+          \item Critical aspect: colour.
+          \item Critical feature: green; contrasted against blue.
+          \item Non-critical aspects: shape, order.
+          \item Non-critical features: circle, square; order of pairs.
+        \end{itemize}
+      \end{example}%
+    }
+  \end{onlyenv}
+\end{frame}
+
+In terms of \cref{fig:vt-patterns}: the critical aspect is colour, and the critical
+feature---the value the learner is to discern---is green, which the
+contrast sets against blue.
+Shape and the order of the pairs are non-critical aspects, whose features
+(circle and square, and the order in which the pairs appear) may vary freely.
+The generalisation pattern exploits exactly this freedom: the shape varies
+while green is kept invariant.
+In the fusion pattern, finally, colour and shape vary together---a green
+square against a yellow circle---so the learner meets the critical feature
+amid simultaneous variation in both dimensions.
+
+One can vary the order of these steps, but the contrast should come first,
+and \citeauthor{NCOL} motivates why \autocite[pp.~45--47]{NCOL}.
+Generalisation before contrast---induction---asks the learner to notice
+what several green things have in common; but that cannot open a dimension
+the learner has never discerned:
+\textcquote[p.~46]{NCOL}{if you cannot see the greenness of any of three
+green, though otherwise different, things, you cannot see what they have in
+common, either}.
+Of two teachers who juxtapose sets of objects to make greenness discernible,
+\textcquote[p.~47]{NCOL}{\textins{o}ne is betting on induction, the other on
+contrast. The latter wins}.
+There is also a cognitive-load motivation hiding in the same passage:
+discernment comes from
+\textcquote[p.~46]{NCOL}{the simultaneous experience of things that differ in
+color but are the same otherwise}---and instances that are not juxtaposed
+side by side must be juxtaposed in the learner's mind.
+Starting with the contrast puts the differing values next to each other;
+any other order makes the learner carry the earlier instances in memory
+until the difference can be experienced.
+
+\subsection{Approaches to learning}
+\label{approaches}
+
+The distinction between \emph{deep} and \emph{surface} approaches to learning
+originates with \textcite{MartonSaljo1976I}, who studied university students
+reading prose texts.
+Students who engaged in what was termed deep-level processing directed their
+attention towards what the text was \emph{about}---its meaning---whereas
+students engaging in surface-level processing directed their attention towards
+the text itself, towards being able to reproduce it.
+The two groups reached qualitatively different learning outcomes: the study
+describes differences in \emph{what} is learned, rather than in how much.
+The approach is not a fixed trait of the student:
+\textcite{MartonSaljo1976II} showed that students adapt their way of learning
+to their conception of what the task requires of them.
+
+\mode<presentation>{%
+\begin{frame}
+  \begin{description}
+    \item[Deep approach] attention on the \emph{meaning}---what the text is
+      about.
+    \item[Surface approach] attention on the \emph{sign}---the text itself,
+      reproducing it.
+  \end{description}
+
+  \pause
+
+  \begin{remark}
+    \begin{itemize}
+      \item Qualitatively different outcomes: \emph{what} is learned, not how
+        much.
+      \item Not a fixed trait: students adapt the approach to the perceived
+        task.
+    \end{itemize}
+  \end{remark}
+\end{frame}%
+}
+
+The approaches can be measured: the revised two-factor Study Process
+Questionnaire (R-SPQ-2F) assesses deep and surface approaches with ten items
+per approach and is designed to be usable by teachers with their own students
+\autocite{RSPQ2F}.
+We return to this instrument in \cref{method}.
+
+In \citetitle{NCOL}, \citeauthor{NCOL} reinterprets the approaches to learning
+in terms of variation theory \autocite[pp.~142--146]{NCOL}.
+Already in the original studies the two approaches differed in terms of
+variation and invariance: those adopting a deep approach
+\textcquote[p.~142]{NCOL}{tried to find the main point in the text, and the
+words for capturing it, by trying alternatives}, whereas those adopting a
+surface approach tried to make sure that they would remember what they had
+read.
+Marton concludes that to develop a powerful way of seeing something, the
+learner must decompose the object of learning and bring it together again,
+and towards that end
+\textcquote[p.~145]{NCOL}{the learner has to create the necessary patterns of
+variation and invariance. This is the deep approach to learning in terms of
+the theory of variation}.
+He summarises: \textcquote[p.~151]{NCOL}{the more powerful, deep approach to
+learning is more varied}, and the surface approach less varied.
+This reinterpretation is the pivot of our argument in
+\cref{debugging-as-learning}.

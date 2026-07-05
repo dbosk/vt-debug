@@ -1,0 +1,108 @@
+\mode*
+\section{Discussion}
+\label{discussion}
+
+\subsection{Implications}
+
+If the hypotheses hold, then debugging skill is not a bag of tricks but a
+particular case of a general learning ability: introducing the appropriate
+patterns of variation for oneself.
+Two consequences follow for teaching.
+
+First, debugging can be taught \emph{as} the patterns of variation: instead of
+teaching tools (debuggers, print statements) as such, we teach the students to
+ask what to vary and what to hold invariant---contrast to open the dimension
+where the bug lives, generalisation to isolate the critical aspect, fusion to
+reconcile the new understanding with the old.
+The worked example in \cref{debugging} is a template for such teaching.
+
+Second, by the generative-learning effect
+\autocites[pp.~227--228]{NCOL}{HolmqvistGustavssonWernberg2007}, teaching the
+course content with
+patterns of variation should over time improve the students' debugging even
+without explicit debugging instruction---since debugging draws on the same
+ability.
+Since prgi26 is itself designed around the patterns of variation from the
+companion paper \autocite{VTProgMisconceptions}, a first version of this
+comparison is available already within the cohort: the students who study on
+their own rather than from the course material (\cref{method}) do the same
+labs without experiencing the material's patterns of variation.
+A between-cohort comparison, against an instance taught without such
+patterns, remains as a follow-up study.
+
+\mode<presentation>{%
+\begin{frame}
+  \begin{block}{If the hypotheses hold}
+    \begin{itemize}
+      \item Debugging skill is a general learning ability, not a bag of
+        tricks.
+      \item Teach debugging as: what to vary, what to hold invariant.
+      \item Teaching \emph{content} with patterns should improve debugging
+        too (generative learning).
+    \end{itemize}
+  \end{block}
+\end{frame}%
+}
+
+\subsection{Threats to validity}
+
+The R-SPQ-2F is a self-report instrument; the deep-approach score measures
+the student's reported approach to studying, not directly their behaviour in
+programming.
+This is partly by design---\cref{h:deep} is exactly the claim that the two
+are connected---but a null result could mean either that the hypothesis is
+wrong or that the instrument does not transfer to the programming context.
+The original studies classified the approaches phenomenographically, from
+task-specific accounts, and the questionnaire classification need not
+coincide with that one; the agreement check against the interview-based
+classification in the think-aloud subsample (\cref{approach-measure}) is
+meant to catch this.
+
+The learnlog data records the students' \emph{acts}---edits and runs---but
+not the reasoning between them.
+A student may generate a contrast mentally, without ever running it.
+The think-aloud validation sessions (\cref{method}) are meant to bound this
+gap, and the phenomenographic stance---acts express understanding---is
+our theoretical justification for coding from acts, but the gap remains.
+
+Confounds for \cref{h:success} include prior programming experience:
+experienced students
+will debug faster regardless of approach.
+We will collect self-reported prior experience and control for it.
+The within-cohort comparison between material users and self-studiers is
+self-selected, not randomised: the students who skip the course material may
+do so precisely because they are experienced, or because they already
+generate their own variation---deep-approach students may be
+over-represented among the self-studiers.
+The R-SPQ-2F scores and the prior-experience measure let us control for this
+statistically, but the comparison remains correlational.
+Finally, the patterns of variation are our own analytic lens; the coding must
+be validated with multiple independent coders and inter-rater reliability
+reported.
+
+\subsection{Conclusion}
+
+We have argued, from variation theory, that debugging is self-directed
+learning: a bug marks a critical aspect the programmer has not yet discerned,
+and fixing it requires generating the patterns of variation---contrast,
+generalisation, fusion---for oneself.
+Since Marton connects the deep approach to learning to exactly this
+self-generated variation, we hypothesise that debugging skill and the deep
+approach are the same underlying ability.
+A pilot with experienced programmers supports the first part: they could not
+explain an unfamiliar phenomenon until they had generated all the patterns.
+The planned study in prgi26---recording every edit--run cycle with learnlog,
+measuring the approaches with R-SPQ-2F, and coding the episodes for patterns
+of variation---will tell us whether the same holds for students, and whether
+the deep approach predicts it.
+
+\begin{frame}<presentation>
+  \begin{idea}
+    \begin{itemize}
+      \item Debugging \(=\) learning without a teacher.
+      \item Deep approach \(=\) generating one's own patterns of variation.
+      \item Hypothesis: they are the same skill.
+      \item prgi26 + learnlog + R-SPQ-2F will tell.
+    \end{itemize}
+  \end{idea}
+\end{frame}

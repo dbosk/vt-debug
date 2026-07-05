@@ -1,0 +1,124 @@
+\mode*
+\section{Introduction}
+
+Debugging is a substantial part of programming: things rarely work on the
+first attempt, and the programmer must find out why.
+Yet debugging is seldom taught explicitly in introductory programming courses;
+students are largely left to pick it up on their own
+\autocite[For a review of debugging in computing education, see][]{DebuggingReview}.
+If we want to teach debugging, we first need a theory of what debugging
+\emph{is}---what the skilled debugger does that the novice does not.
+
+\mode<presentation>{%
+\begin{frame}
+  \begin{block}{Debugging}
+    \begin{itemize}
+      \item A substantial part of programming.
+      \item Seldom taught explicitly.
+      \item What \emph{is} the skill of debugging?
+    \end{itemize}
+  \end{block}
+\end{frame}%
+}
+
+In this paper we propose such a theory, grounded in variation theory
+\autocite{NCOL}.
+The argument runs as follows.
+A bug means that the program behaves differently from what the programmer
+expects: the programmer has not yet discerned some critical aspect of the
+program.
+Debugging is therefore an act of \emph{learning}.
+According to variation theory there is no learning without discernment, and no
+discernment without variation; but during debugging there is no teacher to
+provide that variation---the debugger must introduce it themselves.
+\Textcite[Ch.~5]{NCOL} accounts for exactly this kind of teacher-less learning
+in two places: in scientific discovery, where the researcher opens up new dimensions
+of variation, and in the deep approach to learning
+\autocite{MartonSaljo1976I}, where
+\textcquote[p.~145]{NCOL}{the learner has to create the necessary patterns of
+variation and invariance}.
+This suggests a hypothesis: \emph{debugging skill and the deep approach to
+learning are the same underlying ability}---the ability to generate the
+appropriate patterns of variation for oneself.
+
+\mode<presentation>{%
+\begin{frame}
+  \begin{block}{The argument}
+    \begin{itemize}
+      \item A bug: the program behaves differently than the programmer
+        expects.
+      \item The programmer hasn't discerned some critical aspect.
+      \item Debugging is learning---without a teacher.
+      \item The debugger must generate the variation themselves.
+    \end{itemize}
+  \end{block}
+
+  \pause
+
+  \begin{idea}
+    \begin{itemize}
+      \item Hypothesis: debugging skill \(=\) deep approach to learning
+        \(=\) generating the right patterns of variation for oneself.
+    \end{itemize}
+  \end{idea}
+\end{frame}%
+}
+
+This paper is the full version of the debugging chapter in our companion paper
+on misconceptions in introductory programming
+\autocite{VTProgMisconceptions}.
+We have observed, informally, that experienced programmers who debug an
+unfamiliar phenomenon generate exactly the patterns of variation that
+variation theory prescribes for teaching it; the companion paper only
+sketches this observation, here we report it in detail (\cref{pilot}).
+We develop the observation into a testable hypothesis and outline a
+study to test it: in the 2026 instance of an introductory programming course
+(prgi26), we record the students' every edit--run cycle with the
+\texttt{learnlog} tool \autocite{learnlog}, measure their approaches to
+learning with the R-SPQ-2F questionnaire \autocite{RSPQ2F}, and analyse the
+recorded debugging episodes for patterns of variation.
+We also want an expert baseline to compare the students' patterns against;
+as an approximation of expert debuggers, we record and analyse the debugging
+of the course's teachers and teaching assistants in the same way.
+
+\subsection{Research questions}
+
+The purpose of this study is to answer the following questions:
+\begin{frame}
+\begin{question}\label{rq:patterns}
+  \rqpatterns
+\end{question}
+\begin{question}\label{rq:deep}
+  \rqdeep
+\end{question}
+\begin{question}\label{rq:success}
+  \rqsuccess
+\end{question}
+\begin{question}\label{rq:experts}
+  \rqexperts
+\end{question}
+\end{frame}
+
+These questions call for different types of methods.
+\Cref{rq:patterns,rq:experts} are qualitative: they require recording actual
+debugging episodes---of students and of expert debuggers, the latter
+approximated by the course's teachers---and coding the recorded acts, what
+was varied and what was kept invariant, in variation-theoretic terms.
+In phenomenographic terms, we study the acts in which the debugger's
+understanding is expressed.
+\Cref{rq:deep,rq:success} are correlational: they require independent,
+quantitative measures---of the approach to learning (the questionnaire), of
+the generated patterns (the coded episodes) and of debugging success (the
+outcome measures)---collected from the same students.
+Together this makes for a mixed-methods design, which we detail in
+\cref{method}.
+
+The rest of the paper is structured as follows.
+In \cref{background} we recap phenomenography, variation theory and the
+approaches to learning.
+In \cref{debugging-as-learning} we develop the theoretical argument that
+debugging is self-directed learning and state our hypotheses.
+In \cref{debugging} we give a worked example of the patterns of variation in
+an actual debugging episode.
+In \cref{method} we describe the planned study, in \cref{results} the expected
+results, and in \cref{discussion} we conclude.

@@ -1,0 +1,455 @@
+\mode*
+\only<presentation>{\setminted{autogobble,linenos,fontsize=\scriptsize}}
+
+\section{A worked example: the patterns of variation in debugging}
+\label{debugging}
+
+Let us illustrate the argument of \cref{debugging-as-learning} with a worked
+example: a debugging episode in which the patterns of variation appear one by
+one.
+We will use a particular feature related to default arguments in Python that
+few expect, hence most readers will hopefully not know about this and get the
+intended experience.
+(Anyone who wants to learn about this aspect must go through a variant of
+these patterns of variation, regardless of level; the phenomenon is simply
+too advanced a topic for introductory programming, which is why we aim the
+example at the instructors and researchers for whom this paper is intended.)
+
+Here is the problem.
+We assume familiarity with default values for arguments in Python.
+The function \mintinline{python}{expand} below takes a list and appends an
+element \mintinline{python}{1} to it; we call it a few times.
+
+\begin{frame}[fragile]
+  \begin{pyblock}[tryfirst]
+def expand(x=[]):
+  x.extend([1]) # x += [1]
+  return x
+
+print(
+  f"[1] -> {expand([1])}\n"
+  f"[2] -> {expand([2])}\n"
+  f"()  -> {expand()}\n"
+  f"()  -> {expand()}\n"
+)
+  \end{pyblock}
+  \begin{block}{Output}\printpythontex[verbatim][highlightlines={4}]\end{block}
+
+  \begin{exercise}\label{ex:tryfirst}
+    The two last calls are identical, so they should reasonably print the
+    same result---but they do not (highlighted line).
+    Before reading on: debug this behaviour until you can explain it.
+    While doing so, note \emph{how} you go about it---which examples you
+    try, what you vary, and what you keep unchanged.
+  \end{exercise}
+\end{frame}
+\ltnote{%
+  Try-first design: the reader attempts the debugging---generates the
+  variation themselves---before seeing the analysis, and the
+  note-how-you-do-it prompt turns the reader's own episode into data to
+  compare against the patterns below.
+}
+
+We now walk through the patterns of variation; compare them with the steps
+you just took yourself.
+
+\begin{description}
+  \item[Contrast] The contrast pattern requires two examples to create
+    contrast.
+    The left-hand example below is the problem of \cref{ex:tryfirst}; the
+    right-hand example is a well-behaved variant of the same function.
+    The left-hand (familiar) example should be read first and then the
+    right-hand example will highlight the changes made to the left-hand
+    example to get the right-hand one.
+    (So that one can make the changes oneself.)
+
+    In an actual debugging session nobody serves us this contrast: the first
+    part of the session is about \emph{finding} it.
+    The debugger makes changes that introduce variation in different
+    aspects, until hitting the aspect that produces the contrast---the
+    critical one.
+    That search depends on what aspects the debugger has already discerned.
+    Here we skip that search and present the found contrast directly.
+
+    \begin{frame}<presentation>
+      Let's start with a \emph{contrasting} example \dots
+    \end{frame}
+
+    \begin{frame}[fragile]
+    \begin{minipage}[t]{0.45\columnwidth}
+      \begin{pyblock}[default2]
+def expand(x=[]):
+  x.extend([1]) # x += [1]
+  return x
+
+print(
+  f"[1] -> {expand([1])}\n"
+  f"[2] -> {expand([2])}\n"
+  f"()  -> {expand()}\n"
+  f"()  -> {expand()}\n"
+)
+      \end{pyblock}
+      \begin{block}{Output}\printpythontex[verbatim][highlightlines={4}]\end{block}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.45\columnwidth}
+      \begin{pyblock}[default1][highlightlines={2}]
+def expand(x=[]):
+  return x + [1]
+
+
+print(
+  f"[1] -> {expand([1])}\n"
+  f"[2] -> {expand([2])}\n"
+  f"()  -> {expand()}\n"
+  f"()  -> {expand()}\n"
+)
+      \end{pyblock}
+      \begin{block}{Output}\printpythontex[verbatim][highlightlines={4}]\end{block}
+    \end{minipage}
+    \end{frame}
+
+    On the right-hand side, the change (highlighted) is that we no longer
+    modify \mintinline{python}{x}: we build and return a new list instead.
+    In the output the weird behaviour is gone: the two identical calls now
+    print the same result (highlighted).
+    So the phenomenon seems connected to modifying the argument in place---it seems like the left-hand version appends on the value returned last
+    time.
+
+    Note that with the surface approach to learning one could stop here:
+    \enquote{the problem is solved, remember to not make this mistake
+    again.}
+    Continuing to open up the phenomenon, as the following patterns do, is
+    exactly the deep approach to learning.
+
+    We continue the contrast with more calls.
+    (For brevity we don't repeat the definition of the
+    function~\mintinline{python}{expand}; we keep the two variants side by
+    side, so the between-column comparison remains the contrast.)
+
+    \begin{frame}[fragile]
+    \begin{minipage}[t]{0.45\columnwidth}
+      \begin{pyblock}[default2][highlightlines={4-7}]
+print(
+  f"()  -> {expand()}\n"
+  f"[3] -> {expand([3])}\n"
+  f"()  -> {expand()}\n"
+  f"[]  -> {expand([])}\n"
+  f"[]  -> {expand([])}\n"
+  f"()  -> {expand()}\n"
+)
+      \end{pyblock}
+      \begin{block}{Output}\printpythontex[verbatim][highlightlines={3-6}]\end{block}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.45\columnwidth}
+      \begin{pyblock}[default1]
+print(
+  f"()  -> {expand()}\n"
+  f"[3] -> {expand([3])}\n"
+  f"()  -> {expand()}\n"
+  f"[]  -> {expand([])}\n"
+  f"[]  -> {expand([])}\n"
+  f"()  -> {expand()}\n"
+)
+      \end{pyblock}
+      \begin{block}{Output}\printpythontex[verbatim]\end{block}
+    \end{minipage}
+    \end{frame}
+
+    We can see in the output that when we use the default value in the
+    argument, the return value keeps expanding.
+    These calls contrast along several different aspects.
+    Between the columns we still contrast the function variant: modifying
+    the default in place against building a new list.
+    Within each column we contrast how the argument is supplied: the
+    highlighted calls show that passing the empty list explicitly,
+    \mintinline{python}{expand([])}, always gives \mintinline{python}{[1]},
+    while using the default, \mintinline{python}{expand()}, keeps growing.
+    And among the explicit arguments we contrast an arbitrary list,
+    \mintinline{python}{[3]}, against the empty list,
+    \mintinline{python}{[]}---the same value as the default.
+    In the highlighted calls, what varies is only \emph{how} the empty list
+    is supplied---so the phenomenon is tied to the default object itself,
+    not to empty lists in general.
+    This gives us a hypothesis about which aspect is the critical one: the
+    phenomenon appears because we modify the default argument in place, and
+    because the default argument is an object, which Python handles by
+    reference.
+
+  \item[Generalisation] This brings us to the generalisation pattern.
+    In the generalisation pattern we vary the non-critical aspects and keep the
+    critical aspect invariant.
+    In a sense, the generalisation pattern is the same as induction or the
+    scientific method.
+
+    \begin{frame}<presentation>
+      \dots and then \emph{generalise} it.
+    \end{frame}
+
+    \begin{frame}<presentation>
+      \begin{remark}[Generalisation]
+        \begin{itemize}
+          \item We vary the non-critical aspects.
+          \item We keep the critical aspect invariant.
+            \pause
+          \item \alert<3>{This is also known as the Scientific Method.}
+        \end{itemize}
+      \end{remark}
+    \end{frame}
+
+    \begin{frame}<presentation>[fragile]
+      \begin{example}[experiment2.py]
+        \begin{onlyenv}<1>
+          \inputminted[firstline=1,lastline=13]{python}{examples/experiment2.py}
+        \end{onlyenv}
+        \begin{onlyenv}<2>
+          \inputminted[firstline=1,lastline=2]{python}{examples/experiment2.py}
+          \inputminted[firstline=9,lastline=10]{python}{examples/experiment2.py}
+          \inputminted[firstline=14]{python}{examples/experiment2.py}
+        \end{onlyenv}
+      \end{example}
+    \end{frame}
+
+    \begin{frame}<presentation>[fragile]
+      \begin{example}[experiment3.py]
+      \inputminted{python}{examples/experiment3.py}
+      \end{example}
+    \end{frame}
+
+    Now, we'll change the example, but keep this property invariant---we
+    still modify the default argument, an object handled by reference;
+    or, phrased in terms of the scientific method, we try to falsify our
+    hypothesis.
+    (We highlight the lines that keep this property, \ie remain invariant in
+    the variation theoretic sense.)
+    \begin{frame}[fragile]
+    \begin{pyblock}[default1][highlightlines={10-12}]
+class Person:
+  def __init__(self, first, last):
+    self.first = first
+    self.last = last
+
+  def __str__(self):
+    return f"{self.first} {self.last}"
+
+def create_person(first=None, last=None,
+                  person_base=Person("Gina", "Jones")):
+  if first: person_base.first = first
+  if last: person_base.last = last
+  return person_base
+
+person_default = create_person()
+print(person_default)
+person_A = create_person("Ada")
+print(person_A)
+person_B = create_person("Beda")
+print(person_B)
+print(person_A)
+print(person_default)
+    \end{pyblock}
+    \begin{block}{Output}\printpythontex[verbatim][highlightlines={4-5}]\end{block}
+    \end{frame}
+
+    We can see that the last three lines of the output is the same.
+    The first of them is expected, but we expected the reprint of
+    \mintinline{python}{person_A} to still give \enquote{Ada Jones} and
+    \mintinline{python}{person_default} to still give
+    \enquote{Gina Jones}---the default.
+    Instead all three print \enquote{Beda Jones} (highlighted), indicating
+    that \mintinline{python}{person_A}, \mintinline{python}{person_B} and
+    \mintinline{python}{person_default} all seem to refer to the same
+    object.
+
+  \item[Fusion] Now we can fuse this back with our previous understanding of
+    default arguments.
+    First we test that it doesn't work with non-mutables, like integers.
+    \begin{frame}<presentation>
+      \dots and then \emph{fuse} it back.
+    \end{frame}
+    \begin{frame}[fragile]
+    \begin{pyblock}[default1]
+def increment(x=1):
+  x += 1
+  return x
+
+print(f"(1) -> {increment(1)}")
+print(f"(2) -> {increment(2)}")
+print(f"()  -> {increment()}")
+print(f"()  -> {increment()}")
+print(f"()  -> {increment()}")
+    \end{pyblock}
+    \begin{block}{Output}\printpythontex[verbatim][highlightlines={3-5}]\end{block}
+    \end{frame}
+
+    And we can thus conclude that this phenomenon happens only with mutable
+    objects that are handled by reference in Python.
+
+    This must be due to how Python is constructed.
+    The default value seems to be constructed when the function is defined, not
+    when it's called (like in other languages, C++ for instance), and then
+    referenced (not copied) whenever the function is called without the
+    argument.
+    Consider this example.
+
+    \begin{frame}[fragile]
+    \begin{pyblock}[default1][highlightlines=5]
+class TraceClass:
+  def __init__(self):
+    print(f"{self} created")
+
+def test_function(obj=TraceClass()):
+  print(f"test_function called with obj = {obj}")
+
+print("Test code begins")
+test_function()
+    \end{pyblock}
+    \begin{block}{Output}\printpythontex[verbatim][highlightlines={1}]\end{block}
+    \end{frame}
+
+    We see that the print statement from the constructor is executed before the
+    test code is executed (highlighted line), supporting our hypothesis that
+    the default value is constructed when the function is defined, not the when
+    function is called, and then referenced throughout.
+    This example fuses all the aspects: the construction time of the default
+    value, that it is referenced rather than copied, and that modifying it in
+    place is what makes the phenomenon visible.
+
+    We can also use an example from another language: C++.
+    In C++, default arguments are evaluated when the function is called, not
+    when it's defined.
+    \begin{frame}[fragile]
+      \inputminted[firstline=4]{cpp}{examples/experiment5.cpp}
+      \begin{block}{Output}
+        \inputminted[linenos=false,highlightlines={2,4}]{text}{examples/experiment5.out}
+      \end{block}
+    \end{frame}
+
+    We see that in C++ the object is created anew at every call, after the
+    test code has started (highlighted lines)---the opposite of Python.
+    (To mirror Python's reference semantics we pass the argument by
+    reference; C++ does not allow binding a plain reference,
+    \mintinline{cpp}{TraceClass&}, to the default temporary, so it must be
+    an rvalue reference, \mintinline{cpp}{TraceClass&&}.
+    Even so, a new object is constructed at each call.)
+    Note that the two printed addresses may even coincide; that does not
+    mean it is the same object, only that the same memory location is
+    reused for the two calls' temporaries---the constructor runs anew each
+    call.
+    That the objects are different is also supported by the modification:
+    \mintinline{cpp}{test_function} appends an element to the object, yet
+    the size is \(1\) in both calls---the modification of the first call's
+    default does not carry over to the second.
+\end{description}
+
+By now, we fully understand this phenomenon, and we see Python in a more
+powerful way.
+
+\subsection{Consequences}
+
+There are several things to note with this example.
+First, note how the contrast pattern is designed to focus your (the
+reader's) attention to the phenomenon at hand: that default values can change
+during execution.
+Next, the generalisation pattern broadens our view of when this phenomenon
+happens, that the objects are referenced and reused.
+Finally, the fusion pattern merges this back into our original view of default
+values, namely that they work as usual for non-mutable types (\eg integers).
+By now we completely understand the phenomenon at hand: the patterns did not
+merely remove the bug, they produced an explanation.
+
+In the terms of \citeauthor{NCOL}'s account of discovery
+(\cref{debugging-as-learning}), what we did with this example is to open up
+the dimension of construction/execution time for default arguments: once
+that dimension is opened, construction at definition time and construction
+at call time become two features that can vary---and the C++ comparison is
+exactly that variation.
+
+Second thing to note, if you are a seasoned programmer, once you had that
+initial contrast pattern the remaining patterns (generalisation and fusion)
+probably resembles quite a lot what you would have tested yourself to make
+sense of this phenomenon---it would probably resemble how you would go about to
+debug this and explain it to yourself.
+Unless, of course, you opted for the surface approach to learning.
+
+But then the main issue of debugging is finding that initial contrast.
+Why, then, would someone using the deep approach to learning do better?
+Because the search for the contrast is itself a matter of variation: the
+debugger varies aspect after aspect until the critical one responds, and
+which aspects one can vary at all depends on what one has already
+discerned.
+In our example, to even conceive of the variations above, the debugger must
+already see---in a more powerful way---at least the following aspects.
+\begin{enumerate}
+  \item That a parameter may get its value from a default, so that
+    supplying the value explicitly is a variation at all.
+  \item That a list is a mutable object, which can be modified in place or
+    rebuilt.
+  \item That variables and parameters hold references to objects, so that
+    two names may refer to the same object.
+  \item That the default value is itself an object with a construction
+    time---and construction time and execution time are the same thing:
+    execution controls construction, so \emph{when} the definition is
+    executed determines when the default is constructed.
+\end{enumerate}
+These are basically the prerequisites for the search: an aspect one cannot
+yet discern is an aspect one cannot vary.
+The deep approach is exactly the disposition to generate that variation;
+the surface approach offers no search procedure at all---it can only
+recognise mistakes already made and memorised.
+
+\subsection{A pilot with experienced programmers}
+\label{pilot}
+
+We actually tested this hypothesis on several colleagues who have been
+programming for many years, are well-versed in Python but didn't know of this
+phenomenon.
+We gave them the same problem as in \cref{ex:tryfirst} and asked them to
+debug this behaviour and later explain it when they understood it.
+(To record the data, we asked them to think aloud and recorded their screen and
+voice in a Zoom session.)
+Nowadays we can also record such sessions using learnlog
+\autocite{learnlog}, as we do in the study in \cref{method}.
+
+% XXX Test with more colleagues.
+% Tested with Alexander.
+% TODO Expand this section with details from the recorded sessions (see the
+% KTH Play playlist referenced in debug_data/data.md): which concrete
+% examples each colleague tried, in what order, and how the patterns map
+% onto them.  The companion paper only sketches this observation; the full
+% account belongs here.
+The concrete examples that they tried varied from person to person, some tried
+many more examples than above, but the patterns of variation shown above were
+present.
+Indeed, they couldn't explain the phenomenon until they had generated all the
+patterns above---covering both generalisation and fusion.
+
+So far we have two recorded sessions.
+We are transcribing these; the transcripts will then be analysed with the
+episode coding of \cref{method}, and the coded episodes reported here.
+% TODO Transcribe and analyse the two recorded sessions (KTH Play playlist in
+% debug_data/data.md); report the coded episodes here.
+% XXX Stub: per-session summaries to be added.
+% - Session 1: examples tried, in what order, which patterns they realise.
+% - Session 2: same.
+
+\mode<presentation>{%
+\begin{frame}
+  \begin{remark}[Tested]
+    \begin{itemize}
+      \item Tested this on a colleague.
+      \item He couldn't explain the phenomenon until he had generated all the
+        patterns above.
+      \item Plan to do this with more colleagues.
+    \end{itemize}
+  \end{remark}
+\end{frame}%
+}
+
+This pilot supports \cref{h:patterns} for experienced programmers: the
+successful debugging episodes contained all the patterns of variation, and the
+explanation did not come until the patterns were complete.
+What the pilot cannot tell us is how this plays out for \emph{students}, nor
+whether the ability to generate the patterns is connected to the deep approach
+to learning.
+That is the purpose of the study we describe next.
