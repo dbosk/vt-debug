@@ -29,6 +29,9 @@ variation.
 We therefore also record which students use the course material, through the
 learning platform's activity data complemented by self-report in the
 questionnaire (\cref{material-use}).
+We also have the students who know programming from before; we identify
+them with a diagnostic quiz at the start of the course
+(\cref{prior-knowledge}).
 
 \mode<presentation>{%
 \begin{frame}
@@ -52,12 +55,13 @@ questionnaire (\cref{material-use}).
 
 We record the students' programming with the \texttt{learnlog} tool
 \autocite{learnlog}.
-The students run \texttt{learnlog init} once in their project directory; the
-tool then installs itself into the project's virtual environment and
+The students run \texttt{learnlog init} once in their course directory (one
+directory for the whole course, not one per assignment or project); the
+tool then installs itself into the directory's virtual environment and
 activates on every Python run, so that every program run is recorded
 transparently---even runs that fail before the program starts, such as
 syntax errors: source code changes, command-line arguments, standard
-input/output/error, and unhandled exceptions.
+input/output/error, and unhandled exceptions are all stored.
 The data is stored in a hidden local Git repository, which gives a complete
 timeline of the students' edit--run cycles.
 The students push their logs to per-student Git repositories (or export them
@@ -67,7 +71,7 @@ events per lab so that episodes can be attributed to assignments.
 \begin{frame}<presentation>[fragile]
   \begin{block}{learnlog\only<presentation>{~\autocite{learnlog}}}
     \begin{itemize}
-      \item \texttt{learnlog init} once per project.
+      \item \texttt{learnlog init} once per course directory.
       \item Records every run: source diff, arguments, I/O, exceptions.
       \item Hidden local Git repo \(\to\) complete edit--run timeline.
       \item Students push logs or submit bundles; events tagged per lab.
@@ -92,9 +96,14 @@ Study Process Questionnaire (R-SPQ-2F), which yields a deep-approach and a
 surface-approach score from ten items each \autocite{RSPQ2F}.
 Since the approach is not a fixed trait---students adapt it to their
 conception of the task \autocite{MartonSaljo1976II}---we administer the
-questionnaire twice, at the start and at the end of the course, and treat the
-scores as measurements of the approach in the context of this course rather
-than as a stable property of the student.
+questionnaire twice, at the start and at the end of the course.
+At the start of the course the students cannot yet answer with respect to
+this course---they must have started the course for that---so the first
+administration asks about their studies in general, to get a feel for their
+general approach.
+The second administration, at the end, asks with respect to this course;
+those scores we treat as measurements of the approach in the context of
+this course rather than as a stable property of the student.
 
 \paragraph{Classifying the students compatibly with the original studies}
 
@@ -111,11 +120,11 @@ The R-SPQ-2F is instead a self-report questionnaire; it does not classify an
 actual learning episode but the student's reported way of studying.
 We bridge this gap in three ways.
 \begin{enumerate}
-  \item We administer the R-SPQ-2F with instructions to answer with respect
-    to \emph{this course}, in line with the instrument's intended use by
-    teachers evaluating the approaches of their own students
-    \autocite{RSPQ2F} and with the task-dependence of the approach
-    \autocite{MartonSaljo1976II}.
+  \item In the end-of-course administration (\cref{approach-measure}) we
+    have the students answer the R-SPQ-2F with respect to \emph{this
+    course}, in line with the instrument's intended use by teachers
+    evaluating the approaches of their own students \autocite{RSPQ2F} and
+    with the task-dependence of the approach \autocite{MartonSaljo1976II}.
     The resulting scores are comparable with the questionnaire-based
     literature.
   \item In the think-aloud subsample we additionally classify the students
@@ -144,8 +153,26 @@ modules and embedded activities each student has worked through, and we
 complement this with a self-report item alongside the R-SPQ-2F asking how the
 student mainly studies (from the course material, from other sources, or a
 mix).
+The interactive material assignments (FeedbackFruits) give us detailed data
+about the students' interactions with the material as well.
 % XXX Decide the exact operationalisation (threshold on activity data vs
 % self-report) once the prgi26 Canvas course is finalised.
+
+\subsubsection{Prior programming knowledge}
+\label{prior-knowledge}
+
+Some students know programming from before the course.
+They matter twice: prior experience is a confound for \cref{h:success}, and
+the experienced students form yet another group within the cohort, whose
+debugging may exhibit the patterns from the start.
+We therefore administer a diagnostic test---a quiz---at the start of the
+course, measuring prior programming knowledge, complemented by
+self-reported programming experience.
+% XXX Decide the quiz contents.  Candidates to capture alongside prior
+% knowledge: languages known and years of experience, whether they know
+% Python specifically, prior debugging habits (what they do when a program
+% misbehaves), programming self-efficacy, and how they plan to study
+% (baseline for the material-use self-report).
 
 \subsubsection{Debugging outcomes}
 
@@ -195,6 +222,14 @@ variation-theoretic coding:\label{episode-coding}
     present, and whether the episode ends in a fix.
 \end{enumerate}
 \end{frame}
+
+Note that when programming, the generalisation and fusion experiments are
+probably not made in the lab file itself: they are typically done in a REPL
+or a throw-away file.
+Since learnlog activates on every Python run in the course directory's
+virtual environment---including REPL sessions and scratch files---these
+runs are recorded too, and the coding must consider all recorded runs, not
+only those of the lab solution.
 
 This coding answers \cref{rq:patterns} (which patterns appear).
 For \cref{rq:deep,rq:success} we relate the coded episodes to the R-SPQ-2F

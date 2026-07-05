@@ -342,8 +342,8 @@ test_function()
     default does not carry over to the second.
 \end{description}
 
-By now, we fully understand this phenomenon, and we see Python in a more
-powerful way.
+By now, we fully understand this phenomenon, and we see default values in a
+more powerful way.
 
 \subsection{Consequences}
 
@@ -387,13 +387,14 @@ already see---in a more powerful way---at least the following aspects.
     rebuilt.
   \item That variables and parameters hold references to objects, so that
     two names may refer to the same object.
-  \item That the default value is itself an object with a construction
-    time---and construction time and execution time are the same thing:
-    execution controls construction, so \emph{when} the definition is
-    executed determines when the default is constructed.
+  \item That objects are constructed, and that construction happens through
+    execution.
 \end{enumerate}
 These are basically the prerequisites for the search: an aspect one cannot
 yet discern is an aspect one cannot vary.
+Note that \emph{when} the default argument's definition is executed---and
+hence when the default is constructed---is not among the prerequisites:
+that is precisely the dimension the search opens up.
 The deep approach is exactly the disposition to generate that variation;
 the surface approach offers no search procedure at all---it can only
 recognise mistakes already made and memorised.
@@ -401,14 +402,14 @@ recognise mistakes already made and memorised.
 \subsection{A pilot with experienced programmers}
 \label{pilot}
 
-We actually tested this hypothesis on several colleagues who have been
+We actually tested this hypothesis on colleagues who have been
 programming for many years, are well-versed in Python but didn't know of this
 phenomenon.
 We gave them the same problem as in \cref{ex:tryfirst} and asked them to
 debug this behaviour and later explain it when they understood it.
 (To record the data, we asked them to think aloud and recorded their screen and
 voice in a Zoom session.)
-Nowadays we can also record such sessions using learnlog
+Nowadays we can also record such sessions directly with learnlog
 \autocite{learnlog}, as we do in the study in \cref{method}.
 
 % XXX Test with more colleagues.
@@ -425,8 +426,10 @@ Indeed, they couldn't explain the phenomenon until they had generated all the
 patterns above---covering both generalisation and fusion.
 
 So far we have two recorded sessions.
-We are transcribing these; the transcripts will then be analysed with the
-episode coding of \cref{method}, and the coded episodes reported here.
+We transcribe the recordings using learnlog---replaying the sessions'
+edit--run cycles into learnlog logs---so that the transcripts can be
+analysed with the episode coding of \cref{method}, and the coded episodes
+reported here.
 % TODO Transcribe and analyse the two recorded sessions (KTH Play playlist in
 % debug_data/data.md); report the coded episodes here.
 % XXX Stub: per-session summaries to be added.
