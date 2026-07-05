@@ -1,0 +1,32 @@
+article.pdf
+didactic.sty
+slides.pdf
+slides.unq
+article.aux
+article.bbl
+article.bcf
+article.blg
+article.fdb_latexmk
+article.fls
+article.log
+article.out
+article.run.xml
+article.toc
+ltxobj/
+
+# latexmk config symlink (created by `make latexmkrc`)
+latexmkrc
+
+# PythonTeX build artifacts (created in the project root by the latexmk
+# pythontex custom dependency)
+*.pytxcode
+*.pytxmcr
+*.pytxpyg
+pythontex_data.pkl
+pythontex-files-*
+py_*.stdout
+didactic_output_*.txt
+
+# compiled C++ example and its captured output (built by make)
+examples/experiment5
+examples/experiment5.out

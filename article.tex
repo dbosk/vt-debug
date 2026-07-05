@@ -1,0 +1,56 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+\documentclass[a4paper,10pt,article,oneside,oldfontcommands]{memoir}
+\let\subsubsection\subsection
+\let\subsection\section
+\let\section\chapter
+
+\usepackage[hyphens]{url}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage[noamsthm,notheorems]{beamerarticle}
+\setjobnamebeamerversion{slides}
+
+\input{preamble.tex}
+
+\usepackage[inline]{enumitem}
+\setlist[enumerate]{label=(\arabic*)}
+
+\title{%
+  Debugging through the lens of variation theory:
+  is debugging skill the deep approach to learning?%
+}
+\author{%
+  Daniel Bosk
+  \\KTH Royal Institute of Technology, Sweden
+  \\\texttt{dbosk@kth.se}
+}
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed
+
+\begin{document}
+
+\maketitle
+\begin{abstract}
+  \input{abstract.tex}
+\end{abstract}
+
+\clearpage
+\tableofcontents
+\clearpage
+
+\input{introduction}
+\input{background}
+
+\input{debugging-as-learning.tex}
+\input{debugging.tex}
+
+\input{method}
+
+\input{results.tex}
+\input{discussion.tex}
+
+\printbibliography
+
+\end{document}

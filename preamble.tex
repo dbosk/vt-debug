@@ -1,0 +1,136 @@
+\usepackage{tikz}
+\usepackage{tikzscale}
+% adapted from https://stackoverflow.com/a/54903109/1305099
+\NewDocumentCommand{\semitransp}{m}{%
+  {\pgfsetfillopacity{0.3}#1}%
+  \pgfsetfillopacity{1}%
+}
+\usepackage{graphicx} % support the \includegraphics command and options
+
+\usepackage{multirow}%for tables
+
+% Font/encoding setup, guarded by engine: under pdfLaTeX [T1]{fontenc} is
+% required or monospace silently falls back to a proportional font.  didactic's
+% memoir branch overrides the main fonts (Palatino/Helvetica/Bera); lmodern is
+% the fallback for the beamer build.
+\usepackage{iftex}
+\ifpdftex
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \usepackage{lmodern}
+\fi
+\usepackage[british]{babel}
+\usepackage{booktabs}
+
+% Verbose citation style (full reference on first use, short form on repeats):
+% \autocite produces a footnote citation, which didactic places in the margin in
+% the memoir article and at the foot of the slide in beamer -- "verbose
+% references in the margin".  Use \autocite for all citations so they adapt to
+% the build; keep \parencite/\textcite out of the document.
+\usepackage[
+  natbib,
+  backend=biber,
+  style=verbose,
+  citestyle=verbose,
+  singletitle=false,
+  maxbibnames=99,
+]{biblatex}
+\addbibresource{debugging.bib}
+\addbibresource{theory.bib}
+
+\usepackage[all]{foreign}
+\renewcommand{\foreignfullfont}{}
+\renewcommand{\foreignabbrfont}{}
+
+%\usepackage{newclude}
+\usepackage{import}
+
+\usepackage{subcaption}
+
+\usepackage[noend]{algpseudocode}
+\usepackage{xparse}
+
+\let\email\texttt
+
+% minted v3+ (TeX Live 2024+) auto-detects the output directory; the old
+% [outputdir=ltxobj] option is now an error.
+\usepackage{minted}
+\setminted{autogobble,linenos}
+
+\usepackage{pythontex}
+% The build runs pythontex from the project root (latexmk's mylatex fudge), so
+% paths are relative to the project root: keep outputs here and run Python code
+% from the project root.
+\setpythontexoutputdir{.}
+\setpythontexworkingdir{.}
+\setpythontexfv{numbers=left}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{thmtools}
+\usepackage[unq]{unique}
+\DeclareMathOperator{\powerset}{\mathcal{P}}
+
+\usepackage[binary-units]{siunitx}
+
+\usepackage[strict]{csquotes}
+\usepackage[single]{acro}
+
+\usepackage[capitalize]{cleveref}
+% Beamer frames carry a `framenumber` label type; give cleveref a name for it so
+% \cref to a \label'd frame works (and does not error on a cold first compile).
+\crefname{framenumber}{frame}{frames}
+\Crefname{framenumber}{Frame}{Frames}
+
+% Load didactic LAST: it adapts biblatex/csquotes/cleveref (already loaded
+% above) and auto-detects memoir to apply the modern Tufte layout -- wide outer
+% margin, Palatino fonts, footnotes-in-margin, side-captions, \ltnote margin
+% notes -- and footnote citations.
+\usepackage[marginparmargin=right]{didactic}
+
+% A semantic hypothesis environment in the style of didactic's question:
+% numbered theorem in the article, block in the slides.  The translations must
+% be declared before \ProvideSemanticEnv fetches them.
+\DeclareTranslation{English}{Hypothesis}{Hypothesis}
+\DeclareTranslation{English}{hypothesis}{hypothesis}
+\DeclareTranslation{English}{hypotheses}{hypotheses}
+\DeclareTranslation{English}{Hypotheses}{Hypotheses}
+\ProvideSemanticEnv{hypothesis}[block]{Hypothesis}
+  {hypothesis}{hypotheses}{Hypothesis}{Hypotheses}
+
+% The research questions and hypotheses as macros, so that they can be
+% restated verbatim wherever needed (they are stated in question/hypothesis
+% environments in the introduction and the theory section).
+\newcommand{\rqpatterns}{%
+  Which patterns of variation (contrast, generalisation, fusion), if any, can
+  be observed in students' recorded debugging episodes?%
+}
+\newcommand{\rqdeep}{%
+  Is a deep approach to learning associated with generating more, and more
+  complete, patterns of variation while debugging?%
+}
+\newcommand{\rqsuccess}{%
+  Is debugging success associated with the deep approach and with the
+  completeness of the generated patterns?%
+}
+\newcommand{\rqexperts}{%
+  Which patterns of variation do expert debuggers exhibit while debugging,
+  and how do the students' patterns compare to theirs?%
+}
+\newcommand{\hpatterns}{%
+  Successful debugging episodes exhibit the patterns of variation: contrast,
+  generalisation and fusion.
+  Unsuccessful or prolonged episodes lack one or more of the patterns.%
+}
+\newcommand{\hdeep}{%
+  Students with a stronger deep approach (higher R-SPQ-2F deep score)
+  generate more, and more complete, patterns of variation in their debugging
+  episodes.%
+}
+\newcommand{\hsuccess}{%
+  Debugging success (fixing the bug, and doing so in fewer edit--run cycles)
+  is positively associated with the deep approach and with the completeness
+  of the generated patterns.%
+}
