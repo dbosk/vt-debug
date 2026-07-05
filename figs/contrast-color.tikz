@@ -1,0 +1,4 @@
+\begin{tikzpicture}
+  \fill[green] (-0.75, 0) circle (0.5);
+  \fill[blue] (0.75, 0) circle (0.5);
+\end{tikzpicture}
