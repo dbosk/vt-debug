@@ -33,15 +33,26 @@ We also have the students who know programming from before; we identify
 them with a diagnostic quiz at the start of the course
 (\cref{prior-knowledge}).
 
-The data collection maps onto the research questions as follows.
-The learnlog recordings (\cref{learnlog-data}) yield the debugging episodes
-in which we look for the patterns of variation (\cref{rq:patterns})---for
-the students and for the teachers alike, the latter giving the expert
-baseline (\cref{rq:experts}, \cref{teacher-baseline}).
-The questionnaire (\cref{approach-measure}) provides the approach measure
-that we relate to the generated patterns (\cref{rq:deep}), and the
-debugging outcomes (\cref{outcomes}) the success measure
-(\cref{rq:success}).
+The data collection maps onto the research questions as follows; we
+restate the questions and hypotheses to give the overview here, the
+details follow in the coming sections.
+\begin{description}
+  \item[\Cref{rq:patterns}] \enquote{\rqpatterns}
+    \Cref{h:patterns} predicts the answer: \enquote{\hpatterns}
+    We answer this by coding the debugging episodes recorded with learnlog
+    (\cref{learnlog-data}) in variation-theoretic terms (\cref{analysis}).
+  \item[\Cref{rq:deep}] \enquote{\rqdeep}
+    \Cref{h:deep} predicts: \enquote{\hdeep}
+    The questionnaire (\cref{approach-measure}) provides the approach
+    measure that we relate to the coded patterns.
+  \item[\Cref{rq:success}] \enquote{\rqsuccess}
+    \Cref{h:success} predicts: \enquote{\hsuccess}
+    The debugging outcomes (\cref{outcomes}) provide the success measures.
+  \item[\Cref{rq:experts}] \enquote{\rqexperts}
+    The teachers' and assistants' recordings give the expert baseline
+    (\cref{teacher-baseline}); this comparison is exploratory
+    (\cref{hypotheses}).
+\end{description}
 The diagnostic quiz (\cref{prior-knowledge}) and the material use
 (\cref{material-use}) provide the control variables and the within-cohort
 comparison groups.
@@ -67,8 +78,8 @@ comparison groups.
 We describe the data collection in the chronological order of the course:
 what we collect at the start of the course
 (\cref{prior-knowledge,approach-measure}), what we collect throughout it
-(\cref{learnlog-data,material-use,teacher-baseline}), and what derives from
-the recordings afterwards (\cref{outcomes}).
+(\cref{learnlog-data,think-aloud,material-use,teacher-baseline}), and what
+derives from the recordings afterwards (\cref{outcomes}).
 
 \subsubsection{Prior programming knowledge}
 \label{prior-knowledge}
@@ -87,15 +98,22 @@ following.
     \enquote{when your program misbehaves, what do you do?}.
     The answers can themselves be coded for variation-thinking, giving a
     baseline debugging-approach measure that is independent of both the
-    logs and the questionnaire.
+    logs and the questionnaire---a third, independent angle on the
+    connection between approach and patterns (\cref{rq:deep}).
   \item Languages known and years of experience, and whether they know
-    Python specifically.
-  \item How they learned to program: in a formal course or self-taught---
-    the self-taught being self-directed learners by definition.
-  \item Programming self-efficacy, which confounds persistence measures
-    such as the time and the number of cycles to fix.
+    Python specifically: experienced students will debug faster regardless
+    of approach, so this is the control variable for \cref{h:success}.
+  \item How they learned to program: in a formal course or
+    self-taught---the self-taught being self-directed learners by
+    definition, which bears directly on the deep approach
+    (\cref{rq:deep}): they may already generate their own variation.
+  \item Programming self-efficacy: less confident students may give up or
+    persist differently, which confounds the persistence-based success
+    measures of \cref{h:success}, the time and the number of cycles to
+    fix.
   \item How they plan to study in this course, as a baseline for the
-    material-use self-report (\cref{material-use}).
+    material-use self-report (\cref{material-use}) and thereby for the
+    generative-learning comparison it supports.
 \end{enumerate}
 For the knowledge part itself, a subset of a validated concept inventory
 for introductory programming would make the measure comparable to other
@@ -142,8 +160,8 @@ We bridge this gap in three ways.
     with the task-dependence of the approach \autocite{MartonSaljo1976II}.
     The resulting scores are comparable with the questionnaire-based
     literature.
-  \item In the think-aloud subsample we additionally classify the students
-    the way \textcite{MartonSaljo1976I} did: we ask them to recount how they
+  \item In the think-aloud subsample (\cref{think-aloud}) we additionally
+    classify the students the way \textcite{MartonSaljo1976I} did: we ask them to recount how they
     went about the lab and the debugging, and classify the accounts as deep
     or surface.
     This classification is the one compatible with \citeauthor{NCOL}'s
@@ -197,6 +215,21 @@ Recall the phenomenographic stance
 (\cref{background}): acts express understanding, so the recorded acts are the
 appropriate data for a second-order analysis.
 
+\subsubsection{Think-aloud sessions with a subsample}
+\label{think-aloud}
+
+With a smaller subsample of student volunteers we also hold think-aloud
+debugging sessions during the course, of the kind piloted in \cref{pilot}:
+the student debugs while speaking their thoughts aloud, and we record the
+session with learnlog (\cref{learnlog-data}) together with the audio.
+The subsample serves two purposes.
+First, the logs record acts but not the reasoning between them, so the
+think-aloud sessions let us validate that the patterns coded from the logs
+(\cref{analysis}) correspond to the patterns in the students' reasoning.
+Second, the sessions give us the students' task-specific accounts of how
+they went about the debugging, which we need to classify their approaches
+the way the original studies did (\cref{approach-measure}).
+
 \subsubsection{Course material use}
 \label{material-use}
 
@@ -238,6 +271,7 @@ wall-clock time from the first failing run to the first passing run.
 These constitute our measures of debugging success for \cref{h:success}.
 
 \subsection{Analysis}
+\label{analysis}
 
 We define a \emph{debugging episode} as the sequence of edit--run cycles from
 a run that surprises the student (typically a failing run, an unhandled
@@ -301,9 +335,9 @@ contained all of them.
 The pilot used screen and voice recordings; the main study instead uses
 learnlog's edit--run data, which scales to a full course but does not capture
 the students' reasoning between runs.
-We therefore complement the logs with think-aloud sessions with a smaller
-sample of student volunteers, to validate that the patterns coded from the
-logs correspond to the patterns in the students' reasoning.
+We therefore complement the logs with the think-aloud subsample
+(\cref{think-aloud}), to validate that the patterns coded from the logs
+correspond to the patterns in the students' reasoning.
 
 \subsection{Ethics}
 
