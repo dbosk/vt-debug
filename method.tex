@@ -33,34 +33,58 @@ We also have the students who know programming from before; we identify
 them with a diagnostic quiz at the start of the course
 (\cref{prior-knowledge}).
 
-The data collection maps onto the research questions as follows; we
-restate the questions and hypotheses to give the overview here, the
-details follow in the coming sections.
+In summary, the method is as follows.
+We record the students' every edit--run cycle with learnlog throughout the
+course (\cref{learnlog-data}) and code the recorded debugging episodes for
+patterns of variation (\cref{analysis}); we measure the approaches to
+learning with the R-SPQ-2F (\cref{approach-measure}); and we relate
+patterns, approach and outcomes to one another.
+The questions are answered in two modes: descriptively
+(\cref{rq:patterns,rq:experts}) and by attempting to falsify the
+corresponding hypothesis (\cref{rq:deep,rq:success,rq:generative}).
+Restating the questions and the hypotheses, the overview is as follows;
+the details follow in the coming sections.
 \begin{description}
   \item[\Cref{rq:patterns}] \enquote{\rqpatterns}
-    \Cref{h:patterns} predicts the answer: \enquote{\hpatterns}
-    We answer this by coding the debugging episodes recorded with learnlog
-    (\cref{learnlog-data}) in variation-theoretic terms (\cref{analysis}).
+    Answered descriptively: coding the debugging episodes recorded with
+    learnlog (\cref{learnlog-data}) in variation-theoretic terms
+    (\cref{analysis}) yields the catalogue of which patterns appear, in
+    what order, and how often.
+    \Cref{h:patterns} additionally predicts: \enquote{\hpatterns}
+    As stated this is a universal claim, which a single counterexample
+    would falsify; since the coding is necessarily noisy, we operationalise
+    it statistically: pattern completeness should separate successful from
+    unsuccessful episodes.
   \item[\Cref{rq:deep}] \enquote{\rqdeep}
-    \Cref{h:deep} predicts: \enquote{\hdeep}
+    Answered by testing \cref{h:deep}: \enquote{\hdeep}
     The questionnaire (\cref{approach-measure}) provides the approach
-    measure that we relate to the coded patterns.
+    measure, which we correlate with the coded patterns; the think-aloud
+    subsample (\cref{think-aloud}) validates both the coding and the
+    classification.
   \item[\Cref{rq:success}] \enquote{\rqsuccess}
-    \Cref{h:success} predicts: \enquote{\hsuccess}
-    The debugging outcomes (\cref{outcomes}) provide the success measures.
+    Answered by testing \cref{h:success}: \enquote{\hsuccess}
+    The debugging outcomes (\cref{outcomes}) provide the success measures;
+    the diagnostic quiz (\cref{prior-knowledge}) provides the control for
+    prior experience.
   \item[\Cref{rq:experts}] \enquote{\rqexperts}
-    The teachers' and assistants' recordings give the expert baseline
-    (\cref{teacher-baseline}); this comparison is exploratory
-    (\cref{hypotheses}).
+    Answered descriptively---it has no hypothesis to test: we code the
+    teachers' and assistants' episodes identically
+    (\cref{teacher-baseline}) and compare the two groups' patterns.
   \item[\Cref{rq:generative}] \enquote{\rqgenerative}
-    \Cref{h:generative} predicts: \enquote{\hgenerative}
+    Answered by testing \cref{h:generative}: \enquote{\hgenerative}
     The material-use measure (\cref{material-use}) identifies the groups;
-    the comparison controls for approach (\cref{approach-measure}) and
-    prior experience (\cref{prior-knowledge}).
+    approach and prior experience are controlled for; since the groups are
+    self-selected, the answer is correlational.
 \end{description}
-The diagnostic quiz (\cref{prior-knowledge}) provides the control
-variables; together with the material use (\cref{material-use}) it also
-defines the within-cohort comparison groups.
+Note, finally, that the overarching hypothesis---that debugging skill and
+the deep approach to learning are the same underlying ability---is not
+itself directly tested: \cref{h:deep,h:success} are consistent with the
+two being identical, but also with two distinct abilities sharing a cause.
+Answering the questions thus supports the overarching hypothesis by
+inference to the best explanation, not by falsification.
+The data collection follows in \cref{data-collection}, the analysis in
+\cref{analysis}, the pilot of the coding in \cref{method-pilot}, and the
+ethical considerations in \cref{ethics}.
 
 \mode<presentation>{%
 \begin{frame}
@@ -79,6 +103,7 @@ defines the within-cohort comparison groups.
 }
 
 \subsection{Data collection}
+\label{data-collection}
 
 We describe the data collection in the chronological order of the course:
 what we collect at the start of the course
@@ -332,6 +357,7 @@ differences between the two should point out precisely what debugging
 instruction needs to provide.
 
 \subsection{Pilot}
+\label{method-pilot}
 
 As reported in \cref{pilot}, we have piloted the variation-theoretic coding on
 think-aloud recordings of experienced programmers debugging the
@@ -346,6 +372,7 @@ We therefore complement the logs with the think-aloud subsample
 correspond to the patterns in the students' reasoning.
 
 \subsection{Ethics}
+\label{ethics}
 
 Participation in the study is opt-in and requires informed consent; the
 students' grades are unaffected by participation, and the logs are collected
