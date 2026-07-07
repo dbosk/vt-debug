@@ -251,7 +251,8 @@ appropriate data for a second-order analysis.
 With a smaller subsample of student volunteers we also hold think-aloud
 debugging sessions during the course, of the kind piloted in \cref{pilot}:
 the student debugs while speaking their thoughts aloud, and we record the
-session with learnlog (\cref{learnlog-data}) together with the audio.
+session with learnlog (\cref{learnlog-data}) together with the audio and
+video (probably over Zoom).
 The subsample serves two purposes.
 First, the logs record acts but not the reasoning between them, so the
 think-aloud sessions let us validate that the patterns coded from the logs
@@ -263,7 +264,10 @@ the way the original studies did (\cref{approach-measure}).
 \subsubsection{Course material use}
 \label{material-use}
 
-To identify the within-cohort comparison group we measure each student's use
+We need to know who uses the course material to be able to answer
+\cref{rq:generative}: the groups compared there are defined by whether the
+student has experienced the material's patterns of variation.
+To identify these groups we measure each student's use
 of the course material: the learning platform (Canvas) records which pages,
 modules and embedded activities each student has worked through, and we
 complement this with a self-report item alongside the R-SPQ-2F asking how the
@@ -332,6 +336,17 @@ Since learnlog activates on every Python run in the course directory's
 virtual environment---including REPL sessions and scratch files---these
 runs are recorded too, and the coding must consider all recorded runs, not
 only those of the lab solution.
+
+One possibility is that a student does not generate the generalisation and
+fusion patterns at all, but instead searches for an explanation online or
+asks an AI assistant (\cref{debugging-as-learning}).
+In the logs such episodes show up as a sudden fix without preceding
+experiments, possibly with pasted-in code; we code these as externally
+sourced.
+This matters for \cref{h:patterns}: a successful episode without patterns
+is not a counterexample if the variation was outsourced---the hypothesis
+concerns the episodes where the student generated the explanation
+themselves.
 
 This coding answers \cref{rq:patterns} (which patterns appear).
 For \cref{rq:deep,rq:success} we relate the coded episodes to the R-SPQ-2F
