@@ -69,7 +69,7 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{amsthm}
-\usepackage{thmtools}
+\usepackage{thmtools,thm-restate}
 \usepackage[unq]{unique}
 \DeclareMathOperator{\powerset}{\mathcal{P}}
 
@@ -100,47 +100,24 @@
 \ProvideSemanticEnv{hypothesis}[block]{Hypothesis}
   {hypothesis}{hypotheses}{Hypothesis}{Hypotheses}
 
-% The research questions and hypotheses as macros, so that they can be
-% restated verbatim wherever needed (they are stated in question/hypothesis
-% environments in the introduction and the theory section).
-\newcommand{\rqpatterns}{%
-  Which patterns of variation (contrast, generalisation, fusion), if any, can
-  be observed in students' recorded debugging episodes?%
-}
-\newcommand{\rqdeep}{%
-  Is a deep approach to learning associated with generating more, and more
-  complete, patterns of variation while debugging?%
-}
-\newcommand{\rqsuccess}{%
-  Is debugging success associated with the deep approach and with the
-  completeness of the generated patterns?%
-}
-\newcommand{\rqexperts}{%
-  Which patterns of variation do expert debuggers exhibit while debugging,
-  and how do the students' patterns compare to theirs?%
-}
-\newcommand{\hpatterns}{%
-  Successful debugging episodes exhibit the patterns of variation: contrast,
-  generalisation and fusion.
-  Unsuccessful or prolonged episodes lack one or more of the patterns.%
-}
-\newcommand{\hdeep}{%
-  Students with a stronger deep approach (higher R-SPQ-2F deep score)
-  generate more, and more complete, patterns of variation in their debugging
-  episodes.%
-}
-\newcommand{\hsuccess}{%
-  Debugging success (fixing the bug, and doing so in fewer edit--run cycles)
-  is positively associated with the deep approach and with the completeness
-  of the generated patterns.%
-}
-\newcommand{\rqgenerative}{%
-  Do students who have experienced the course material's patterns of
-  variation generate more, and more complete, patterns of variation in
-  their debugging than students who study on their own?%
-}
-\newcommand{\hgenerative}{%
-  Students who use the course material generate more, and more complete,
-  patterns of variation in their debugging episodes than students who do
-  not---controlling for approach and prior programming experience.%
-}
+% The research questions and hypotheses are stated in restatable
+% question/hypothesis environments (thm-restate): stated once in the
+% introduction and the theory section, restated with \rqpatterns* etc. in
+% the method overview, keeping their original numbers.
+%
+% thm-restate assumes theorem environments with counters.  In the slides,
+% didactic's semantic environments are beamer blocks without counters, so
+% we replace restatable there with a transparent wrapper: it just typesets
+% the wrapped environment (passing the optional heading through) and
+% defines the restating command as a star-tolerant no-op---restatements
+% only occur in article-mode prose, which the slides skip.
+\makeatletter
+\@ifclassloaded{beamer}{%
+  \DeclareDocumentEnvironment{restatable}{o m m}{%
+    \expandafter\ProvideDocumentCommand\csname #3\endcsname{s}{\relax}%
+    \IfValueTF{#1}{\begin{#2}[#1]}{\begin{#2}}%
+  }{%
+    \end{#2}%
+  }%
+}{\relax}
+\makeatother
