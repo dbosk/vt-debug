@@ -27,29 +27,20 @@ These students form a natural comparison group \emph{within} the cohort: they
 do the same labs, but without experiencing the material's patterns of
 variation.
 We therefore also record which students use the course material, through the
-learning platform's activity data complemented by self-report in the
-questionnaire (\cref{material-use}).
+learning platform's activity data complemented by self-report in a
+questionnaire.
 We also have the students who know programming from before; we identify
-them with a diagnostic quiz at the start of the course
-(\cref{prior-knowledge}).
+them with a diagnostic quiz at the start of the course.
 
-In summary, the method is as follows.
-We record the students' every edit--run cycle with learnlog throughout the
-course (\cref{learnlog-data}) and code the recorded debugging episodes for
-patterns of variation (\cref{analysis}); we measure the approaches to
-learning with the R-SPQ-2F (\cref{approach-measure}); and we relate
-patterns, approach and outcomes to one another.
-The questions are answered in two modes: descriptively
-(\cref{rq:patterns,rq:experts}) and by attempting to falsify the
-corresponding hypothesis (\cref{rq:deep,rq:success,rq:generative}).
-Restating the questions and the hypotheses, the overview is as follows;
-the details follow in the coming sections.
+Let us remind ourselves about the questions that we have set out to
+answer, and how we will answer them; the details follow in the coming
+sections.
 
 \rqpatterns*
-Answered descriptively: coding the debugging episodes recorded with
-learnlog (\cref{learnlog-data}) in variation-theoretic terms
-(\cref{analysis}) yields the catalogue of which patterns appear, in what
-order, and how often.
+Answered descriptively: we record the students' debugging episodes with
+learnlog (\cref{learnlog-data}) and code them in variation-theoretic terms
+(\cref{analysis}); this yields a catalogue of which patterns appear, in
+what order, and how often.
 \Cref{h:patterns} additionally predicts:
 \hpatterns*
 As stated this is a universal claim, which a single counterexample would
@@ -60,16 +51,18 @@ unsuccessful episodes.
 \rqdeep*
 Answered by testing \cref{h:deep}:
 \hdeep*
-The questionnaire (\cref{approach-measure}) provides the approach measure,
-which we correlate with the coded patterns; the think-aloud subsample
-(\cref{think-aloud}) validates both the coding and the classification.
+The questionnaire (\cref{approach-measure}) provides the measure of the
+students' approach to learning, which we correlate with the coded
+patterns; the think-aloud subsample (\cref{think-aloud}) validates both
+the coding and the classification.
 
 \rqsuccess*
 Answered by testing \cref{h:success}:
 \hsuccess*
-The debugging outcomes (\cref{outcomes}) provide the success measures; the
-diagnostic quiz (\cref{prior-knowledge}) provides the control for prior
-experience.
+The debugging outcomes---whether the bug was fixed, and in how many
+edit--run cycles---derive from the recorded episodes (\cref{analysis}) and
+provide the success measures; the diagnostic quiz (\cref{prior-knowledge})
+provides the control for prior experience.
 
 \rqexperts*
 Answered descriptively---it has no hypothesis to test: we code the
@@ -113,9 +106,8 @@ ethical considerations in \cref{ethics}.
 
 We describe the data collection in the chronological order of the course:
 what we collect at the start of the course
-(\cref{prior-knowledge,approach-measure}), what we collect throughout it
-(\cref{learnlog-data,think-aloud,material-use,teacher-baseline}), and what
-derives from the recordings afterwards (\cref{outcomes}).
+(\cref{prior-knowledge,approach-measure}), and what we collect throughout it
+(\cref{learnlog-data,think-aloud,material-use,teacher-baseline}).
 
 \subsubsection{Prior programming knowledge}
 \label{prior-knowledge}
@@ -151,11 +143,28 @@ following.
     material-use self-report (\cref{material-use}) and thereby for the
     generative-learning comparison it supports.
 \end{enumerate}
+Concretely, the quiz asks the following.
+% XXX Draft wording; to be piloted before the course starts.
+\begin{enumerate}
+  \item \enquote{Have you programmed before this course?
+    Which programming languages have you used, and for roughly how long?}
+  \item \enquote{Have you programmed in Python?}
+  \item \enquote{If you have programmed before: how did you learn---in a
+    formal course, self-taught, or both?}
+  \item \enquote{When your program misbehaves, what do you do?
+    Describe what you did the last time it happened.}
+    (open text)
+  \item \enquote{How confident are you that you could write, run and fix a
+    small program on your own?}
+    (five-point scale)
+  \item \enquote{How do you plan to study in this course: mainly from the
+    course material, mainly from other sources, or a mix?}
+\end{enumerate}
 For the knowledge part itself, a subset of a validated concept inventory
 for introductory programming would make the measure comparable to other
 studies.
 % XXX Pick and verify a concept inventory (candidates to be reviewed)
-% before finalising the quiz.
+% before finalising the quiz; its items then join the list above.
 
 \subsubsection{Measuring the approach to learning: R-SPQ-2F}
 \label{approach-measure}
@@ -173,6 +182,30 @@ general approach.
 The second administration, at the end, asks with respect to this course;
 those scores we treat as measurements of the approach in the context of
 this course rather than as a stable property of the student.
+
+\paragraph{The items at the start of the course}
+
+The R-SPQ-2F comprises 20 items: for each of the deep and the surface
+approach, five motive and five strategy items, giving 10 items per
+approach score \autocite{RSPQ2F}.
+At the start of the course we use the items in their original wording,
+with the students instructed to answer with their studies in general in
+mind.
+% XXX Enumerate the 20 items verbatim from the appendix of Biggs et al.
+% (2001) here; insert and verify against the original before the course
+% starts.
+
+\paragraph{The items at the end of the course}
+
+At the end of the course we use the same 20 items, with the instructions
+(and, where needed, the wording) referring to this course instead of to
+the student's studies in general, in line with the instrument's intended
+use by teachers evaluating their own course \autocite{RSPQ2F}.
+The two administrations thus differ only in this reframing, so that the
+start and end scores remain comparable while measuring the general and
+the course-specific approach, respectively.
+% XXX Enumerate the adapted items alongside the originals once those are
+% inserted above.
 
 \paragraph{Classifying the students compatibly with the original studies}
 
@@ -302,13 +335,6 @@ Their episodes are coded identically to the students'
 (\cref{episode-coding}), giving an expert baseline: which patterns experts
 generate, in what order, and how complete their episodes are.
 
-\subsubsection{Debugging outcomes}
-\label{outcomes}
-
-For each debugging episode in the recordings (\cref{learnlog-data}) we
-record whether the bug was fixed, the number of edit--run cycles, and the
-wall-clock time from the first failing run to the first passing run.
-These constitute our measures of debugging success for \cref{h:success}.
 
 \subsection{Analysis}
 \label{analysis}
@@ -333,6 +359,10 @@ variation-theoretic coding:\label{episode-coding}
   \item Rate the episode's pattern completeness: which of the patterns are
     present, and whether the episode ends in a fix.
 \end{enumerate}
+For each episode we also record whether the bug was fixed, the number of
+edit--run cycles, and the wall-clock time from the first failing run to
+the first passing run: these constitute our measures of debugging success
+for \cref{h:success}.
 \end{frame}
 
 Note that when programming, the generalisation and fusion experiments are
