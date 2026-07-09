@@ -295,6 +295,140 @@
   doi =		 {10.1080/09650790701314684},
 }
 
+% === provenance: FCS1 ===
+% CLAIM: The FCS1 is a validated, language-independent assessment of CS1
+%   knowledge (computing previously lacked such validated assessments).
+% FOUND-VIA: Crossref API, query.bibliographic="language independent
+%   assessment CS1 knowledge FCS1 Tew Guzdial"; abstract via OpenAlex
+%   (2026-07-09).
+% PICKED: the primary source introducing the instrument.
+% QUOTE (abstract): "computing lacks valid assessments for pedagogical or
+%   research purposes.  Without such valid assessments, it is difficult to
+%   accurately measure student learning ..."
+% VERIFIED: abstract read via OpenAlex; title states the instrument is "a
+%   language independent assessment of CS1 knowledge".  Pages 111--116
+%   confirmed via Crossref.
+% DATE: 2026-07-09
+@inproceedings{FCS1,
+  author =	 {Tew, Allison Elliott and Guzdial, Mark},
+  title =	 {The {FCS1}: a language independent assessment of {CS1}
+                  knowledge},
+  booktitle =	 {Proceedings of the 42nd {ACM} Technical Symposium on
+                  Computer Science Education},
+  series =	 {SIGCSE '11},
+  pages =	 {111--116},
+  year =	 {2011},
+  doi =		 {10.1145/1953163.1953200},
+}
+
+% === provenance: SCS1 ===
+% CLAIM: The SCS1 is a validated, language-independent concept inventory for
+%   introductory programming, an isomorphic successor of the FCS1.
+% FOUND-VIA: Crossref API, query.bibliographic="replication validation
+%   language independent CS1 knowledge assessment SCS1 Parker"; abstract via
+%   OpenAlex (2026-07-09).
+% PICKED: the primary source introducing the SCS1.
+% QUOTE (abstract): "We developed the Second CS1 Assessment (SCS1) as an
+%   isomorphic version of a previously validated language-independent
+%   assessment for introductory computer science, the FCS1."
+% VERIFIED: abstract read via OpenAlex; pages 93--101 confirmed via
+%   Crossref.
+% DATE: 2026-07-09
+@inproceedings{SCS1,
+  author =	 {Parker, Miranda C. and Guzdial, Mark and Engleman, Shelly},
+  title =	 {Replication, Validation, and Use of a Language Independent
+                  {CS1} Knowledge Assessment},
+  booktitle =	 {Proceedings of the 2016 {ACM} Conference on International
+                  Computing Education Research},
+  series =	 {ICER '16},
+  pages =	 {93--101},
+  year =	 {2016},
+  doi =		 {10.1145/2960310.2960316},
+}
+
+% === provenance: SCS1IRT ===
+% CLAIM: An item response theory evaluation of the SCS1 found problematic
+%   items (informing the choice of a subset).
+% FOUND-VIA: OpenAlex search "item response theory evaluation SCS1"
+%   (2026-07-09), after a Crossref bibliographic query missed it.
+% PICKED: the IRT re-evaluation of the SCS1 (the instrument we subset).
+% QUOTE (abstract): "We analyzed the Second Computer Science 1 (SCS1)
+%   concept inventory, a widely used assessment of introductory computer
+%   science (CS1) knowledge, for such flaws. [...] modeling question
+%   difficulty and learner knowledge separately with Item Response Theory
+%   (IRT) and performing expert review on problematic questions."
+% VERIFIED: abstract read via OpenAlex; pages 699--705 confirmed via
+%   Crossref.  TODO: read the full text for WHICH items are problematic
+%   when selecting the subset.
+% DATE: 2026-07-09
+@inproceedings{SCS1IRT,
+  author =	 {Xie, Benjamin and Davidson, Matthew J. and Li, Min and Ko,
+                  Amy J.},
+  title =	 {An Item Response Theory Evaluation of a Language-Independent
+                  {CS1} Knowledge Assessment},
+  booktitle =	 {Proceedings of the 50th {ACM} Technical Symposium on
+                  Computer Science Education},
+  series =	 {SIGCSE '19},
+  pages =	 {699--705},
+  year =	 {2019},
+  doi =		 {10.1145/3287324.3287370},
+}
+
+% === provenance: SCS1Short ===
+% CLAIM: Shortened adaptations of the SCS1 exist that reduce time and
+%   redundancy while maintaining the instrument's reliability.
+% FOUND-VIA: Crossref API, query.bibliographic="revalidating cognitive
+%   introductory computing instruments Bockmon"; abstract via Semantic
+%   Scholar (2026-07-09).
+% PICKED: the shortened-SCS1 validation study.
+% QUOTE (abstract): "This paper discusses efforts to modify Parker et al.'s
+%   Second CS1 aptitude test (SCS1) to reduce the time spent on the exam,
+%   provide greater customization to match concepts taught across three
+%   universities, and reduce redundancy of test questions all while
+%   maintaining the instrument's rel[iability]"
+% VERIFIED: abstract read via Semantic Scholar; pages 552--557 confirmed
+%   via Crossref.
+% DATE: 2026-07-09
+@inproceedings{SCS1Short,
+  author =	 {Bockmon, Ryan and Cooper, Stephen and Gratch, Jonathan and
+                  Dorodchi, Mohsen},
+  title =	 {(Re){Validating} Cognitive Introductory Computing
+                  Instruments},
+  booktitle =	 {Proceedings of the 50th {ACM} Technical Symposium on
+                  Computer Science Education},
+  series =	 {SIGCSE '19},
+  pages =	 {552--557},
+  year =	 {2019},
+  doi =		 {10.1145/3287324.3287372},
+}
+
+% === provenance: FCS1SCS1Uses ===
+% CLAIM: The FCS1 and SCS1 have been widely used and adapted in computing
+%   education research.
+% FOUND-VIA: OpenAlex search "item response theory evaluation SCS1"
+%   surfaced it among the results (2026-07-09).
+% PICKED: the instrument authors' own ten-year retrospective of uses and
+%   adaptations.
+% QUOTE (abstract): "we can trace the use and the impact that these
+%   validated instruments have had [...] we examine how the FCS1 and SCS1
+%   assessments have been used and adapted."
+% VERIFIED: abstract read via OpenAlex; pages 60--68 confirmed via
+%   Crossref.
+% DATE: 2026-07-09
+@inproceedings{FCS1SCS1Uses,
+  author =	 {Parker, Miranda C. and Guzdial, Mark and Tew, Allison
+                  Elliott},
+  title =	 {Uses, Revisions, and the Future of Validated Assessments in
+                  Computing Education: A Case Study of the {FCS1} and
+                  {SCS1}},
+  booktitle =	 {Proceedings of the 17th {ACM} Conference on International
+                  Computing Education Research},
+  series =	 {ICER '21},
+  pages =	 {60--68},
+  year =	 {2021},
+  doi =		 {10.1145/3446871.3469744},
+}
+
 % === provenance: VTProgMisconceptions ===
 % CLAIM: (companion paper) Catalogue of introductory-programming misconceptions
 %   analysed through variation theory; contains the short version of the
