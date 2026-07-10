@@ -119,46 +119,39 @@ debugging may exhibit the patterns from the start.
 We therefore administer a diagnostic test---a quiz---at the start of the
 course, measuring prior programming knowledge, complemented by
 self-reported programming experience.
-Besides prior programming knowledge, the start-of-course quiz captures the
-following.
+Besides prior programming knowledge, the quiz asks the following; with
+each question we give the reason for asking it.
+% XXX Draft wording; to be piloted before the course starts.
 \begin{enumerate}
-  \item Prior debugging habits, through an open question such as
-    \enquote{when your program misbehaves, what do you do?}.
+  \item \enquote{Have you programmed before this course?
+    Which programming languages have you used, and for roughly how long?
+    Have you programmed in Python?}
+    Experienced students will debug faster regardless of their approach to
+    learning, so prior experience is the control variable for
+    \cref{h:success}.
+  \item \enquote{If you have programmed before: how did you learn---in a
+    formal course, self-taught, or both?}
+    The self-taught are self-directed learners by definition, which bears
+    directly on the deep approach (\cref{rq:deep}): they may already
+    generate their own variation.
+  \item \enquote{When your program misbehaves, what do you do?
+    Describe what you did the last time it happened.}
+    (open text)
     The answers can themselves be coded for variation-thinking, giving a
     baseline debugging-approach measure that is independent of both the
     logs and the questionnaire---a third, independent angle on the
     connection between approach and patterns (\cref{rq:deep}).
-  \item Languages known and years of experience, and whether they know
-    Python specifically: experienced students will debug faster regardless
-    of approach, so this is the control variable for \cref{h:success}.
-  \item How they learned to program: in a formal course or
-    self-taught---the self-taught being self-directed learners by
-    definition, which bears directly on the deep approach
-    (\cref{rq:deep}): they may already generate their own variation.
-  \item Programming self-efficacy: less confident students may give up or
-    persist differently, which confounds the persistence-based success
-    measures of \cref{h:success}, the time and the number of cycles to
-    fix.
-  \item How they plan to study in this course, as a baseline for the
-    material-use self-report (\cref{material-use}) and thereby for the
-    generative-learning comparison it supports.
-\end{enumerate}
-Concretely, the quiz asks the following.
-% XXX Draft wording; to be piloted before the course starts.
-\begin{enumerate}
-  \item \enquote{Have you programmed before this course?
-    Which programming languages have you used, and for roughly how long?}
-  \item \enquote{Have you programmed in Python?}
-  \item \enquote{If you have programmed before: how did you learn---in a
-    formal course, self-taught, or both?}
-  \item \enquote{When your program misbehaves, what do you do?
-    Describe what you did the last time it happened.}
-    (open text)
   \item \enquote{How confident are you that you could write, run and fix a
     small program on your own?}
     (five-point scale)
+    Less confident students may give up or persist differently, which
+    confounds the persistence-based success measures of
+    \cref{h:success}---the time and the number of cycles to fix.
   \item \enquote{How do you plan to study in this course: mainly from the
     course material, mainly from other sources, or a mix?}
+    This is the baseline for the material-use self-report
+    (\cref{material-use}), and thereby for the generative-learning
+    comparison it supports (\cref{rq:generative}).
 \end{enumerate}
 For the knowledge part itself we use a subset of the Second CS1 Assessment
 (SCS1), a validated, language-independent concept inventory for
@@ -172,12 +165,19 @@ must fit alongside the R-SPQ-2F and the background items above, and an
 item response theory evaluation of the SCS1 found problematic items that a
 subset can avoid \autocite{SCS1IRT}; shortened adaptations that preserve
 the instrument's reliability exist \autocite{SCS1Short}.
-% XXX Select the concrete SCS1 subset when finalising the quiz; the
-% selected items then join the list above.  Per the IRT results (SCS1IRT,
-% full text): avoid Q20, Q24, Q27 (unrelated to the CS1-knowledge factor)
-% and Q5, Q13, Q15, Q18 (too difficult, Q13/Q18 also poor
-% discrimination).  Requires the instrument itself: requested from the
-% SCS1 maintainers (see nytid todo).
+An alternative for the knowledge part is the Nordic Prior Knowledge Test
+in Programming, which was designed for precisely our situation: assessing
+incoming students' prior knowledge of the basic elements of CS1, in the
+Nordic setting \autocite{NPKT}.
+Its 2024 administration, with \num{3038} students across eight Norwegian
+institutions, provides a directly comparable baseline for our cohort.
+% XXX Decide between the SCS1 subset and the Nordic Prior Knowledge Test
+% (or combine them) when finalising the quiz; the chosen items then join
+% the list above.  SCS1: per the IRT results (SCS1IRT, full text), avoid
+% Q20, Q24, Q27 (unrelated to the CS1-knowledge factor) and Q5, Q13, Q15,
+% Q18 (too difficult, Q13/Q18 also poor discrimination); the instrument
+% must be requested from its maintainers (see nytid todo 171).  The
+% Nordic test's availability: check with Bolland et al.
 
 \subsubsection{Measuring the approach to learning: R-SPQ-2F}
 \label{approach-measure}
