@@ -1,0 +1,96 @@
+\mode*
+\section{Related work}
+\label{related-work}
+
+We compare our study with three lines of earlier work: debugging in
+computing education, analyses of programming process data, and variation
+theory and phenomenography applied to programming.
+
+\subsection{Debugging in computing education}
+
+The educational debugging literature up to 2008 is reviewed by
+\textcite{DebuggingReview}.
+On the empirical side, \textcite{DebuggingStudentPerspective} report from a
+multi-institutional study that students find locating bugs harder than
+fixing them, that they use a wide variety of strategies, and that the web
+has emerged as the obvious first place to look for similar examples.
+\Textcite{MichaeliRomeike2019} argue that debugging is a skill distinct
+from general programming ability and should be taught explicitly, yet is
+underrepresented both in classrooms and in computing education research.
+
+Our study supplies what this line of work calls for but does not provide:
+a \emph{theory} of what the skilled debugger does---generating the patterns
+of variation---and hence of what explicit debugging instruction should
+teach (\cref{debugging-as-learning,discussion}).
+The finding that locating the bug is the hard part matches our analysis
+that the main issue of debugging is finding the initial contrast
+(\cref{debugging}); the web-first habit matches our externally-sourced
+episodes, where the explanation is found rather than generated
+(\cref{analysis}).
+
+\subsection{Programming process data}
+
+\Textcite{Jadud2006} pioneered the analysis of what he calls compilation
+behaviour: observing students' repeated edit--compile cycles, with
+snapshots of the program from one compilation to the next, capturing their
+attempts to make programs syntactically correct.
+Our edit--run cycles are the semantic sibling of Jadud's edit--compile
+cycles: where compilation behaviour captures the syntactic struggle, our
+variation-theoretic coding asks what the student \emph{varied} between
+runs, and what that reveals about which aspects they discern.
+The community has since standardised the logging of such process data in
+the ProgSnap2 format \autocite{ProgSnap2}; learnlog exports its recordings
+as ProgSnap2 \autocite{learnlog}, so our data and analyses remain
+comparable and shareable within that ecosystem.
+
+\subsection{Variation theory and phenomenography in programming}
+
+\Textcite{ThuneEckerdal2009} apply phenomenography and variation theory to
+engineering students' conceptions of computer programming, presenting an
+outcome space of five qualitatively different ways of seeing programming,
+with associated dimensions of variation.
+\Textcite{BruceLearningToProgram} phenomenographically map five different
+ways in which first-year students \emph{go about} learning to program,
+from \enquote{following} (getting through the unit), via coding,
+understanding and integrating, and problem solving, to enculturation.
+Both study students' conceptions and experiences through interviews.
+We differ in two ways: we apply variation theory to the recorded
+\emph{acts} of debugging---the phenomenographic stance that acts express
+understanding (\cref{background}), operationalised through learnlog's
+edit--run data---and we connect the self-generated patterns of variation
+to the approaches to learning, via \citeauthor{NCOL}'s reinterpretation
+(\cref{approaches}).
+Bruce et al.'s categories can be read as approach-like distinctions in the
+programming context: their \enquote{following} students resemble the
+surface approach, their problem solvers the deep.
+Our companion paper \autocite{VTProgMisconceptions} complements these by
+deriving teaching patterns from documented misconceptions.
+
+We have not found prior work that connects the approaches to learning to
+debugging specifically, nor work that looks for the patterns of variation
+in programming process data.
+That combination---debugging as self-directed variation, observed in
+recorded edit--run cycles, and related to the deep approach---is the
+contribution of this study.
+
+\mode<presentation>{%
+\begin{frame}
+  \begin{block}{Related work}
+    \begin{itemize}
+      \item Debugging education: hard, distinct, undertaught---but no
+        theory of the skill.
+      \item Process data: edit--compile cycles, ProgSnap2---but analysed
+        for syntax, not variation.
+      \item VT/phenomenography in programming: conceptions via
+        interviews---not acts, not debugging.
+    \end{itemize}
+  \end{block}
+
+  \begin{idea}
+    \begin{itemize}
+      \item New: patterns of variation in recorded debugging, connected to
+        the deep approach.
+    \end{itemize}
+  \end{idea}
+\end{frame}%
+}

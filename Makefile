@@ -17,6 +17,7 @@ SRC+=debugging.tex
 SRC+=method.tex
 
 SRC+=results.tex
+SRC+=related-work.tex
 SRC+=discussion.tex
 
 # The C++ counterexample's output is compiled and captured at build time so
