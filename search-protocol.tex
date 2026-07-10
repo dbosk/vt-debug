@@ -1,0 +1,103 @@
+\mode*
+\section{Search and verification protocol}
+\label{app:search}
+
+Every citation in this paper follows a find--verify--record protocol: the
+claim is stated first, a source is found through a recorded, reproducible
+query, the source itself is read (abstract or full text) to verify that it
+supports the claim at its scope and strength, and the outcome is recorded
+in a provenance block in the bibliography file (fields: claim, found-via,
+picked, verbatim quote, verification status, date).
+This appendix documents the searches; the per-reference records are in the
+provenance blocks.
+% XXX Future searches: prefer the scholar tool, which queries several
+% databases at once and records the queries; the API queries below are
+% recorded verbatim and equally reproducible.
+
+\paragraph{Foundational references (2026-07-02)}
+
+The approaches-to-learning and debugging-education anchors were found via
+the Crossref REST API (\texttt{query.bibliographic}), one query each:
+\begin{itemize}
+  \item \texttt{on qualitative differences in learning outcome and process
+    Marton} --- retained Marton and Säljö I and II (both parts surfaced in
+    one query);
+  \item \texttt{revised two-factor study process questionnaire R-SPQ-2F
+    Biggs} --- retained Biggs, Kember and Leung;
+  \item \texttt{Debugging a review of the literature from an educational
+    perspective McCauley} --- retained McCauley et al.
+\end{itemize}
+Verification: abstracts from the Crossref records; the R-SPQ-2F was later
+verified in full text (2026-07-09), from which the 20 items in
+\cref{approach-measure} are transcribed.
+(Semantic Scholar and OpenAlex were unavailable on 2026-07-02; Crossref
+was used as the fallback.)
+
+\paragraph{Passages in \citetitle{NCOL} (2026-07-02 to 2026-07-09)}
+
+The claims attributed to \citeauthor{NCOL} were located by full-text
+search of the book's chapter PDFs (\texttt{pdftotext} followed by
+\texttt{grep}), with search terms \texttt{deep approach},
+\texttt{induction}, and \texttt{outcomes of learning turned out}; page
+numbers were taken from the printed running heads.
+The studies Marton reviews (Silén; Fyrenius, Wirell and Silén; Marton, Wen
+and Wong; Marton and Wenestam; Holmqvist, Gustavsson and Wernberg) were
+identified from those passages; their bibliographic metadata was verified
+against the book's reference list and, where indexed, against Crossref.
+They are cited as reviewed in \citetitle{NCOL}; the originals remain to be
+read.
+
+\paragraph{Concept inventory for the diagnostic quiz (2026-07-09)}
+
+Crossref \texttt{query.bibliographic} queries:
+\texttt{language independent assessment CS1 knowledge FCS1 Tew Guzdial};
+\texttt{replication validation language independent CS1 knowledge
+assessment SCS1 Parker};
+\texttt{revalidating cognitive introductory computing instruments
+Bockmon}.
+The IRT evaluation was missed by Crossref and found by the OpenAlex search
+\texttt{item response theory evaluation SCS1}, which also surfaced the
+FCS1/SCS1 retrospective.
+Retained: the FCS1 and SCS1 primary sources, the IRT evaluation (later
+read in full text for the item-level results), the shortened revalidation,
+and the retrospective.
+The Nordic Prior Knowledge Test was contributed by the first author
+(2026-07-10); its metadata was verified against the publisher's page and
+its full text read.
+
+\paragraph{Related work (2026-07-10)}
+
+Crossref \texttt{query.bibliographic} queries, verbatim:
+\begin{itemize}
+  \item \texttt{Debugging from the student perspective Fitzgerald
+    McCauley} --- retained Fitzgerald et al.;
+  \item \texttt{Improving debugging skills in the classroom systematic
+    self-efficacy Michaeli Romeike} --- retained Michaeli and Romeike;
+  \item \texttt{methods and tools for exploring novice compilation
+    behaviour Jadud} --- retained Jadud;
+  \item \texttt{ProgSnap2 flexible format programming process data Price}
+    --- retained Price et al.;
+  \item \texttt{Learning to program phenomenographic perspective Booth}
+    --- Booth's thesis did not surface; an OpenAlex search with the same
+    terms surfaced Bruce et al., which was retained instead (full text
+    read from the journal's site);
+  \item \texttt{Variation theory applied students learning computer
+    programming Thune Eckerdal} --- retained Thuné and Eckerdal;
+  \item \texttt{programming success factors deep surface approach Bergin
+    Reilly} --- the candidate could not be verified (no retrievable
+    abstract; truncated title metadata) and was \emph{discarded} rather
+    than cited unread.
+\end{itemize}
+All retained related-work references were verified by reading their
+abstracts (via OpenAlex or Semantic Scholar), except Bruce et al., whose
+full text was read.
+
+\paragraph{Full texts read}
+
+\Textcite{RSPQ2F} (instrument transcription),
+\textcite{SCS1IRT} (item-level results),
+\textcite{BruceLearningToProgram},
+\textcite{NPKT},
+and the passages of \citetitle{NCOL} cited throughout.
+All other references are verified at abstract level, with
+\textcite{DebuggingReview} cited only as a pointer to the review it is.
