@@ -19,6 +19,7 @@ SRC+=method.tex
 SRC+=results.tex
 SRC+=related-work.tex
 SRC+=discussion.tex
+SRC+=conclusions.tex
 SRC+=search-protocol.tex
 
 # The C++ counterexample's output is compiled and captured at build time so
