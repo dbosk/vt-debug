@@ -30,3 +30,13 @@ didactic_output_*.txt
 # compiled C++ example and its captured output (built by make)
 examples/experiment5
 examples/experiment5.out
+
+# woven and tangled from the appendix literate programs (quiz.nw, episodes.nw)
+quiz.tex
+episodes.tex
+quiz.json
+analyze_quiz.py
+analyze_episodes.py
+
+# byte-compiled checks of the tangled programs
+__pycache__/

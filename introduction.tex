@@ -125,6 +125,72 @@ correlational as well, comparing groups within the cohort.
 Together this makes for a mixed-methods design, which we detail in
 \cref{method}.
 
+Answering the questions requires methods that are themselves untried: we
+code patterns of variation from recorded edit--run cycles, and we
+classify approaches to learning from several sources, none of which is
+the original studies' method.
+The study must therefore verify its own instruments, which we state as
+methodological questions, separate from the substantive ones.
+\begin{frame}
+\begin{restatable}{mquestion}{mqcoding}\label{mq:coding}
+  Do the patterns of variation coded from the recorded edit--run cycles
+  correspond to the patterns in the debugger's reasoning?
+\end{restatable}
+\begin{restatable}{mquestion}{mqagreement}\label{mq:agreement}
+  Do the different classifications of the students' approaches to
+  learning---the questionnaire scores, the interview accounts and the
+  coded open-text answers---agree?
+\end{restatable}
+\end{frame}
+Each is answered by comparing measurements of the same thing from
+independent sources; we detail how in \cref{method}.
+
+\subsection{Contributions}
+
+Summarising the above, this paper contributes the following; each
+contribution is held to account by a research question.
+\begin{itemize}
+  \item A variation-theoretic \emph{theory} of debugging: debugging is
+    self-directed learning, and debugging skill is the ability to
+    generate the patterns of variation for oneself
+    (\cref{debugging-as-learning}), illustrated by a worked example of an
+    actual debugging episode (\cref{debugging}).
+    \Cref{rq:patterns} tests the theory's central prediction.
+  \item The identification of debugging skill with the deep approach to
+    learning, via \citeauthor{NCOL}'s reinterpretation of the approaches
+    (\cref{approaches}); \cref{rq:deep,rq:success} test it.
+  \item An expert baseline for debugging: the course's teachers, an AI
+    coding agent, and the systematic-debugging literature---where we
+    check that the literature's prescriptions are variation theory
+    without knowing it (\cref{rq:experts}).
+  \item A within-cohort test of generative learning: whether experiencing
+    patterns of variation in the course material breeds generating them
+    in debugging (\cref{rq:generative}).
+  \item A method for observing patterns of variation in programming
+    process data: learnlog's recorded edit--run cycles and a
+    variation-theoretic coding of them, validated against think-aloud
+    reasoning (\cref{mq:coding}).
+  \item An approach classification compatible with the original studies'
+    phenomenographic one, triangulated from questionnaire, interview and
+    open-text sources, with the agreement between them reported
+    (\cref{mq:agreement}).
+\end{itemize}
+
+\mode<presentation>{%
+\begin{frame}
+  \begin{block}{Contributions}
+    \begin{itemize}
+      \item Theory: debugging \(=\) self-directed variation.
+      \item Debugging skill \(=\) the deep approach.
+      \item Expert baselines: teachers, AI agent, the literature.
+      \item Generative learning, tested within the cohort.
+      \item Method: coding variation from edit--run logs (validated).
+      \item Method: triangulated approach classification (agreement).
+    \end{itemize}
+  \end{block}
+\end{frame}%
+}
+
 The rest of the paper is structured as follows.
 In \cref{background} we recap phenomenography, variation theory and the
 approaches to learning.
@@ -138,3 +204,7 @@ In \cref{related-work} we compare with related work---placed late so that
 the comparison with our design is direct---in \cref{discussion} we discuss
 implications and threats to validity, and in \cref{conclusions} we
 conclude.
+The appendices contain the study's instruments as literate programs---the
+diagnostic quiz (\cref{app:quiz}) and the episode analysis
+(\cref{app:episodes})---and the search protocol behind the references
+(\cref{app:search}).

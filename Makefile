@@ -2,7 +2,7 @@ LATEXFLAGS=		-shell-escape
 TEX_PYTHONTEX=	yes
 
 .PHONY: all
-all: article.pdf slides.pdf
+all: article.pdf slides.pdf programs
 
 SRC+=theory.bib
 SRC+=debugging.bib
@@ -20,7 +20,22 @@ SRC+=results.tex
 SRC+=related-work.tex
 SRC+=discussion.tex
 SRC+=conclusions.tex
+SRC+=quiz.tex
+SRC+=episodes.tex
 SRC+=search-protocol.tex
+
+# The appendix literate programs: woven into the article (the .tex files
+# above), tangled into the quiz description and the analysis programs.
+NOWEB_SUFFIXES+=	.json
+
+.PHONY: programs
+programs: quiz.json analyze_quiz.py analyze_episodes.py
+quiz.json: quiz.nw
+	${NOTANGLE.json}
+analyze_quiz.py: quiz.nw
+	${NOTANGLE.py}
+analyze_episodes.py: episodes.nw
+	${NOTANGLE.py}
 
 # The C++ counterexample's output is compiled and captured at build time so
 # the paper shows real output, same as the PythonTeX examples.
@@ -48,8 +63,10 @@ article.pdf slides.pdf: latexmkrc
 clean:
 	latexmk -C
 	${RM} article.bbl article.run.xml
+	${RM} quiz.tex episodes.tex
+	${RM} quiz.json analyze_quiz.py analyze_episodes.py
 
 INCLUDE_MAKEFILES?=./makefiles
-include ${INCLUDE_MAKEFILES}/tex.mk
+include ${INCLUDE_MAKEFILES}/noweb.mk
 INCLUDE_DIDACTIC=./didactic
 include ${INCLUDE_DIDACTIC}/didactic.mk

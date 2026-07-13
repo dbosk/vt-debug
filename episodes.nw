@@ -1,0 +1,281 @@
+\section{Analysing the episodes, literately}
+\label{app:episodes}
+
+This appendix is the second literate program of the paper: it tangles
+to [[analyze_episodes.py]], which computes the quantitative analyses of
+\cref{analysis}---the R-SPQ-2F scores (\cref{approach-measure}), the
+correlations testing \cref{h:deep,h:success}, the group comparison
+testing \cref{h:generative}, and the agreement measures answering
+\cref{mq:coding,mq:agreement}.
+Presenting the program here also pins down the data formats, which
+double as the study's code book.
+
+\subsection{The data files}
+
+The program reads three CSV files, one per data source.
+
+\begin{description}
+  \item[{[[rspq.csv]]}] One row per student and administration:
+    [[student]], [[administration]] ([[start]] or [[end]],
+    \cref{approach-measure,end-measure}), and [[item1]] through
+    [[item20]] with the five-point answers.
+  \item[{[[episodes.csv]]}] One row per coded debugging episode
+    (\cref{analysis}): [[student]], [[episode]], the binary codes
+    [[contrast]], [[generalisation]] and [[fusion]], whether the
+    episode was [[external]]ly sourced, whether the bug was [[fixed]],
+    the number of [[cycles]], the [[seconds]] from first failing to
+    first passing run, and the [[coder]]---[[log]] for episodes coded
+    from the learnlog data, [[thinkaloud]] for the same episodes coded
+    from the think-aloud recordings (\cref{think-aloud}).
+  \item[{[[students.csv]]}] One row per student: [[student]], whether
+    they are a [[material_user]] (\cref{material-use}), whether they
+    have [[prior_experience]] (\cref{prior-knowledge,app:quiz}), and
+    the two independent approach classifications, [[interview_class]]
+    from the think-aloud accounts and [[quiz_class]] from the coded
+    open-text answers ([[deep]], [[surface]], or empty).
+\end{description}
+
+\subsection{The program}
+
+The statistical tests come from SciPy; everything else is the standard
+library.
+
+<<[[analyze_episodes.py]]>>=
+"""Compute the quantitative analyses of the study.
+
+Tangled from the appendix of the paper, which documents the data
+formats and the tests; the paper's method section motivates them.
+Requires scipy.
+"""
+
+import argparse
+import collections
+import csv
+
+from scipy import stats
+
+<<R-SPQ-2F scoring>>
+<<episode measures>>
+<<agreement measures>>
+<<hypothesis tests>>
+<<episode analysis main>>
+
+if __name__ == "__main__":
+    main()
+@
+
+\subsection{Scoring the R-SPQ-2F}
+
+The deep-approach score sums items 1, 2, 5, 6, 9, 10, 13, 14, 17 and
+18; the surface-approach score sums the rest; and each splits into a
+motive and a strategy subscale \autocite[p.~149]{RSPQ2F}.
+We compute all six: the deep-strategy subscale is the robustness check
+motivated by the criticisms in \cref{approach-measure}.
+
+<<R-SPQ-2F scoring>>=
+SUBSCALES = {
+    "DM": (1, 5, 9, 13, 17),
+    "DS": (2, 6, 10, 14, 18),
+    "SM": (3, 7, 11, 15, 19),
+    "SS": (4, 8, 12, 16, 20),
+}
+
+
+def rspq_scores(row):
+    """Return the R-SPQ-2F scores for one rspq.csv row."""
+    answers = {i: int(row[f"item{i}"]) for i in range(1, 21)}
+    scores = {
+        name: sum(answers[i] for i in items)
+        for name, items in SUBSCALES.items()
+    }
+    scores["DA"] = scores["DM"] + scores["DS"]
+    scores["SA"] = scores["SM"] + scores["SS"]
+    return scores
+@
+
+\subsection{Episode measures}
+
+An episode's pattern completeness is the number of patterns present,
+zero to three; externally sourced episodes are excluded from the
+completeness analyses, since there the variation was outsourced
+(\cref{analysis}).
+
+<<episode measures>>=
+PATTERNS = ("contrast", "generalisation", "fusion")
+
+
+def completeness(episode):
+    """Return the number of patterns present in a coded episode."""
+    return sum(int(episode[pattern]) for pattern in PATTERNS)
+
+
+def own_episodes(episodes):
+    """The episodes where the student generated the variation."""
+    return [e for e in episodes if not int(e["external"])]
+@
+
+\subsection{Agreement}
+
+Both methodological questions ask whether two classifications of the
+same thing agree, which we measure with Cohen's kappa; SciPy does not
+provide it, so we compute it from the confusion counts.
+
+<<agreement measures>>=
+def cohen_kappa(pairs):
+    """Cohen's kappa for a list of (classification_a, classification_b)."""
+    n = len(pairs)
+    counts = collections.Counter(pairs)
+    labels = {label for pair in pairs for label in pair}
+    observed = sum(counts[(label, label)] for label in labels) / n
+    expected = sum(
+        (sum(v for (a, _), v in counts.items() if a == label) / n)
+        * (sum(v for (_, b), v in counts.items() if b == label) / n)
+        for label in labels
+    )
+    return (observed - expected) / (1 - expected)
+@
+
+For \cref{mq:coding} the pairs are the per-pattern codes of the same
+episode from the two coders, the logs and the think-aloud recordings;
+for \cref{mq:agreement} the pairs are the per-student approach
+classifications from two of the three sources at a time, where the
+questionnaire classifies a student as deep when the deep-approach
+score exceeds the surface-approach score.
+
+<<agreement measures>>=
+def coding_agreement(episodes):
+    """Kappa between log-coded and think-aloud-coded patterns (MQ 1)."""
+    by_key = collections.defaultdict(dict)
+    for e in episodes:
+        by_key[(e["student"], e["episode"])][e["coder"]] = e
+    pairs = []
+    for versions in by_key.values():
+        if "log" in versions and "thinkaloud" in versions:
+            for pattern in PATTERNS:
+                pairs.append(
+                    (versions["log"][pattern], versions["thinkaloud"][pattern])
+                )
+    return cohen_kappa(pairs) if pairs else None
+
+
+def questionnaire_class(scores):
+    """Classify from the end-of-course R-SPQ-2F scores."""
+    return "deep" if scores["DA"] > scores["SA"] else "surface"
+@
+
+\subsection{The hypothesis tests}
+
+\Cref{h:deep} predicts a positive correlation between the deep-approach
+score and the completeness of the student's episodes; we use Spearman's
+rank correlation, since neither measure is interval-scaled, and repeat
+the test with the deep-strategy subscale.
+
+<<hypothesis tests>>=
+def test_deep(students_scores, episodes):
+    """H2: deep-approach score vs mean episode completeness."""
+    mean_completeness = {}
+    by_student = collections.defaultdict(list)
+    for e in own_episodes(episodes):
+        by_student[e["student"]].append(completeness(e))
+    for student, values in by_student.items():
+        mean_completeness[student] = sum(values) / len(values)
+    common = [s for s in students_scores if s in mean_completeness]
+    for scale in ("DA", "DS"):
+        result = stats.spearmanr(
+            [students_scores[s][scale] for s in common],
+            [mean_completeness[s] for s in common],
+        )
+        print(f"H2 ({scale} vs completeness): "
+              f"rho={result.statistic:.2f}, p={result.pvalue:.3f}")
+@
+
+\Cref{h:success} predicts that the successful episodes are the complete
+ones: we compare the completeness of fixed and unfixed episodes, and
+correlate completeness with the number of cycles among the fixed ones
+(fewer cycles meaning a quicker fix).
+
+<<hypothesis tests>>=
+def test_success(episodes):
+    """H3: completeness vs debugging success."""
+    own = own_episodes(episodes)
+    fixed = [completeness(e) for e in own if int(e["fixed"])]
+    unfixed = [completeness(e) for e in own if not int(e["fixed"])]
+    if fixed and unfixed:
+        result = stats.mannwhitneyu(fixed, unfixed, alternative="greater")
+        print(f"H3 (fixed vs unfixed completeness): "
+              f"U={result.statistic:.0f}, p={result.pvalue:.3f}")
+    cycles = [(completeness(e), int(e["cycles"]))
+              for e in own if int(e["fixed"])]
+    if cycles:
+        result = stats.spearmanr([c for c, _ in cycles],
+                                 [n for _, n in cycles])
+        print(f"H3 (completeness vs cycles): "
+              f"rho={result.statistic:.2f}, p={result.pvalue:.3f}")
+@
+
+\Cref{h:generative} predicts that the material users generate more
+complete patterns than the self-studiers; the groups are compared with
+a Mann--Whitney U test, and the controls for approach and prior
+experience are reported alongside rather than modelled, given the
+expected group sizes.
+
+<<hypothesis tests>>=
+def test_generative(students, episodes):
+    """H4: material users vs self-studiers on completeness."""
+    by_student = collections.defaultdict(list)
+    for e in own_episodes(episodes):
+        by_student[e["student"]].append(completeness(e))
+    groups = {"1": [], "0": []}
+    for row in students:
+        values = by_student.get(row["student"])
+        if values:
+            groups[row["material_user"]].append(sum(values) / len(values))
+    if groups["1"] and groups["0"]:
+        result = stats.mannwhitneyu(groups["1"], groups["0"],
+                                    alternative="greater")
+        print(f"H4 (material users vs self-studiers): "
+              f"U={result.statistic:.0f}, p={result.pvalue:.3f}")
+@
+
+\subsection{Tying it together}
+
+The main function reads the three files, scores the questionnaires,
+runs the tests, and reports the agreement measures.
+
+<<episode analysis main>>=
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("rspq", help="rspq.csv")
+    parser.add_argument("episodes", help="episodes.csv")
+    parser.add_argument("students", help="students.csv")
+    args = parser.parse_args()
+
+    with open(args.rspq, newline="") as infile:
+        rspq = list(csv.DictReader(infile))
+    with open(args.episodes, newline="") as infile:
+        episodes = list(csv.DictReader(infile))
+    with open(args.students, newline="") as infile:
+        students = list(csv.DictReader(infile))
+
+    end_scores = {row["student"]: rspq_scores(row)
+                  for row in rspq if row["administration"] == "end"}
+
+    test_deep(end_scores, episodes)
+    test_success(episodes)
+    test_generative(students, episodes)
+
+    kappa = coding_agreement(episodes)
+    if kappa is not None:
+        print(f"MQ1 (log vs think-aloud coding): kappa={kappa:.2f}")
+    for row in students:
+        row["questionnaire_class"] = (
+            questionnaire_class(end_scores[row["student"]])
+            if row["student"] in end_scores else ""
+        )
+    sources = ("questionnaire_class", "interview_class", "quiz_class")
+    for a, b in [(x, y) for x in sources for y in sources if x < y]:
+        pairs = [(row[a], row[b]) for row in students
+                 if row.get(a) and row.get(b)]
+        if pairs:
+            print(f"MQ2 ({a} vs {b}): kappa={cohen_kappa(pairs):.2f}")
+@

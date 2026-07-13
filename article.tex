@@ -17,6 +17,11 @@
 \usepackage[inline]{enumitem}
 \setlist[enumerate]{label=(\arabic*)}
 
+% The appendix literate programs are woven with noweave; article-only, so
+% noweb.sty is loaded here and not in the shared preamble.
+\usepackage{noweb}
+\noweboptions{breakcode,longchunks}
+
 \title{%
   Debugging through the lens of variation theory:
   is debugging skill the deep approach to learning?%
@@ -57,6 +62,8 @@
 
 \appendix
 
+\input{quiz.tex}
+\input{episodes.tex}
 \input{search-protocol.tex}
 
 \end{document}

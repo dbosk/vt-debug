@@ -1,0 +1,305 @@
+\section{Setting up the diagnostic quiz, literately}
+\label{app:quiz}
+
+This appendix is a literate program \autocite{LiterateProgramming}: the
+prose and the code are one and the same source, woven into the text you
+are reading and tangled into the files the computer runs.
+It implements the diagnostic quiz of \cref{prior-knowledge}: it sets the
+quiz up in the learning platform, and it prepares the results for the
+analysis.
+Two files are tangled from this section: [[quiz.json]], the description
+of the quiz that the [[canvaslms]] tool pushes to Canvas, and
+[[analyze_quiz.py]], which summarises the results and prepares the
+open-text answers for manual coding.
+
+\subsection{The quiz for Canvas}
+
+The learning platform of the course is Canvas, and the [[canvaslms]]
+command-line tool creates a quiz from a JSON description:
+\begin{minted}{bash}
+canvaslms quizzes create -c prgi26 -f quiz.json
+\end{minted}
+The description has two parts, the quiz-level settings and the list of
+questions; the questions in turn are the background items of
+\cref{prior-knowledge} followed by the knowledge part.
+
+<<[[quiz.json]]>>=
+{
+  "quiz_type": "new",
+  "settings": {
+    <<quiz settings>>
+  },
+  "items": [
+    <<background items>>
+    <<knowledge-part items>>
+  ]
+}
+@
+
+The quiz is a diagnostic, not an assessment: nothing is graded, so
+there is no time limit, a single attempt suffices, and the result view
+shows the student their answers but no notion of correctness.
+
+<<quiz settings>>=
+"title": "Diagnostic quiz: your programming background",
+"instructions": "<p>This quiz maps your programming background so that we can adapt the course. It is not graded and there are no wrong answers. Please answer on your own, without help from others or from tools.</p>",
+"time_limit": null,
+"points_possible": 0,
+"due_at": null,
+"unlock_at": null,
+"lock_at": null,
+"quiz_settings": {
+  "shuffle_answers": false,
+  "shuffle_questions": false,
+  "has_time_limit": false,
+  "one_at_a_time_type": "none",
+  "allow_backtracking": true,
+  "multiple_attempts_enabled": false,
+  "result_view_restricted": true,
+  "display_items": true,
+  "display_item_response": true,
+  "display_item_response_correctness": false,
+  "display_item_correct_answer": false,
+  "display_points_awarded": false,
+  "display_points_possible": false
+}
+@
+
+\subsection{The background items}
+
+The five background items are exactly those motivated in
+\cref{prior-knowledge}; the item titles double as the keys under which
+Canvas reports the answers, so the analysis program
+(\cref{app:quiz-analysis}) refers to the items by these titles.
+
+<<background items>>=
+<<item: previous programming>>,
+<<item: python>>,
+<<item: how learned>>,
+<<item: misbehaving program>>,
+<<item: confidence>>
+@
+
+The first item is open text: which languages, and for how long, cannot
+be anticipated as choices.
+
+<<item: previous programming>>=
+{
+  "position": 1,
+  "points_possible": 0,
+  "entry": {
+    "title": "Previous programming",
+    "item_body": "<p>Have you programmed before this course? Which programming languages have you used, and for roughly how long?</p>",
+    "interaction_type_slug": "essay",
+    "interaction_data": {"rce": false, "word_limit_enabled": false},
+    "scoring_data": {"value": ""},
+    "scoring_algorithm": "None"
+  }
+}
+@
+
+The Python item is a yes/no question.
+Canvas's true--false question type requires a \enquote{correct} answer
+even in an ungraded quiz; the value below is arbitrary and never
+shown to the student (the result view above hides correctness).
+The same holds for the choice items that follow.
+
+<<item: python>>=
+{
+  "position": 2,
+  "points_possible": 0,
+  "entry": {
+    "title": "Python",
+    "item_body": "<p>Have you programmed in Python?</p>",
+    "interaction_type_slug": "true-false",
+    "interaction_data": {"true_choice": "Yes", "false_choice": "No"},
+    "scoring_data": {"value": true},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+How the student learned to program is a choice among the three
+alternatives of \cref{prior-knowledge}, plus the alternative for those
+who have not programmed at all; the order is meaningful, so the choices
+are not shuffled (the quiz settings above disable shuffling globally).
+
+<<item: how learned>>=
+{
+  "position": 3,
+  "points_possible": 0,
+  "entry": {
+    "title": "How you learned",
+    "item_body": "<p>If you have programmed before: how did you learn&mdash;in a formal course, self-taught, or both?</p>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>In a formal course</p>"},
+        {"position": 2, "item_body": "<p>Self-taught</p>"},
+        {"position": 3, "item_body": "<p>Both</p>"},
+        {"position": 4, "item_body": "<p>I have not programmed before this course</p>"}
+      ]
+    },
+    "scoring_data": {"value": 1},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+The misbehaving-program item is the open-text item whose answers we
+code for variation-thinking (\cref{prior-knowledge,mq:agreement}); the
+analysis program extracts these answers into a coding sheet.
+
+<<item: misbehaving program>>=
+{
+  "position": 4,
+  "points_possible": 0,
+  "entry": {
+    "title": "Misbehaving program",
+    "item_body": "<p>When your program misbehaves, what do you do? Describe what you did the last time it happened.</p>",
+    "interaction_type_slug": "essay",
+    "interaction_data": {"rce": false, "word_limit_enabled": false},
+    "scoring_data": {"value": ""},
+    "scoring_algorithm": "None"
+  }
+}
+@
+
+The confidence item is the five-point scale of \cref{prior-knowledge}.
+
+<<item: confidence>>=
+{
+  "position": 5,
+  "points_possible": 0,
+  "entry": {
+    "title": "Confidence",
+    "item_body": "<p>How confident are you that you could write, run and fix a small program on your own?</p>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>Not at all confident</p>"},
+        {"position": 2, "item_body": "<p>Slightly confident</p>"},
+        {"position": 3, "item_body": "<p>Moderately confident</p>"},
+        {"position": 4, "item_body": "<p>Quite confident</p>"},
+        {"position": 5, "item_body": "<p>Very confident</p>"}
+      ]
+    },
+    "scoring_data": {"value": 1},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+\subsection{The knowledge part}
+
+The knowledge part awaits the choice between the SCS1 subset and the
+Nordic Prior Knowledge Test (\cref{prior-knowledge}); its chunk is
+empty until then.
+When the items are added, each must be preceded by a comma, since the
+background items above end without one.
+The same items are reused verbatim in the end-of-course administration
+(\cref{end-measure}), so they are added here once and pushed twice.
+% XXX Add the knowledge-part items once the SCS1-subset/NPKT decision is
+% made (see the corresponding note in the method section).
+
+<<knowledge-part items>>=
+@
+
+\subsection{Analysing the results}
+\label{app:quiz-analysis}
+
+Canvas exports the quiz results as a CSV file with one row per student
+and one column per item, keyed by the item titles above.
+The analysis program tabulates the closed items---prior programming in
+Python, how the student learned, and the confidence scale---and writes
+the open-text answers to a coding sheet: a CSV file with one row per
+student and empty columns for the codes, to be filled in manually
+(\cref{analysis}).
+
+<<[[analyze_quiz.py]]>>=
+"""Summarise the diagnostic quiz results and prepare the coding sheet.
+
+The quiz itself is defined in quiz.json; both files are tangled from
+the same literate source (the appendix of the paper).  The input is
+Canvas's CSV export of the quiz results; the item titles are the
+column keys.
+"""
+
+import argparse
+import collections
+import csv
+import sys
+
+<<the item titles are the column keys>>
+<<tabulate the closed items>>
+<<write the coding sheet>>
+<<analysis main>>
+
+if __name__ == "__main__":
+    main()
+@
+
+The item titles are the join keys between the two tangled files: if a
+title changes in the quiz, this dictionary is the only other place to
+change---and both live in the same source chunk sequence, side by
+side.
+
+<<the item titles are the column keys>>=
+STUDENT = "name"
+CLOSED_ITEMS = ["Python", "How you learned", "Confidence"]
+OPEN_ITEMS = ["Previous programming", "Misbehaving program"]
+CODING_COLUMNS = ["contrast", "generalisation", "fusion", "notes"]
+@
+
+Tabulating a closed item is counting its answer frequencies; we print
+one table per item.
+
+<<tabulate the closed items>>=
+def tabulate(rows, item):
+    """Print the answer frequencies for one closed item."""
+    counts = collections.Counter(row[item] for row in rows)
+    print(f"\n{item}")
+    for answer, count in counts.most_common():
+        print(f"  {answer or '(no answer)'}: {count}")
+@
+
+The coding sheet holds the open-text answers next to empty columns for
+the manual variation-thinking codes; the coder fills in whether the
+described debugging exhibits contrast, generalisation or fusion
+thinking (\cref{analysis}).
+
+<<write the coding sheet>>=
+def write_coding_sheet(rows, path):
+    """Write open-text answers with empty coding columns to path."""
+    fields = [STUDENT] + OPEN_ITEMS + CODING_COLUMNS
+    with open(path, "w", newline="") as out:
+        writer = csv.DictWriter(out, fieldnames=fields, extrasaction="ignore")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({key: row.get(key, "") for key in fields})
+@
+
+The main function ties the pieces together.
+
+<<analysis main>>=
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("results", help="CSV export of the quiz results")
+    parser.add_argument(
+        "--coding-sheet",
+        default="quiz-coding-sheet.csv",
+        help="output CSV for manual coding of the open-text answers",
+    )
+    args = parser.parse_args()
+
+    with open(args.results, newline="") as infile:
+        rows = list(csv.DictReader(infile))
+    if not rows:
+        sys.exit("no rows in the results export")
+
+    print(f"{len(rows)} students")
+    for item in CLOSED_ITEMS:
+        tabulate(rows, item)
+    write_coding_sheet(rows, args.coding_sheet)
+    print(f"\ncoding sheet written to {args.coding_sheet}")
+@

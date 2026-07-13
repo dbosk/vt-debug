@@ -75,6 +75,20 @@ Answered by testing \cref{h:generative}:
 The material-use measure (\cref{material-use}) identifies the groups;
 approach and prior experience are controlled for; since the groups are
 self-selected, the answer is correlational.
+
+The methodological questions are answered by comparing independent
+measurements of the same thing.
+\mqcoding*
+Answered within the think-aloud subsample (\cref{think-aloud}): we code
+the patterns from the logs and compare them with the patterns in the
+recorded reasoning; agreement is what licenses coding the full cohort
+from the logs alone (\cref{analysis}).
+\mqagreement*
+Answered by comparing the three approach classifications---the
+questionnaire scores (\cref{approach-measure,end-measure}), the
+interview-based classification (\cref{think-aloud}) and the coded
+open-text answers of the quiz (\cref{prior-knowledge})---and reporting
+the agreement between them.
 Note, finally, that the overarching hypothesis---that debugging skill and
 the deep approach to learning are the same underlying ability---is not
 itself directly tested: \cref{h:deep,h:success} are consistent with the
@@ -120,13 +134,15 @@ debugging may exhibit the patterns from the start.
 We therefore administer a diagnostic test---a quiz---at the start of the
 course, measuring prior programming knowledge, complemented by
 self-reported programming experience.
+(The quiz is set up in the learning platform by the literate program in
+\cref{app:quiz}, which also prepares its results for analysis.)
 Besides prior programming knowledge, the quiz asks the following;
 between the questions we give the reason for asking them.
 % XXX Draft wording; to be piloted before the course starts.
 \begin{enumerate}
   \item \enquote{Have you programmed before this course?
-    Which programming languages have you used, and for roughly how long?
-    Have you programmed in Python?}
+    Which programming languages have you used, and for roughly how long?}
+  \item \enquote{Have you programmed in Python?}
 \end{enumerate}
 Experienced students will debug faster regardless of their approach to
 learning, so prior experience is the control variable for
@@ -146,7 +162,8 @@ their own variation.
 The answers can themselves be coded for variation-thinking, giving a
 baseline debugging-approach measure that is independent of both the logs
 and the questionnaire---a third, independent angle on the connection
-between approach and patterns (\cref{rq:deep}).
+between approach and patterns (\cref{rq:deep}), and the third
+classification whose agreement \cref{mq:agreement} asks about.
 \begin{enumerate}[resume]
   \item \enquote{How confident are you that you could write, run and fix a
     small program on your own?}
@@ -275,7 +292,7 @@ For our purposes the strategy side is the one that matters---creating
 patterns of variation is a way of going about learning, not a level of
 interest---so we will also score the deep-strategy subscale separately
 (items 2, 6, 10, 14 and 18 \autocite[p.~149]{RSPQ2F}) as a robustness
-check.
+check; the analysis program in \cref{app:episodes} computes both.
 Item-level factor analyses, however, advise care with that substructure:
 \textcite{RSPQ2FReexamined} find the R-SPQ-2F
 \textcquote{RSPQ2FReexamined}{best described by a parsimonious
@@ -320,7 +337,7 @@ We bridge this gap in three ways.
     or surface.
     This classification is the one compatible with \citeauthor{NCOL}'s
     variation-theoretic reinterpretation, and we report the agreement between
-    it and the questionnaire classification.
+    it and the questionnaire classification (\cref{mq:agreement}).
   \item We guard against circularity.
     \Citeauthor{NCOL}'s reinterpretation \emph{defines} the deep approach as
     creating the necessary patterns of variation
@@ -352,6 +369,9 @@ Since we encourage the students to run everything in this course-wide
 directory, we hope to capture not only the lab work but also some of what
 they run while studying---for instance when they follow a tutorial or try
 out an example from the material.
+When studying, they are more likely to aim for full understanding rather
+than only fixing the problem at hand, so we expect to see more complete
+patterns in the debugging they do while studying.
 
 \begin{frame}<presentation>[fragile]
   \begin{block}{learnlog\only<presentation>{~\autocite{learnlog}}}
@@ -386,7 +406,9 @@ students at different points of their learning.
 The subsample serves two purposes.
 First, the logs record acts but not the reasoning between them, so the
 think-aloud sessions let us validate that the patterns coded from the logs
-(\cref{analysis}) correspond to the patterns in the students' reasoning.
+(\cref{analysis}) correspond to the patterns in the students'
+reasoning---this answers \cref{mq:coding}, a methodological contribution
+in its own right.
 Second, the sessions give us the students' task-specific accounts of how
 they went about the debugging, which we need to classify their approaches
 the way the original studies did (\cref{approach-measure}).
@@ -433,10 +455,10 @@ method---creating and verifying hypotheses about the failure through
 experiments, conducted systematically---which is precisely the kind of
 self-generated variation our coding looks for
 (\cref{debugging-as-learning}).
-We can therefore also compare the coded episodes, the students' and the
-teachers' alike, with the prescriptions of the systematic-debugging
-literature: the prescribed hypothesis--experiment cycle should show up
-in our coding as the contrast and generalisation patterns.
+Our main interest in this comparison is to verify that what the book
+prescribes is essentially variation theory, without itself knowing that:
+the prescribed hypothesis--experiment cycle should show up in our coding
+as the contrast and generalisation patterns.
 
 A further expert of a different kind is an AI coding agent (Claude
 Opus).
@@ -452,6 +474,8 @@ if any, a state-of-the-art coding agent generates when it debugs.
 
 At the end of the course we administer both start-of-course instruments
 again: the concept inventory and the R-SPQ-2F.
+(The concept-inventory items are pushed to the learning platform by the
+same program as at the start, \cref{app:quiz}.)
 
 We need the concept inventory (\cref{prior-knowledge}) again because at
 the start it measures what the students brought with them; administered
@@ -463,7 +487,7 @@ relate the generated patterns of variation not only to debugging success
 but also to how much the student learned.
 
 We need the R-SPQ-2F (\cref{approach-measure}) again because the approach
-is not a fixed trait---students adapt it to their conception of the task
+to learning is not a fixed trait---students adapt it to their conception of the task
 \autocite{MartonSaljo1976II}---so the start-of-course scores measure the
 students' general approach, not their approach in \emph{this} course.
 At the end of the course we use the same 20 items; only the preliminary
@@ -533,6 +557,8 @@ For \cref{rq:deep,rq:success} we relate the coded episodes to the R-SPQ-2F
 scores and the debugging outcomes: correlating deep-approach scores with
 pattern counts and completeness (\cref{h:deep}), and both with debugging
 success (\cref{h:success}).
+These computations, and the data formats they assume, are implemented in
+the literate program of \cref{app:episodes}.
 
 The within-cohort comparison group (\cref{material-use}) lets us answer
 \cref{rq:generative} already in this study: if experiencing patterns of
@@ -550,6 +576,9 @@ If the overarching hypothesis is right, the experts' episodes should look
 like the deep-approach students' episodes, only more so---and the
 differences between the two should point out precisely what debugging
 instruction needs to provide.
+The experts can also be expected to have discerned more aspects than the
+students: they have more to vary, and their prerequisites for the search
+are richer (\cref{debugging}).
 
 \subsection{Pilot}
 \label{method-pilot}

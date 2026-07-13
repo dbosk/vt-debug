@@ -100,6 +100,17 @@
 \ProvideSemanticEnv{hypothesis}[block]{Hypothesis}
   {hypothesis}{hypotheses}{Hypothesis}{Hypotheses}
 
+% Methodological questions get their own environment, and thereby their own
+% counter: they are numbered separately from the substantive research
+% questions.
+\DeclareTranslation{English}{Methodological question}{Methodological question}
+\DeclareTranslation{English}{methodological question}{methodological question}
+\DeclareTranslation{English}{methodological questions}{methodological questions}
+\DeclareTranslation{English}{Methodological questions}{Methodological questions}
+\ProvideSemanticEnv{mquestion}[orangeblock]{Methodological question}
+  {methodological question}{methodological questions}
+  {Methodological question}{Methodological questions}
+
 % The research questions and hypotheses are stated in restatable
 % question/hypothesis environments (thm-restate): stated once in the
 % introduction and the theory section, restated with \rqpatterns* etc. in
