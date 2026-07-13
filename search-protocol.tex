@@ -92,6 +92,38 @@ All retained related-work references were verified by reading their
 abstracts (via OpenAlex or Semantic Scholar), except Bruce et al., whose
 full text was read.
 
+\paragraph{Criticisms of the R-SPQ-2F and the expert debugging literature
+(2026-07-13)}
+
+Searches via the \texttt{scholar} tool (which queries several databases at
+once), verbatim:
+\begin{itemize}
+  \item \texttt{scholar search "Why Programs Fail a guide to systematic
+    debugging Zeller" -p s2 -p dblp} --- retained the second edition of
+    Zeller's book; verified against the table of contents and chapter
+    descriptions on the book's companion site;
+  \item \texttt{scholar search "R-SPQ-2F factor structure re-examination
+    validity study process questionnaire" -p s2 -p openalex} --- surfaced
+    application and translation studies but not the item-level
+    re-examinations;
+  \item \texttt{scholar search "Revised Two-Factor Study Process
+    Questionnaire exploratory confirmatory factor analyses item level
+    Justicia" -p openalex} --- surfaced Stes, De Maeyer and Van Petegem
+    (retained; abstract and conclusions read on the journal's site) but
+    still not Justicia et al., which was then found by the Crossref
+    fallback \texttt{query.bibliographic} query \texttt{Revised Two-Factor
+    Study Process Questionnaire exploratory confirmatory factor analyses at
+    item level} (retained; abstract read on the publisher's page);
+  \item \texttt{Exploring and reconciling the factor structure Revised
+    Two-factor Study Process Questionnaire} (Crossref) --- surfaced Socha
+    and Sigler's factor-structure study, but its abstract could not be
+    retrieved from any source (publisher access only), so it was
+    \emph{discarded} rather than cited unread.
+\end{itemize}
+The motive/strategy subscale composition and scoring key cited in the
+criticisms discussion were verified against the full text of
+\textcite{RSPQ2F} (p.~149).
+
 \paragraph{Full texts read}
 
 \Textcite{RSPQ2F} (instrument transcription),

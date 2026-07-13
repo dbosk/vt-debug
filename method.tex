@@ -24,8 +24,8 @@ them to start generating such patterns for themselves.
 Not all students use the course material, however: some study on their own,
 from other sources.
 These students form a natural comparison group \emph{within} the cohort: they
-do the same labs, but without experiencing the material's patterns of
-variation.
+do only what is mandatory for assessment---the labs, the exam and the
+project---without experiencing the material's patterns of variation.
 We therefore also record which students use the course material, through the
 learning platform's activity data complemented by self-report in a
 questionnaire.
@@ -51,9 +51,9 @@ unsuccessful episodes.
 \rqdeep*
 Answered by testing \cref{h:deep}:
 \hdeep*
-The questionnaire (\cref{approach-measure}) provides the measure of the
+A questionnaire (\cref{approach-measure}) provides the measure of the
 students' approach to learning, which we correlate with the coded
-patterns; the think-aloud subsample (\cref{think-aloud}) validates both
+patterns; a think-aloud subsample (\cref{think-aloud}) validates both
 the coding and the classification.
 
 \rqsuccess*
@@ -61,7 +61,7 @@ Answered by testing \cref{h:success}:
 \hsuccess*
 The debugging outcomes---whether the bug was fixed, and in how many
 edit--run cycles---derive from the recorded episodes (\cref{analysis}) and
-provide the success measures; the diagnostic quiz (\cref{prior-knowledge})
+provide the success measures; a diagnostic quiz (\cref{prior-knowledge})
 provides the control for prior experience.
 
 \rqexperts*
@@ -106,8 +106,9 @@ ethical considerations in \cref{ethics}.
 
 We describe the data collection in the chronological order of the course:
 what we collect at the start of the course
-(\cref{prior-knowledge,approach-measure}), and what we collect throughout it
-(\cref{learnlog-data,think-aloud,material-use,teacher-baseline}).
+(\cref{prior-knowledge,approach-measure}), what we collect throughout it
+(\cref{learnlog-data,think-aloud,material-use,teacher-baseline}), and what
+we collect at the end (\cref{end-measure}).
 
 \subsubsection{Prior programming knowledge}
 \label{prior-knowledge}
@@ -154,13 +155,7 @@ between approach and patterns (\cref{rq:deep}).
 Less confident students may give up or persist differently, which
 confounds the persistence-based success measures of
 \cref{h:success}---the time and the number of cycles to fix.
-\begin{enumerate}[resume]
-  \item \enquote{How do you plan to study in this course: mainly from the
-    course material, mainly from other sources, or a mix?}
-\end{enumerate}
-This is the baseline for the material-use self-report
-(\cref{material-use}), and thereby for the generative-learning comparison
-it supports (\cref{rq:generative}).
+
 For the knowledge part itself we use a subset of the Second CS1 Assessment
 (SCS1), a validated, language-independent concept inventory for
 introductory programming \autocite{SCS1}, itself an isomorphic successor
@@ -169,7 +164,8 @@ Both instruments have been widely used and adapted in computing education
 research \autocite{FCS1SCS1Uses}, which makes our prior-knowledge measure
 comparable to other studies.
 We use a subset rather than the full instrument for two reasons: the quiz
-must fit alongside the R-SPQ-2F and the background items above, and an
+must fit alongside the approach questionnaire (the R-SPQ-2F, which we
+introduce in \cref{approach-measure}) and the background items above, and an
 item response theory evaluation of the SCS1 found problematic items that a
 subset can avoid \autocite{SCS1IRT}; shortened adaptations that preserve
 the instrument's reliability exist \autocite{SCS1Short}.
@@ -193,16 +189,12 @@ institutions, provides a directly comparable baseline for our cohort.
 We measure the students' approaches to learning with the revised two-factor
 Study Process Questionnaire (R-SPQ-2F), which yields a deep-approach and a
 surface-approach score from ten items each \autocite{RSPQ2F}.
-Since the approach is not a fixed trait---students adapt it to their
-conception of the task \autocite{MartonSaljo1976II}---we administer the
-questionnaire twice, at the start and at the end of the course.
 At the start of the course the students cannot yet answer with respect to
-this course---they must have started the course for that---so the first
+this course---they must have started the course for that---so this
 administration asks about their studies in general, to get a feel for their
 general approach.
-The second administration, at the end, asks with respect to this course;
-those scores we treat as measurements of the approach in the context of
-this course rather than as a stable property of the student.
+(We administer the questionnaire again at the end of the course; we
+motivate that in \cref{end-measure}.)
 
 \paragraph{The items at the start of the course}
 
@@ -261,20 +253,44 @@ The items are the following.
   \item I find the best way to pass examinations is to try to remember
     answers to likely questions.
 \end{enumerate}
+We keep the items verbatim, even where the wording could be adapted to
+our setting---item 14's \enquote{free time} might read more naturally as
+out-of-class time---since rewording a validated instrument would put its
+validation, and the comparability with other studies, at risk.
 
-\paragraph{The items at the end of the course}
+\paragraph{Criticisms of the instrument}
 
-At the end of the course we use the same 20 items; only the preliminary
-instructions differ, asking the students to answer in connection with this
-course rather than their studying in general.
-This is exactly the use the instrument was revised for:
-\textcquote[p.~146]{RSPQ2F}{it is useful to indicate in the preliminary
-instructions (see Appendix) that you want your students to reply in
-connection with the particular course, module, or programme in question,
-rather than to studying generally}.
-The two administrations thus differ only in the instructions, so the start
-and end scores remain comparable while measuring the general and the
-course-specific approach, respectively.
+Reading the items, one may object that many of the deep items express
+interest in the topics---finding them exciting, spending free time on
+them---rather than a way of going about learning them: a student can
+surely take a deep approach to a topic they do not particularly care
+for.
+The objection points at the instrument's construction: each approach
+score deliberately sums five \emph{motive} items and five \emph{strategy}
+items, where the deep motive is intrinsic interest and the deep strategy
+is to maximise meaning \autocite{RSPQ2F}.
+The deep-approach score thus mixes wanting to learn with how one goes
+about it.
+For our purposes the strategy side is the one that matters---creating
+patterns of variation is a way of going about learning, not a level of
+interest---so we will also score the deep-strategy subscale separately
+(items 2, 6, 10, 14 and 18 \autocite[p.~149]{RSPQ2F}) as a robustness
+check.
+Item-level factor analyses, however, advise care with that substructure:
+\textcite{RSPQ2FReexamined} find the R-SPQ-2F
+\textcquote{RSPQ2FReexamined}{best described by a parsimonious
+first-order two-factor model}---deep and surface, with no separate
+motive and strategy factors.
+The instrument is also sensitive to context: comparing validation
+studies across cultures, \textcite{RSPQ2FCrossCultural} conclude that
+\textcquote{RSPQ2FCrossCultural}{cross-cultural sensitivity is an
+important point to be borne in mind when using the R-SPQ-2F}; our
+students answer the original English items but are mostly not native
+speakers of English, so we will check the two-factor structure in our
+own data before interpreting the scores.
+The last safeguard is that the questionnaire is not our only approach
+measure: the think-aloud accounts classify the approaches independently,
+as we describe next.
 
 \paragraph{Classifying the students compatibly with the original studies}
 
@@ -291,7 +307,7 @@ The R-SPQ-2F is instead a self-report questionnaire; it does not classify an
 actual learning episode but the student's reported way of studying.
 We bridge this gap in three ways.
 \begin{enumerate}
-  \item In the end-of-course administration (\cref{approach-measure}) we
+  \item In the end-of-course administration (\cref{end-measure}) we
     have the students answer the R-SPQ-2F with respect to \emph{this
     course}, in line with the instrument's intended use by teachers
     evaluating the approaches of their own students \autocite{RSPQ2F} and
@@ -332,6 +348,10 @@ timeline of the students' edit--run cycles.
 The students push their logs to per-student Git repositories (or export them
 as bundle files and submit them through the course platform), and tag the
 events per lab so that episodes can be attributed to assignments.
+Since we encourage the students to run everything in this course-wide
+directory, we hope to capture not only the lab work but also some of what
+they run while studying---for instance when they follow a tutorial or try
+out an example from the material.
 
 \begin{frame}<presentation>[fragile]
   \begin{block}{learnlog\only<presentation>{~\autocite{learnlog}}}
@@ -360,7 +380,9 @@ With a smaller subsample of student volunteers we also hold think-aloud
 debugging sessions during the course, of the kind piloted in \cref{pilot}:
 the student debugs while speaking their thoughts aloud, and we record the
 session with learnlog (\cref{learnlog-data}) together with the audio and
-video (probably over Zoom).
+video (over Zoom).
+We hold the sessions at various points during the course, to capture the
+students at different points of their learning.
 The subsample serves two purposes.
 First, the logs record acts but not the reasoning between them, so the
 think-aloud sessions let us validate that the patterns coded from the logs
@@ -404,6 +426,59 @@ Their episodes are coded identically to the students'
 (\cref{episode-coding}), giving an expert baseline: which patterns experts
 generate, in what order, and how complete their episodes are.
 
+The teachers are not the only expert baseline available.
+The debugging literature itself codifies how experts debug:
+\textcite{WhyProgramsFail} teaches debugging as the scientific
+method---creating and verifying hypotheses about the failure through
+experiments, conducted systematically---which is precisely the kind of
+self-generated variation our coding looks for
+(\cref{debugging-as-learning}).
+We can therefore also compare the coded episodes, the students' and the
+teachers' alike, with the prescriptions of the systematic-debugging
+literature: the prescribed hypothesis--experiment cycle should show up
+in our coding as the contrast and generalisation patterns.
+
+A further expert of a different kind is an AI coding agent (Claude
+Opus).
+Since learnlog records every Python run in the virtual environment it is
+initialised in (\cref{learnlog-data}), initialising it in the
+environment where the agent works records all the agent's runs, and the
+agent's debugging episodes can then be coded identically to the humans'.
+That gives us a third point of comparison: which patterns of variation,
+if any, a state-of-the-art coding agent generates when it debugs.
+
+\subsubsection{End-of-course measurements}
+\label{end-measure}
+
+At the end of the course we administer both start-of-course instruments
+again: the concept inventory and the R-SPQ-2F.
+
+We need the concept inventory (\cref{prior-knowledge}) again because at
+the start it measures what the students brought with them; administered
+again at the end, the difference measures what they learned during the
+course.
+That gives us a learning-outcome measure that is independent of both the
+grades and the debugging-success measures (\cref{analysis}), so we can
+relate the generated patterns of variation not only to debugging success
+but also to how much the student learned.
+
+We need the R-SPQ-2F (\cref{approach-measure}) again because the approach
+is not a fixed trait---students adapt it to their conception of the task
+\autocite{MartonSaljo1976II}---so the start-of-course scores measure the
+students' general approach, not their approach in \emph{this} course.
+At the end of the course we use the same 20 items; only the preliminary
+instructions differ, asking the students to answer in connection with this
+course rather than their studying in general.
+This is exactly the use the instrument was revised for:
+\textcquote[p.~146]{RSPQ2F}{it is useful to indicate in the preliminary
+instructions (see Appendix) that you want your students to reply in
+connection with the particular course, module, or programme in question,
+rather than to studying generally}.
+The two administrations thus differ only in the instructions, so the start
+and end scores remain comparable while measuring the general and the
+course-specific approach, respectively; the end-of-course scores are the
+ones we treat as measurements of the approach in the context of this
+course rather than as a stable property of the student.
 
 \subsection{Analysis}
 \label{analysis}
