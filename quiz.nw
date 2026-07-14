@@ -199,7 +199,7 @@ When the items are added, each must be preceded by a comma, since the
 background items above end without one.
 The same items are reused verbatim in the end-of-course administration
 (\cref{end-measure}), so they are added here once and pushed twice.
-% XXX Add the knowledge-part items once the SCS1-subset/NPKT decision is
+% XXX(#4) Add the knowledge-part items once the SCS1-subset/NPKT decision is
 % made (see the corresponding note in the method section).
 
 <<knowledge-part items>>=
