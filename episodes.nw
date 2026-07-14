@@ -35,6 +35,19 @@ The program reads three CSV files, one per data source.
     open-text answers ([[deep]], [[surface]], or empty).
 \end{description}
 
+The extraction of [[rspq.csv]] is automated the same way as the quiz
+results: the two R-SPQ-2F administrations are Canvas surveys with known
+titles, so their student-analysis reports are fetched with the quiz
+program's [[fetch_results]] (\cref{app:quiz-analysis})---the programs
+are tangled into the same directory, so it can be imported from
+[[analyze_quiz]].
+What remains manual is what no platform holds: the episode codes come
+from the coding of the learnlog data (\cref{analysis}) and the
+classifications from the human coders.
+% XXX(#12) Wire up the R-SPQ-2F extraction: fetch the two
+% administrations' reports via analyze_quiz.fetch_results and map the
+% question columns to item1..item20 once the surveys exist in Canvas.
+
 \subsection{The program}
 
 The statistical tests come from SciPy; everything else is the standard

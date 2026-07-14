@@ -34,9 +34,12 @@ examples/experiment5.out
 # woven and tangled from the appendix literate programs (quiz.nw, episodes.nw)
 quiz.tex
 episodes.tex
-quiz.json
+quiz-start.json
+quiz-end.json
 analyze_quiz.py
 analyze_episodes.py
 
 # byte-compiled checks of the tangled programs
 __pycache__/
+noweb_lexer.py
+_minted*

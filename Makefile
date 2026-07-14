@@ -25,12 +25,26 @@ SRC+=episodes.tex
 SRC+=search-protocol.tex
 
 # The appendix literate programs: woven into the article (the .tex files
-# above), tangled into the quiz description and the analysis programs.
+# above), tangled into the quiz descriptions and the analysis programs.
 NOWEB_SUFFIXES+=	.json
 
+# Weave with syntax highlighting: the dbosk noweb fork's autolang/tominted
+# filters typeset each chunk with minted (see the literate-programming
+# skill).  The custom lexer keeps chunk references hyperlinked inside
+# docstrings; it must sit where LaTeX runs, whitelisted by hash in
+# ~/.config/latexminted.
+NOWEAVEFLAGS.tex=	-n -delay -autolang -autodefs python3 -index \
+			-filter 'tominted -lexer noweb_lexer.py'
+NOWEB_LIB=	$(shell sed -n 's/^LIB=//p' "`command -v noweave`" | head -1)
+noweb_lexer.py:
+	cp ${NOWEB_LIB}/noweb_lexer.py $@
+article.pdf: noweb_lexer.py
+
 .PHONY: programs
-programs: quiz.json analyze_quiz.py analyze_episodes.py
-quiz.json: quiz.nw
+programs: quiz-start.json quiz-end.json analyze_quiz.py analyze_episodes.py
+quiz-start.json: quiz.nw
+	${NOTANGLE.json}
+quiz-end.json: quiz.nw
 	${NOTANGLE.json}
 analyze_quiz.py: quiz.nw
 	${NOTANGLE.py}
@@ -63,8 +77,8 @@ article.pdf slides.pdf: latexmkrc
 clean:
 	latexmk -C
 	${RM} article.bbl article.run.xml
-	${RM} quiz.tex episodes.tex
-	${RM} quiz.json analyze_quiz.py analyze_episodes.py
+	${RM} quiz.tex episodes.tex noweb_lexer.py
+	${RM} quiz-start.json quiz-end.json analyze_quiz.py analyze_episodes.py
 
 INCLUDE_MAKEFILES?=./makefiles
 include ${INCLUDE_MAKEFILES}/noweb.mk

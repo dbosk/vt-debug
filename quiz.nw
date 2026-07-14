@@ -4,30 +4,37 @@
 This appendix is a literate program \autocite{LiterateProgramming}: the
 prose and the code are one and the same source, woven into the text you
 are reading and tangled into the files the computer runs.
-It implements the diagnostic quiz of \cref{prior-knowledge}: it sets the
-quiz up in the learning platform, and it prepares the results for the
+It implements the quizzes of \cref{prior-knowledge,end-measure}: it sets
+them up in the learning platform, and it prepares their results for the
 analysis.
-Two files are tangled from this section: [[quiz.json]], the description
-of the quiz that the [[canvaslms]] tool pushes to Canvas, and
-[[analyze_quiz.py]], which summarises the results and prepares the
-open-text answers for manual coding.
+Three files are tangled from this section: [[quiz-start.json]] and
+[[quiz-end.json]], the descriptions of the start-of-course and
+end-of-course quizzes that the [[canvaslms]] tool pushes to Canvas, and
+[[analyze_quiz.py]], which fetches the results from Canvas, summarises
+them, and prepares the open-text answers for coding.
 
-\subsection{The quiz for Canvas}
+\subsection{The two quizzes for Canvas}
 
 The learning platform of the course is Canvas, and the [[canvaslms]]
-command-line tool creates a quiz from a JSON description:
+command-line tool creates the quizzes from their JSON descriptions:
 \begin{minted}{bash}
-canvaslms quizzes create -c prgi26 -f quiz.json
+canvaslms quizzes create -c prgi26 -f quiz-start.json
+canvaslms quizzes create -c prgi26 -f quiz-end.json
 \end{minted}
-The description has two parts, the quiz-level settings and the list of
-questions; the questions in turn are the background items of
-\cref{prior-knowledge} followed by the knowledge part.
+There are two quizzes because the data collection is chronological: the
+start-of-course quiz asks the background items and the knowledge part
+(\cref{prior-knowledge}), and the end-of-course quiz repeats the
+knowledge part to measure the gain (\cref{end-measure}).
+The two descriptions reuse the same chunks, so the knowledge items are
+defined once and pushed twice.
 
-<<[[quiz.json]]>>=
+<<[[quiz-start.json]]>>=
 {
   "quiz_type": "new",
   "settings": {
-    <<quiz settings>>
+    "title": "Diagnostic quiz: your programming background",
+    "instructions": "<p>This quiz maps your programming background so that we can adapt the course. It is not graded and there are no wrong answers. Please answer on your own, without help from others or from tools.</p>",
+    <<common quiz settings>>
   },
   "items": [
     <<background items>>
@@ -36,13 +43,34 @@ questions; the questions in turn are the background items of
 }
 @
 
-The quiz is a diagnostic, not an assessment: nothing is graded, so
+The end-of-course quiz opens with a question of its own: whether the
+student prepared for the quiz.
+We ask because preparation would confound the knowledge-gain measure of
+\cref{end-measure}---a student who reviews the material the night
+before measures preparation, not what the course left behind.
+
+<<[[quiz-end.json]]>>=
+{
+  "quiz_type": "new",
+  "settings": {
+    "title": "Concept quiz: what you know now",
+    "instructions": "<p>This quiz repeats the concept questions from the start-of-course quiz, so that we can see what you have learned during the course. It is not graded. Please answer on your own, without preparation, help or tools.</p>",
+    <<common quiz settings>>
+  },
+  "items": [
+    <<end-quiz preparation item>>
+    <<knowledge-part items>>
+  ]
+}
+@
+
+Both quizzes are diagnostics, not assessments: nothing is graded, so
 there is no time limit, a single attempt suffices, and the result view
 shows the student their answers but no notion of correctness.
+These settings are shared; only the title and the instructions above
+differ.
 
-<<quiz settings>>=
-"title": "Diagnostic quiz: your programming background",
-"instructions": "<p>This quiz maps your programming background so that we can adapt the course. It is not graded and there are no wrong answers. Please answer on your own, without help from others or from tools.</p>",
+<<common quiz settings>>=
 "time_limit": null,
 "points_possible": 0,
 "due_at": null,
@@ -66,15 +94,15 @@ shows the student their answers but no notion of correctness.
 @
 
 \subsection{The background items}
+\label{app:background-items}
 
-The five background items are exactly those motivated in
+The four background items are exactly those motivated in
 \cref{prior-knowledge}; the item titles double as the keys under which
 Canvas reports the answers, so the analysis program
 (\cref{app:quiz-analysis}) refers to the items by these titles.
 
 <<background items>>=
 <<item: previous programming>>,
-<<item: python>>,
 <<item: how learned>>,
 <<item: misbehaving program>>,
 <<item: confidence>>
@@ -82,6 +110,9 @@ Canvas reports the answers, so the analysis program
 
 The first item is open text: which languages, and for how long, cannot
 be anticipated as choices.
+Note that this answer also tells us whether the student has programmed
+in Python, so we do not ask that separately; the analysis derives it
+when the answer is coded (\cref{app:quiz-analysis}).
 
 <<item: previous programming>>=
 {
@@ -98,35 +129,18 @@ be anticipated as choices.
 }
 @
 
-The Python item is a yes/no question.
-Canvas's true--false question type requires a \enquote{correct} answer
-even in an ungraded quiz; the value below is arbitrary and never
-shown to the student (the result view above hides correctness).
-The same holds for the choice items that follow.
-
-<<item: python>>=
-{
-  "position": 2,
-  "points_possible": 0,
-  "entry": {
-    "title": "Python",
-    "item_body": "<p>Have you programmed in Python?</p>",
-    "interaction_type_slug": "true-false",
-    "interaction_data": {"true_choice": "Yes", "false_choice": "No"},
-    "scoring_data": {"value": true},
-    "scoring_algorithm": "Equivalence"
-  }
-}
-@
-
 How the student learned to program is a choice among the three
 alternatives of \cref{prior-knowledge}, plus the alternative for those
 who have not programmed at all; the order is meaningful, so the choices
 are not shuffled (the quiz settings above disable shuffling globally).
+Canvas requires a \enquote{correct} answer even in an ungraded quiz;
+the [[scoring_data]] value below is arbitrary and never shown to the
+student, since the result view above hides correctness.
+The same holds for the other choice items.
 
 <<item: how learned>>=
 {
-  "position": 3,
+  "position": 2,
   "points_possible": 0,
   "entry": {
     "title": "How you learned",
@@ -152,7 +166,7 @@ analysis program extracts these answers into a coding sheet.
 
 <<item: misbehaving program>>=
 {
-  "position": 4,
+  "position": 3,
   "points_possible": 0,
   "entry": {
     "title": "Misbehaving program",
@@ -169,7 +183,7 @@ The confidence item is the five-point scale of \cref{prior-knowledge}.
 
 <<item: confidence>>=
 {
-  "position": 5,
+  "position": 4,
   "points_possible": 0,
   "entry": {
     "title": "Confidence",
@@ -190,17 +204,47 @@ The confidence item is the five-point scale of \cref{prior-knowledge}.
 }
 @
 
+The preparation item of the end-of-course quiz comes first in that
+quiz, before the knowledge items.
+
+<<end-quiz preparation item>>=
+{
+  "position": 1,
+  "points_possible": 0,
+  "entry": {
+    "title": "Preparation",
+    "item_body": "<p>Did you prepare for this quiz&mdash;for example, review the course material&mdash;before taking it?</p>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>No</p>"},
+        {"position": 2, "item_body": "<p>Yes, briefly</p>"},
+        {"position": 3, "item_body": "<p>Yes, thoroughly</p>"}
+      ]
+    },
+    "scoring_data": {"value": 1},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
 \subsection{The knowledge part}
 
 The knowledge part awaits the choice between the SCS1 subset and the
 Nordic Prior Knowledge Test (\cref{prior-knowledge}); its chunk is
 empty until then.
-When the items are added, each must be preceded by a comma, since the
-background items above end without one.
-The same items are reused verbatim in the end-of-course administration
-(\cref{end-measure}), so they are added here once and pushed twice.
+When the items are added, each must be preceded by a comma---in both
+quizzes something comes before them: the background items in the start
+quiz, the preparation item in the end quiz.
+To keep each item's placement independent of the quiz it appears in, we
+number the knowledge items from position 11; Canvas orders by position
+and gaps are fine.
+Mind also that the items must not be committed to this (public)
+repository: both instruments are distributed to researchers on request,
+so the chunk will pull them from an untracked file.
 % XXX(#4) Add the knowledge-part items once the SCS1-subset/NPKT decision is
-% made (see the corresponding note in the method section).
+% made (see the corresponding note in the method section); load them from an
+% untracked file to keep them out of the public repository.
 
 <<knowledge-part items>>=
 @
@@ -208,30 +252,48 @@ The same items are reused verbatim in the end-of-course administration
 \subsection{Analysing the results}
 \label{app:quiz-analysis}
 
-Canvas exports the quiz results as a CSV file with one row per student
-and one column per item, keyed by the item titles above.
-The analysis program tabulates the closed items---prior programming in
-Python, how the student learned, and the confidence scale---and writes
-the open-text answers to a coding sheet: a CSV file with one row per
-student and empty columns for the codes, to be filled in manually
-(\cref{analysis}).
+Canvas compiles the responses into a student-analysis report: a CSV
+file with one row per student and one column per item, keyed by the
+item titles above.
+The analysis program fetches that report itself---we know the course
+and the quiz titles, so nothing needs to be clicked or downloaded by
+hand---using the same [[canvaslms]] machinery as the command-line tool.
+It then tabulates the closed items and writes the open-text answers to
+a coding sheet: a CSV file with one row per student and columns for the
+codes---whether the student has used Python, and whether the described
+debugging exhibits contrast, generalisation or fusion thinking
+(\cref{analysis,mq:agreement}).
+
+The coding is done by a human, but a large language model prepares it:
+with [[--llm]] the program asks a model (via the [[llm]] package) to
+suggest the codes for each answer, and the human coder verifies or
+overrides them in the sheet.
+The suggested codes are kept in separate columns from the verified
+ones, so the sheet always shows which is which.
 
 <<[[analyze_quiz.py]]>>=
-"""Summarise the diagnostic quiz results and prepare the coding sheet.
+"""Fetch and summarise the quiz results, and prepare the coding sheet.
 
-The quiz itself is defined in quiz.json; both files are tangled from
-the same literate source (the appendix of the paper).  The input is
-Canvas's CSV export of the quiz results; the item titles are the
-column keys.
+The quizzes are defined in quiz-start.json and quiz-end.json; all three
+files are tangled from the same literate source (the appendix of the
+paper).  The results come straight from Canvas via canvaslms; the item
+titles are the column keys.
+
+Requires canvaslms (and its configured credentials); the --llm option
+additionally requires the llm package with a configured model.
 """
 
 import argparse
 import collections
 import csv
+import json
+import os
 import sys
 
-<<the item titles are the column keys>>
+<<the course and the item titles are the keys>>
+<<fetch the results from Canvas>>
 <<tabulate the closed items>>
+<<pre-code the open answers with an LLM>>
 <<write the coding sheet>>
 <<analysis main>>
 
@@ -239,67 +301,204 @@ if __name__ == "__main__":
     main()
 @
 
-The item titles are the join keys between the two tangled files: if a
-title changes in the quiz, this dictionary is the only other place to
-change---and both live in the same source chunk sequence, side by
+The course name and the item titles are the join keys between the
+tangled files: if a title changes in a quiz, this dictionary is the
+only other place to change---and they live in the same source, side by
 side.
+Canvas prefixes the report's columns with item identifiers, so we match
+columns by containment rather than equality.
 
-<<the item titles are the column keys>>=
+<<the course and the item titles are the keys>>=
+COURSE = "prgi26"
+QUIZ_TITLES = {
+    "start": "Diagnostic quiz: your programming background",
+    "end": "Concept quiz: what you know now",
+}
 STUDENT = "name"
-CLOSED_ITEMS = ["Python", "How you learned", "Confidence"]
+CLOSED_ITEMS = ["How you learned", "Confidence", "Preparation"]
 OPEN_ITEMS = ["Previous programming", "Misbehaving program"]
-CODING_COLUMNS = ["contrast", "generalisation", "fusion", "notes"]
+CODING_COLUMNS = ["python", "contrast", "generalisation", "fusion", "notes"]
+
+
+def column_for(title, fieldnames):
+    """Return the report column whose name contains the item title."""
+    return next((name for name in fieldnames if title in name), None)
 @
 
+\subsubsection{Fetching the report from Canvas}
+
+Just as we create the quizzes with [[canvaslms]], we extract the
+results with it: the same package provides the credentials, the course
+lookup and the report machinery, so the program reuses them instead of
+reimplementing the Canvas API calls.
+The report is generated on demand by Canvas, so we request it, wait for
+it, and download the CSV it points to.
+
+<<fetch the results from Canvas>>=
+def fetch_results(which):
+    """Download the student-analysis rows for the start or end quiz."""
+    import appdirs
+    import requests
+    import canvaslms.cli
+    import canvaslms.cli.login
+    from canvasapi import Canvas
+    from canvaslms.cli.quizzes import (
+        create_new_quiz_report,
+        filter_quizzes,
+        is_new_quiz,
+        poll_progress,
+    )
+
+    config_file = os.path.join(
+        appdirs.user_config_dir("canvaslms"), "config.json"
+    )
+    config = canvaslms.cli.read_configuration(config_file)
+    hostname, token = canvaslms.cli.login.load_credentials(config)
+    canvas = Canvas(f"https://{hostname}", token)
+
+    course = next(
+        c for c in canvas.get_courses()
+        if COURSE in (c.name or "") or COURSE in (c.course_code or "")
+    )
+    quiz = next(filter_quizzes([course], QUIZ_TITLES[which]))
+    if not is_new_quiz(quiz):
+        sys.exit(f"quiz {quiz.title!r} is not a New Quiz")
+
+    progress = poll_progress(
+        create_new_quiz_report(course, quiz.id, canvas._Canvas__requester)
+    )
+    url = progress.results.get("url") if progress else None
+    if not url:
+        sys.exit("Canvas did not produce the student-analysis report")
+    response = requests.get(url)
+    response.raise_for_status()
+    return list(csv.DictReader(response.text.splitlines()))
+@
+
+\subsubsection{Summaries and the coding sheet}
+
 Tabulating a closed item is counting its answer frequencies; we print
-one table per item.
+one table per item present in the report (the preparation item only
+exists in the end quiz).
 
 <<tabulate the closed items>>=
 def tabulate(rows, item):
     """Print the answer frequencies for one closed item."""
-    counts = collections.Counter(row[item] for row in rows)
+    column = column_for(item, rows[0].keys())
+    if column is None:
+        return
+    counts = collections.Counter(row[column] for row in rows)
     print(f"\n{item}")
     for answer, count in counts.most_common():
         print(f"  {answer or '(no answer)'}: {count}")
 @
 
-The coding sheet holds the open-text answers next to empty columns for
-the manual variation-thinking codes; the coder fills in whether the
-described debugging exhibits contrast, generalisation or fusion
-thinking (\cref{analysis}).
+The model suggests the codes from the two open answers: whether the
+languages answer mentions Python, and which of the three patterns of
+variation the described debugging exhibits.
+The prompt defines the patterns briefly; the model must answer in JSON
+so that the suggestions land in columns.
+The suggestions are exactly that---\cref{analysis} requires a human
+coder, and the verified codes go in the bare columns.
+
+<<pre-code the open answers with an LLM>>=
+CODING_PROMPT = """\
+You are pre-coding survey answers for a study on debugging.
+Answer in JSON with keys "python" ("yes", "no" or "unclear"),
+"contrast", "generalisation", "fusion" (each 0 or 1), and
+"rationale" (one sentence).
+
+"python": does the languages answer mention Python?
+The pattern codes concern the misbehaving-program answer:
+"contrast" = compares the failing case against a working one;
+"generalisation" = varies other things to see if the problem persists,
+keeping the suspected cause fixed;
+"fusion" = reconciles the found cause with prior understanding,
+varying several things together.
+
+Languages answer: {previous}
+Misbehaving-program answer: {misbehaving}
+"""
+
+
+def llm_precode(rows):
+    """Ask the default llm model to suggest codes for each row."""
+    import llm
+
+    model = llm.get_model()
+    suggestions = []
+    for row in rows:
+        prompt = CODING_PROMPT.format(
+            previous=row.get(column_for(OPEN_ITEMS[0], row.keys()) or "", ""),
+            misbehaving=row.get(column_for(OPEN_ITEMS[1], row.keys()) or "", ""),
+        )
+        try:
+            suggestion = json.loads(model.prompt(prompt).text())
+        except (json.JSONDecodeError, Exception):
+            suggestion = {}
+        suggestions.append(
+            {f"suggested_{key}": suggestion.get(key, "")
+             for key in ["python", "contrast", "generalisation",
+                         "fusion", "rationale"]}
+        )
+    return suggestions
+@
+
+The coding sheet holds the open-text answers, the model's suggested
+codes when [[--llm]] was given, and the empty columns for the human
+coder's verified codes.
 
 <<write the coding sheet>>=
-def write_coding_sheet(rows, path):
-    """Write open-text answers with empty coding columns to path."""
-    fields = [STUDENT] + OPEN_ITEMS + CODING_COLUMNS
+def write_coding_sheet(rows, path, suggestions=None):
+    """Write open-text answers with coding columns to path."""
+    open_columns = {
+        item: column_for(item, rows[0].keys()) for item in OPEN_ITEMS
+    }
+    suggested = [f"suggested_{c}"
+                 for c in ["python", "contrast", "generalisation",
+                           "fusion", "rationale"]]
+    fields = ([STUDENT] + OPEN_ITEMS
+              + (suggested if suggestions else []) + CODING_COLUMNS)
     with open(path, "w", newline="") as out:
         writer = csv.DictWriter(out, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
-        for row in rows:
-            writer.writerow({key: row.get(key, "") for key in fields})
+        for index, row in enumerate(rows):
+            record = {STUDENT: row.get(STUDENT, "")}
+            for item, column in open_columns.items():
+                record[item] = row.get(column, "") if column else ""
+            if suggestions:
+                record.update(suggestions[index])
+            writer.writerow(record)
 @
 
-The main function ties the pieces together.
+The main function ties the pieces together: fetch (or read) the
+report, tabulate, pre-code if asked to, and write the sheet.
 
 <<analysis main>>=
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("results", help="CSV export of the quiz results")
-    parser.add_argument(
-        "--coding-sheet",
-        default="quiz-coding-sheet.csv",
-        help="output CSV for manual coding of the open-text answers",
-    )
+    parser.add_argument("--quiz", choices=QUIZ_TITLES, default="start",
+                        help="which quiz to analyse")
+    parser.add_argument("--results",
+                        help="read this CSV instead of fetching from Canvas")
+    parser.add_argument("--llm", action="store_true",
+                        help="pre-code the open answers with an LLM")
+    parser.add_argument("--coding-sheet", default="quiz-coding-sheet.csv",
+                        help="output CSV for the coding of open answers")
     args = parser.parse_args()
 
-    with open(args.results, newline="") as infile:
-        rows = list(csv.DictReader(infile))
+    if args.results:
+        with open(args.results, newline="") as infile:
+            rows = list(csv.DictReader(infile))
+    else:
+        rows = fetch_results(args.quiz)
     if not rows:
-        sys.exit("no rows in the results export")
+        sys.exit("no responses")
 
     print(f"{len(rows)} students")
     for item in CLOSED_ITEMS:
         tabulate(rows, item)
-    write_coding_sheet(rows, args.coding_sheet)
+    suggestions = llm_precode(rows) if args.llm else None
+    write_coding_sheet(rows, args.coding_sheet, suggestions)
     print(f"\ncoding sheet written to {args.coding_sheet}")
 @

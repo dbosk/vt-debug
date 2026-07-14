@@ -142,11 +142,13 @@ between the questions we give the reason for asking them.
 \begin{enumerate}
   \item \enquote{Have you programmed before this course?
     Which programming languages have you used, and for roughly how long?}
-  \item \enquote{Have you programmed in Python?}
 \end{enumerate}
 Experienced students will debug faster regardless of their approach to
 learning, so prior experience is the control variable for
 \cref{h:success}.
+Whether the student has programmed in Python we do not ask separately:
+the languages they list already tell us, and the analysis derives it
+when the answer is coded (\cref{app:quiz-analysis}).
 \begin{enumerate}[resume]
   \item \enquote{If you have programmed before: how did you learn---in a
     formal course, self-taught, or both?}
@@ -485,6 +487,9 @@ That gives us a learning-outcome measure that is independent of both the
 grades and the debugging-success measures (\cref{analysis}), so we can
 relate the generated patterns of variation not only to debugging success
 but also to how much the student learned.
+The end-of-course quiz adds a single item of its own, asking whether the
+student prepared for it: preparation would confound the gain
+measure, so we need to know (\cref{app:quiz}).
 
 We need the R-SPQ-2F (\cref{approach-measure}) again because the approach
 to learning is not a fixed trait---students adapt it to their conception of the task
