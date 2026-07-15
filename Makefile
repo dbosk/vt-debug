@@ -41,10 +41,13 @@ noweb_lexer.py:
 article.pdf: noweb_lexer.py
 
 .PHONY: programs
-programs: quiz-start.json quiz-end.json analyze_quiz.py analyze_episodes.py
-quiz-start.json: quiz.nw
+programs: quiz-background.json quiz-knowledge-start.json \
+	quiz-knowledge-end.json analyze_quiz.py analyze_episodes.py
+quiz-background.json: quiz.nw
 	${NOTANGLE.json}
-quiz-end.json: quiz.nw
+quiz-knowledge-start.json: quiz.nw
+	${NOTANGLE.json}
+quiz-knowledge-end.json: quiz.nw
 	${NOTANGLE.json}
 analyze_quiz.py: quiz.nw
 	${NOTANGLE.py}
@@ -78,7 +81,8 @@ clean:
 	latexmk -C
 	${RM} article.bbl article.run.xml
 	${RM} quiz.tex episodes.tex noweb_lexer.py
-	${RM} quiz-start.json quiz-end.json analyze_quiz.py analyze_episodes.py
+	${RM} quiz-background.json quiz-knowledge-start.json
+	${RM} quiz-knowledge-end.json analyze_quiz.py analyze_episodes.py
 
 INCLUDE_MAKEFILES?=./makefiles
 include ${INCLUDE_MAKEFILES}/noweb.mk

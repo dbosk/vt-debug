@@ -7,72 +7,98 @@ are reading and tangled into the files the computer runs.
 It implements the quizzes of \cref{prior-knowledge,end-measure}: it sets
 them up in the learning platform, and it prepares their results for the
 analysis.
-Three files are tangled from this section: [[quiz-start.json]] and
-[[quiz-end.json]], the descriptions of the start-of-course and
-end-of-course quizzes that the [[canvaslms]] tool pushes to Canvas, and
-[[analyze_quiz.py]], which fetches the results from Canvas, summarises
-them, and prepares the open-text answers for coding.
+Four files are tangled from this section: [[quiz-background.json]],
+[[quiz-knowledge-start.json]] and [[quiz-knowledge-end.json]], the
+descriptions of the quizzes that the [[canvaslms]] tool pushes to
+Canvas, and [[analyze_quiz.py]], which fetches the results from Canvas,
+summarises them, and prepares the open-text answers for coding.
 
-\subsection{The two quizzes for Canvas}
+\subsection{The three quizzes for Canvas}
 
 The learning platform of the course is Canvas, and the [[canvaslms]]
 command-line tool creates the quizzes from their JSON descriptions:
 \begin{minted}{bash}
-canvaslms quizzes create -c prgi26 -f quiz-start.json
-canvaslms quizzes create -c prgi26 -f quiz-end.json
+canvaslms quizzes create -c prgi26 -f quiz-background.json
+canvaslms quizzes create -c prgi26 -f quiz-knowledge-start.json
+canvaslms quizzes create -c prgi26 -f quiz-knowledge-end.json
 \end{minted}
-There are two quizzes because the data collection is chronological: the
-start-of-course quiz asks the background items and the knowledge part
-(\cref{prior-knowledge}), and the end-of-course quiz repeats the
-knowledge part to measure the gain (\cref{end-measure}).
-The two descriptions reuse the same chunks, so the knowledge items are
-defined once and pushed twice.
+There are three quizzes.
+The background quiz and the start-of-course knowledge quiz together
+form the diagnostic of \cref{prior-knowledge}; the end-of-course
+knowledge quiz repeats the knowledge questions to measure the gain
+(\cref{end-measure}).
+The knowledge test is separate from the background quiz because the two
+differ in kind: the knowledge questions have right and wrong answers,
+so that quiz can be graded---and the students may well want to know how
+they did---whereas the background items have no right answers and
+nothing to grade.
+The knowledge items are defined once and appear in both knowledge
+quizzes.
 
-<<[[quiz-start.json]]>>=
+<<[[quiz-background.json]]>>=
 {
   "quiz_type": "new",
   "settings": {
     "title": "Diagnostic quiz: your programming background",
     "instructions": "<p>This quiz maps your programming background so that we can adapt the course. It is not graded and there are no wrong answers. Please answer on your own, without help from others or from tools.</p>",
+    "points_possible": 0,
     <<common quiz settings>>
+    <<ungraded result view>>
+  }
   },
   "items": [
     <<background items>>
+  ]
+}
+@
+
+<<[[quiz-knowledge-start.json]]>>=
+{
+  "quiz_type": "new",
+  "settings": {
+    "title": "Concept quiz: what you know already",
+    "instructions": "<p>This quiz checks which programming concepts you already know, so that we can adapt the course. You will see your score afterwards, but not the correct answers&mdash;the course will teach you those. The score does not affect your grade. Please answer on your own, without help from others or from tools.</p>",
+    "points_possible": 7,
+    <<common quiz settings>>
+    <<graded result view>>
+  }
+  },
+  "items": [
     <<knowledge-part items>>
   ]
 }
 @
 
-The end-of-course quiz opens with a question of its own: whether the
-student prepared for the quiz.
+The end-of-course knowledge quiz opens with a question of its own:
+whether the student prepared for the quiz.
 We ask because preparation would confound the knowledge-gain measure of
 \cref{end-measure}---a student who reviews the material the night
 before measures preparation, not what the course left behind.
 
-<<[[quiz-end.json]]>>=
+<<[[quiz-knowledge-end.json]]>>=
 {
   "quiz_type": "new",
   "settings": {
     "title": "Concept quiz: what you know now",
-    "instructions": "<p>This quiz repeats the concept questions from the start-of-course quiz, so that we can see what you have learned during the course. It is not graded. Please answer on your own, without preparation, help or tools.</p>",
+    "instructions": "<p>This quiz repeats the concept questions from the start-of-course quiz, so that we can see what you have learned during the course. You will see your score afterwards, but not the correct answers. The score does not affect your grade. Please answer on your own, without preparation, help or tools.</p>",
+    "points_possible": 7,
     <<common quiz settings>>
+    <<graded result view>>
+  }
   },
   "items": [
-    <<end-quiz preparation item>>
+    <<end-quiz preparation item>>,
     <<knowledge-part items>>
   ]
 }
 @
 
-Both quizzes are diagnostics, not assessments: nothing is graded, so
-there is no time limit, a single attempt suffices, and the result view
-shows the student their answers but no notion of correctness.
-These settings are shared; only the title and the instructions above
-differ.
+All three quizzes are diagnostics: there is no time limit, a single
+attempt suffices, and answers are never shuffled (order is meaningful
+in several items).
 
 <<common quiz settings>>=
 "time_limit": null,
-"points_possible": 0,
 "due_at": null,
 "unlock_at": null,
 "lock_at": null,
@@ -86,11 +112,28 @@ differ.
   "result_view_restricted": true,
   "display_items": true,
   "display_item_response": true,
+@
+
+The quizzes differ in what the result view reveals.
+The background quiz has nothing to grade, so it shows no points and no
+correctness.
+The knowledge quizzes show the points awarded---how well the student
+did---but neither per-item correctness nor the correct answers: the
+same questions must measure the gain at the end of the course
+(\cref{end-measure}), so they have to stay fresh.
+
+<<ungraded result view>>=
   "display_item_response_correctness": false,
   "display_item_correct_answer": false,
   "display_points_awarded": false,
   "display_points_possible": false
-}
+@
+
+<<graded result view>>=
+  "display_item_response_correctness": false,
+  "display_item_correct_answer": false,
+  "display_points_awarded": true,
+  "display_points_possible": true
 @
 
 \subsection{The background items}
@@ -258,13 +301,11 @@ one point.
 students.)
 
 The items are numbered from position 11, so that their placement is
-independent of the quiz they appear in (Canvas orders by position and
-gaps are fine), and the chunk starts with a comma, since something
-precedes the items in both quizzes: the background items in the start
-quiz, the preparation item in the end quiz.
+independent of the quiz they appear in: Canvas orders by position, gaps
+are fine, and the numbering leaves room for quiz-specific items before
+them, such as the end quiz's preparation item.
 
 <<knowledge-part items>>=
-,
 <<item: variable names>>,
 <<item: control flow>>,
 <<item: asking the user>>,
@@ -484,10 +525,10 @@ ones, so the sheet always shows which is which.
 <<[[analyze_quiz.py]]>>=
 """Fetch and summarise the quiz results, and prepare the coding sheet.
 
-The quizzes are defined in quiz-start.json and quiz-end.json; all three
-files are tangled from the same literate source (the appendix of the
-paper).  The results come straight from Canvas via canvaslms; the item
-titles are the column keys.
+The quizzes are defined in quiz-background.json and the two
+quiz-knowledge-*.json files; all four files are tangled from the same
+literate source (the appendix of the paper).  The results come straight
+from Canvas via canvaslms; the item titles are the column keys.
 
 Requires canvaslms (and its configured credentials); the --llm option
 additionally requires the llm package with a configured model.
@@ -498,6 +539,7 @@ import collections
 import csv
 import json
 import os
+import statistics
 import sys
 
 <<the course and the item titles are the keys>>
@@ -521,7 +563,8 @@ columns by containment rather than equality.
 <<the course and the item titles are the keys>>=
 COURSE = "prgi26"
 QUIZ_TITLES = {
-    "start": "Diagnostic quiz: your programming background",
+    "background": "Diagnostic quiz: your programming background",
+    "start": "Concept quiz: what you know already",
     "end": "Concept quiz: what you know now",
 }
 STUDENT = "name"
@@ -595,6 +638,8 @@ def fetch_results(which):
 Tabulating a closed item is counting its answer frequencies; we print
 one table per item present in the report (the preparation item only
 exists in the end quiz).
+For the knowledge quizzes Canvas grades the items, so their reports
+carry a score column, which we summarise.
 
 <<tabulate the closed items>>=
 def tabulate(rows, item):
@@ -606,6 +651,19 @@ def tabulate(rows, item):
     print(f"\n{item}")
     for answer, count in counts.most_common():
         print(f"  {answer or '(no answer)'}: {count}")
+
+
+def summarize_scores(rows):
+    """Print the score distribution, if the report has scores."""
+    column = column_for("score", rows[0].keys())
+    if column is None:
+        return
+    scores = [float(row[column]) for row in rows if row[column]]
+    if scores:
+        print(f"\nscores: n={len(scores)}"
+              f", mean={statistics.mean(scores):.1f}"
+              f", median={statistics.median(scores):.1f}"
+              f", max={max(scores):.0f}")
 @
 
 The model suggests the codes from the two open answers: the languages,
@@ -688,12 +746,14 @@ def write_coding_sheet(rows, path, suggestions=None):
 @
 
 The main function ties the pieces together: fetch (or read) the
-report, tabulate, pre-code if asked to, and write the sheet.
+report, tabulate and summarise, and---for the background quiz, whose
+open items are the ones that get coded---pre-code if asked to and write
+the sheet.
 
 <<analysis main>>=
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--quiz", choices=QUIZ_TITLES, default="start",
+    parser.add_argument("--quiz", choices=QUIZ_TITLES, default="background",
                         help="which quiz to analyse")
     parser.add_argument("--results",
                         help="read this CSV instead of fetching from Canvas")
@@ -714,7 +774,9 @@ def main():
     print(f"{len(rows)} students")
     for item in CLOSED_ITEMS:
         tabulate(rows, item)
-    suggestions = llm_precode(rows) if args.llm else None
-    write_coding_sheet(rows, args.coding_sheet, suggestions)
-    print(f"\ncoding sheet written to {args.coding_sheet}")
+    summarize_scores(rows)
+    if args.quiz == "background":
+        suggestions = llm_precode(rows) if args.llm else None
+        write_coding_sheet(rows, args.coding_sheet, suggestions)
+        print(f"\ncoding sheet written to {args.coding_sheet}")
 @

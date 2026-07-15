@@ -131,13 +131,13 @@ Some students know programming from before the course.
 They matter twice: prior experience is a confound for \cref{h:success}, and
 the experienced students form yet another group within the cohort, whose
 debugging may exhibit the patterns from the start.
-We therefore administer a diagnostic test---a quiz---at the start of the
-course, measuring prior programming knowledge, complemented by
-self-reported programming experience.
-(The quiz is set up in the learning platform by the literate program in
-\cref{app:quiz}, which also prepares its results for analysis.)
-Besides prior programming knowledge, the quiz asks the following;
-between the questions we give the reason for asking them.
+We therefore administer a diagnostic at the start of the course: two
+short quizzes, one mapping the students' background and one testing
+prior programming knowledge.
+(Both are set up in the learning platform by the literate program in
+\cref{app:quiz}, which also prepares their results for analysis.)
+The background quiz asks the following; between the questions we give
+the reason for asking them.
 % XXX(#8) Draft wording; to be piloted before the course starts.
 \begin{enumerate}
   \item Have you programmed before this course?
@@ -194,10 +194,17 @@ both the logs and the questionnaire: a third angle on the connection
 between approach and patterns (\cref{rq:deep}), and the third
 classification whose agreement \cref{mq:agreement} asks about.
 
-For the knowledge part itself we use the questions of the course's
-example exam---as many as fit alongside the approach questionnaire (the
+The knowledge test is its own quiz because it differs in kind from the
+background items: its questions have right and wrong answers, so it can
+be graded---and the students may well want to know how they did.
+They therefore see their score afterwards, but neither the correct
+answers nor which items they got right: the same questions must measure
+the gain at the end of the course (\cref{end-measure}), so they have to
+stay fresh.
+For the knowledge test we use questions from the course's example
+exam---as many as fit alongside the approach questionnaire (the
 R-SPQ-2F, which we introduce in \cref{approach-measure}) and the
-background items above---improved where needed and translated into
+background quiz---improved where needed and translated into
 English.
 This measures what we want to measure: the exam questions are
 constructed against the course's intended learning outcomes, so the
@@ -483,11 +490,11 @@ if any, a state-of-the-art coding agent generates when it debugs.
 \label{end-measure}
 
 At the end of the course we administer both start-of-course instruments
-again: the concept inventory and the R-SPQ-2F.
-(The concept-inventory items are pushed to the learning platform by the
-same program as at the start, \cref{app:quiz}.)
+again: the knowledge test and the R-SPQ-2F.
+(The end-of-course knowledge quiz is pushed to the learning platform by
+the same program as the start-of-course one, \cref{app:quiz}.)
 
-We need the concept inventory (\cref{prior-knowledge}) again because at
+We need the knowledge test (\cref{prior-knowledge}) again because at
 the start it measures what the students brought with them; administered
 again at the end, the difference measures what they learned during the
 course.
