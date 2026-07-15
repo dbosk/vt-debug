@@ -1,9 +1,9 @@
 \section{Analysing the episodes, literately}
 \label{app:episodes}
 
-This appendix is the second literate program of the paper: it tangles
-to [[analyze_episodes.py]], which computes the quantitative analyses of
-\cref{analysis}---the R-SPQ-2F scores (\cref{approach-measure}), the
+This appendix is the paper's second literate program; the program it
+tangles to, [[analyze_episodes.py]], computes the quantitative analyses
+of \cref{analysis}---the R-SPQ-2F scores (\cref{approach-measure}), the
 correlations testing \cref{h:deep,h:success}, the group comparison
 testing \cref{h:generative}, and the agreement measures answering
 \cref{mq:coding,mq:agreement}.

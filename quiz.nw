@@ -104,8 +104,8 @@ Canvas reports the answers, so the analysis program
 <<background items>>=
 <<item: previous programming>>,
 <<item: how learned>>,
-<<item: misbehaving program>>,
-<<item: confidence>>
+<<item: confidence>>,
+<<item: debugging exercise>>
 @
 
 The first item is open text: which languages, and for how long, cannot
@@ -160,30 +160,13 @@ The same holds for the other choice items.
 }
 @
 
-The misbehaving-program item is the open-text item whose answers we
-code for variation-thinking (\cref{prior-knowledge,mq:agreement}); the
-analysis program extracts these answers into a coding sheet.
-
-<<item: misbehaving program>>=
-{
-  "position": 3,
-  "points_possible": 0,
-  "entry": {
-    "title": "Misbehaving program",
-    "item_body": "<p>When your program misbehaves, what do you do? Describe what you did the last time it happened.</p>",
-    "interaction_type_slug": "essay",
-    "interaction_data": {"rce": false, "word_limit_enabled": false},
-    "scoring_data": {"value": ""},
-    "scoring_algorithm": "None"
-  }
-}
-@
-
-The confidence item is the five-point scale of \cref{prior-knowledge}.
+The confidence item is the five-point scale of \cref{prior-knowledge};
+it comes before the debugging exercise so that the exercise cannot
+colour the answer.
 
 <<item: confidence>>=
 {
-  "position": 4,
+  "position": 3,
   "points_possible": 0,
   "entry": {
     "title": "Confidence",
@@ -200,6 +183,30 @@ The confidence item is the five-point scale of \cref{prior-knowledge}.
     },
     "scoring_data": {"value": 1},
     "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+The debugging exercise is the open-text item whose answers we code for
+variation-thinking (\cref{prior-knowledge,mq:agreement}); since every
+student describes their steps on the same small program, the answers
+are directly comparable, and the analysis program extracts them into a
+coding sheet.
+The program and its behaviour are shown verbatim in the item body; the
+bug is that [[input]] returns a string, so [[price * 3]] repeats the
+string instead of multiplying.
+
+<<item: debugging exercise>>=
+{
+  "position": 4,
+  "points_possible": 0,
+  "entry": {
+    "title": "Debugging exercise",
+    "item_body": "<p>Here is a small Python program, and what happened when it was run. The programmer expected it to print 30.</p><pre>price = input(\"Price? \")\ntotal = price * 3\nprint(total)</pre><p>When run:</p><pre>Price? 10\n101010</pre><p>How would you go about finding out what is wrong? Describe your steps&mdash;you do not need to fix the program.</p>",
+    "interaction_type_slug": "essay",
+    "interaction_data": {"rce": false, "word_limit_enabled": false},
+    "scoring_data": {"value": ""},
+    "scoring_algorithm": "None"
   }
 }
 @
@@ -260,9 +267,12 @@ and the quiz titles, so nothing needs to be clicked or downloaded by
 hand---using the same [[canvaslms]] machinery as the command-line tool.
 It then tabulates the closed items and writes the open-text answers to
 a coding sheet: a CSV file with one row per student and columns for the
-codes---whether the student has used Python, and whether the described
-debugging exhibits contrast, generalisation or fusion thinking
-(\cref{analysis,mq:agreement}).
+codes.
+We code all the data we asked for, so that every collected answer is
+usable: from the languages answer the languages themselves, roughly how
+much they were used, and whether Python is among them; from the
+debugging exercise whether the described steps exhibit contrast,
+generalisation or fusion thinking (\cref{analysis,mq:agreement}).
 
 The coding is done by a human, but a large language model prepares it:
 with [[--llm]] the program asks a model (via the [[llm]] package) to
@@ -316,8 +326,11 @@ QUIZ_TITLES = {
 }
 STUDENT = "name"
 CLOSED_ITEMS = ["How you learned", "Confidence", "Preparation"]
-OPEN_ITEMS = ["Previous programming", "Misbehaving program"]
-CODING_COLUMNS = ["python", "contrast", "generalisation", "fusion", "notes"]
+OPEN_ITEMS = ["Previous programming", "Debugging exercise"]
+CODED_KEYS = ["languages", "experience", "python",
+              "contrast", "generalisation", "fusion"]
+CODING_COLUMNS = CODED_KEYS + ["notes"]
+SUGGESTED_COLUMNS = [f"suggested_{key}" for key in CODED_KEYS + ["rationale"]]
 
 
 def column_for(title, fieldnames):
@@ -393,9 +406,10 @@ def tabulate(rows, item):
         print(f"  {answer or '(no answer)'}: {count}")
 @
 
-The model suggests the codes from the two open answers: whether the
-languages answer mentions Python, and which of the three patterns of
-variation the described debugging exhibits.
+The model suggests the codes from the two open answers: the languages,
+the rough amount of experience and whether Python is among the
+languages from the first, and which of the three patterns of variation
+the described steps exhibit from the second.
 The prompt defines the patterns briefly; the model must answer in JSON
 so that the suggestions land in columns.
 The suggestions are exactly that---\cref{analysis} requires a human
@@ -404,12 +418,16 @@ coder, and the verified codes go in the bare columns.
 <<pre-code the open answers with an LLM>>=
 CODING_PROMPT = """\
 You are pre-coding survey answers for a study on debugging.
-Answer in JSON with keys "python" ("yes", "no" or "unclear"),
-"contrast", "generalisation", "fusion" (each 0 or 1), and
-"rationale" (one sentence).
+Answer in JSON with keys "languages" (comma-separated list of the
+programming languages mentioned), "experience" (roughly how much
+programming experience, in the student's own words, e.g. "2 years"),
+"python" ("yes", "no" or "unclear"), "contrast", "generalisation",
+"fusion" (each 0 or 1), and "rationale" (one sentence).
 
-"python": does the languages answer mention Python?
-The pattern codes concern the misbehaving-program answer:
+"languages", "experience" and "python" concern the languages answer.
+The pattern codes concern the debugging-exercise answer, in which the
+student describes how they would find out why a small program prints
+the wrong thing:
 "contrast" = compares the failing case against a working one;
 "generalisation" = varies other things to see if the problem persists,
 keeping the suspected cause fixed;
@@ -417,7 +435,7 @@ keeping the suspected cause fixed;
 varying several things together.
 
 Languages answer: {previous}
-Misbehaving-program answer: {misbehaving}
+Debugging-exercise answer: {exercise}
 """
 
 
@@ -430,7 +448,7 @@ def llm_precode(rows):
     for row in rows:
         prompt = CODING_PROMPT.format(
             previous=row.get(column_for(OPEN_ITEMS[0], row.keys()) or "", ""),
-            misbehaving=row.get(column_for(OPEN_ITEMS[1], row.keys()) or "", ""),
+            exercise=row.get(column_for(OPEN_ITEMS[1], row.keys()) or "", ""),
         )
         try:
             suggestion = json.loads(model.prompt(prompt).text())
@@ -438,8 +456,7 @@ def llm_precode(rows):
             suggestion = {}
         suggestions.append(
             {f"suggested_{key}": suggestion.get(key, "")
-             for key in ["python", "contrast", "generalisation",
-                         "fusion", "rationale"]}
+             for key in CODED_KEYS + ["rationale"]}
         )
     return suggestions
 @
@@ -454,11 +471,8 @@ def write_coding_sheet(rows, path, suggestions=None):
     open_columns = {
         item: column_for(item, rows[0].keys()) for item in OPEN_ITEMS
     }
-    suggested = [f"suggested_{c}"
-                 for c in ["python", "contrast", "generalisation",
-                           "fusion", "rationale"]]
     fields = ([STUDENT] + OPEN_ITEMS
-              + (suggested if suggestions else []) + CODING_COLUMNS)
+              + (SUGGESTED_COLUMNS if suggestions else []) + CODING_COLUMNS)
     with open(path, "w", newline="") as out:
         writer = csv.DictWriter(out, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
