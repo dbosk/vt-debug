@@ -237,22 +237,223 @@ quiz, before the knowledge items.
 
 \subsection{The knowledge part}
 
-The knowledge part consists of the questions of the course's example
-exam, improved where needed and translated (\cref{prior-knowledge});
-its chunk is empty until they are selected.
-Unlike the concept inventories discussed in \cref{inventory-discussion},
-the exam questions may be committed to this repository and shown here
-in full---that transparency is part of why they were chosen.
-When the items are added, each must be preceded by a comma---in both
-quizzes something comes before them: the background items in the start
+The knowledge part consists of questions from the course's example
+exam, translated into English and lightly improved
+(\cref{prior-knowledge,inventory-discussion}); unlike the concept
+inventories, they may be shown here in full---that transparency is part
+of why they were chosen.
+The example exam groups its questions by topic; we selected one
+question per group, so that the knowledge part spans the course's
+intended learning outcomes---naming, control structures, usable
+interaction, files, error handling, classes, and dividing programs into
+functions---while staying short enough to sit alongside the R-SPQ-2F
+and the background items.
+The improvements are slight: a typo fixed, a doubled question reduced
+to one.
+Each item keeps the example exam's correct answer, but not its points:
+the exam's growing point values implement its grading scheme, whereas
+we measure knowledge by counting correct answers, so all items weigh
+one point.
+(The result view of \cref{app:quiz} still hides correctness from the
+students.)
+
+The items are numbered from position 11, so that their placement is
+independent of the quiz they appear in (Canvas orders by position and
+gaps are fine), and the chunk starts with a comma, since something
+precedes the items in both quizzes: the background items in the start
 quiz, the preparation item in the end quiz.
-To keep each item's placement independent of the quiz it appears in, we
-number the knowledge items from position 11; Canvas orders by position
-and gaps are fine.
-% XXX(#4) Select, improve and translate the example-exam questions and
-% add them here.
 
 <<knowledge-part items>>=
+,
+<<item: variable names>>,
+<<item: control flow>>,
+<<item: asking the user>>,
+<<item: writing to a file>>,
+<<item: catching the error>>,
+<<item: method or attribute>>,
+<<item: why functions>>
+@
+
+Naming (the usability of source code): only one of the candidate names
+tells a human reader what the variable holds.
+
+<<item: variable names>>=
+{
+  "position": 11,
+  "points_possible": 1,
+  "entry": {
+    "title": "Variable names",
+    "item_body": "<p>Which of the following are good names for a variable that stores a name?</p>",
+    "interaction_type_slug": "multi-answer",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>NAME</p>"},
+        {"position": 2, "item_body": "<p>name</p>"},
+        {"position": 3, "item_body": "<p>string</p>"},
+        {"position": 4, "item_body": "<p>n</p>"}
+      ]
+    },
+    "scoring_data": {"value": [2]},
+    "scoring_algorithm": "AllOrNothing"
+  }
+}
+@
+
+Control structures: tracing an [[if]]--[[elif]] chain whose conditions
+overlap---the reader must see that only the first true branch runs, and
+that none of them is true here.
+(The original's last choice had a typo, fixed in translation.)
+
+<<item: control flow>>=
+{
+  "position": 12,
+  "points_possible": 1,
+  "entry": {
+    "title": "Control flow",
+    "item_body": "<p>What does the following code print?</p><pre>speed = 50\nif speed > 70:\n    print(\"fast!\")\nelif speed > 100:\n    print(\"very fast!\")\nelif speed < 30:\n    print(\"slow\")\nelse:\n    print(\"quite slow\")</pre>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>fast!</p>"},
+        {"position": 2, "item_body": "<p>very fast!</p>"},
+        {"position": 3, "item_body": "<p>slow</p>"},
+        {"position": 4, "item_body": "<p>quite slow</p>"},
+        {"position": 5, "item_body": "<p>None of the above</p>"}
+      ]
+    },
+    "scoring_data": {"value": 4},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+Usable interaction: the prompt must tell the user what to enter.
+
+<<item: asking the user>>=
+{
+  "position": 13,
+  "points_possible": 1,
+  "entry": {
+    "title": "Asking the user",
+    "item_body": "<p>You want to ask the user to enter the price per kilo of apples. Which code is clearest for the user?</p>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<pre>price = int(input(\"What do apples cost per kilo? \"))</pre>"},
+        {"position": 2, "item_body": "<pre>price = int(input(\"apples? \"))</pre>"},
+        {"position": 3, "item_body": "<pre>price = int(input(\"Value? \"))</pre>"},
+        {"position": 4, "item_body": "<pre>price = int(input(\"? \"))</pre>"}
+      ]
+    },
+    "scoring_data": {"value": 1},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+Files: what writing to a file requires (opening it for writing), with
+the distractors expressing common misconceptions.
+
+<<item: writing to a file>>=
+{
+  "position": 14,
+  "points_possible": 1,
+  "entry": {
+    "title": "Writing to a file",
+    "item_body": "<p>You want to write data that you have stored in a list to a file called \"results.txt\". Which of the statements is correct?</p>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>We first need to open the file \"results.txt\" for writing.</p>"},
+        {"position": 2, "item_body": "<p>It cannot be done if a file called \"results.txt\" already exists.</p>"},
+        {"position": 3, "item_body": "<p>We write: \"results.txt\".write()</p>"},
+        {"position": 4, "item_body": "<p>.write() can write integers, so we do not need to convert the values in the list to strings before writing them to the file.</p>"}
+      ]
+    },
+    "scoring_data": {"value": 1},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+Error handling in interactive programs: which exception
+[[int("twenty-three")]] raises.
+(The original asked two questions in one; the translation keeps one.)
+
+<<item: catching the error>>=
+{
+  "position": 15,
+  "points_possible": 1,
+  "entry": {
+    "title": "Catching the error",
+    "item_body": "<p>If you enter \"twenty-three\" as the answer to the question below, which type of error should your except clause catch?</p><pre>try:\n    val = int(input(\"How many litres of milk did you buy? \"))</pre>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<pre>except ValueError:\n    print(\"Not an integer.\")</pre>"},
+        {"position": 2, "item_body": "<pre>except TypeError:\n    print(\"Not an integer.\")</pre>"},
+        {"position": 3, "item_body": "<pre>except IndentationError:\n    print(\"Not an integer.\")</pre>"},
+        {"position": 4, "item_body": "<pre>except SyntaxError:\n    print(\"Not an integer.\")</pre>"}
+      ]
+    },
+    "scoring_data": {"value": 1},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+Classes: distinguishing what changes an object's state (a method) from
+what merely describes it.
+
+<<item: method or attribute>>=
+{
+  "position": 16,
+  "points_possible": 1,
+  "entry": {
+    "title": "Method or attribute",
+    "item_body": "<p>You have a class that represents a Car. What would change_owner most likely be in the class?</p>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>An attribute</p>"},
+        {"position": 2, "item_body": "<p>A method</p>"},
+        {"position": 3, "item_body": "<p>A function</p>"},
+        {"position": 4, "item_body": "<p>A class attribute</p>"}
+      ]
+    },
+    "scoring_data": {"value": 2},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+Dividing programs into functions: the reasons are readability, no
+repetition, easier debugging and reuse---but functions are not
+mandatory, which is the lone false choice.
+That easier debugging is one of the correct answers suits this study
+well.
+
+<<item: why functions>>=
+{
+  "position": 17,
+  "points_possible": 1,
+  "entry": {
+    "title": "Why functions",
+    "item_body": "<p>Why is it good to divide your program into functions? Check all options that are correct.</p>",
+    "interaction_type_slug": "multi-answer",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>It makes the code easier to read if it is divided so that each function does one thing.</p>"},
+        {"position": 2, "item_body": "<p>We do not need to repeat code: we can call our function several times instead.</p>"},
+        {"position": 3, "item_body": "<p>It is easier to debug if we have divided our program into smaller parts.</p>"},
+        {"position": 4, "item_body": "<p>You must have functions, otherwise the program cannot run.</p>"},
+        {"position": 5, "item_body": "<p>It makes it easier to reuse parts of your code in other programs.</p>"}
+      ]
+    },
+    "scoring_data": {"value": [1, 2, 3, 5]},
+    "scoring_algorithm": "AllOrNothing"
+  }
+}
 @
 
 \subsection{Analysing the results}
@@ -366,7 +567,9 @@ def fetch_results(which):
     )
     config = canvaslms.cli.read_configuration(config_file)
     hostname, token = canvaslms.cli.login.load_credentials(config)
-    canvas = Canvas(f"https://{hostname}", token)
+    if not hostname.startswith("http"):
+        hostname = f"https://{hostname}"
+    canvas = Canvas(hostname, token)
 
     course = next(
         c for c in canvas.get_courses()
