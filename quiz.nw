@@ -306,9 +306,9 @@ quiz, before the knowledge items.
 
 The questions of the knowledge test are our own, written for this study
 against the course's intended learning outcomes
-(\cref{prior-knowledge}); the course's existing tests could have
-supplied questions, but those are their authors' copyright, and we want
-to publish ours---as done here, in full.
+(\cref{prior-knowledge}), and published here in full.
+They are inspired by the earlier course instances' diagnostic tests,
+written by Emma Riese and Camilla Björn, which these quizzes replace.
 There is one question per outcome area: control structures, containers
 and references, usable interaction, dividing programs into functions,
 files, error handling, classes, and reviewing others' code.
