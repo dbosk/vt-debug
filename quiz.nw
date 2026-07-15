@@ -58,7 +58,7 @@ quizzes.
   "settings": {
     "title": "Concept quiz: what you know already",
     "instructions": "<p>This quiz checks which programming concepts you already know, so that we can adapt the course. You will see your score afterwards, but not the correct answers&mdash;the course will teach you those. The score does not affect your grade. Please answer on your own, without help from others or from tools.</p>",
-    "points_possible": 7,
+    "points_possible": 8,
     <<common quiz settings>>
     <<graded result view>>
   }
@@ -81,7 +81,7 @@ before measures preparation, not what the course left behind.
   "settings": {
     "title": "Concept quiz: what you know now",
     "instructions": "<p>This quiz repeats the concept questions from the start-of-course quiz, so that we can see what you have learned during the course. You will see your score afterwards, but not the correct answers. The score does not affect your grade. Please answer on your own, without preparation, help or tools.</p>",
-    "points_possible": 7,
+    "points_possible": 8,
     <<common quiz settings>>
     <<graded result view>>
   }
@@ -139,16 +139,40 @@ same questions must measure the gain at the end of the course
 \subsection{The background items}
 \label{app:background-items}
 
-The four background items are exactly those motivated in
-\cref{prior-knowledge}; the item titles double as the keys under which
-Canvas reports the answers, so the analysis program
-(\cref{app:quiz-analysis}) refers to the items by these titles.
+The background quiz opens with the consent item---an idea kept from the
+course's earlier diagnostic tests, which these quizzes replace:
+participation in the study is opt-in (\cref{ethics}), so we ask before
+collecting anything.
+Then follow the four background items motivated in
+\cref{prior-knowledge}.
+The item titles double as the keys under which Canvas reports the
+answers, so the analysis program (\cref{app:quiz-analysis}) refers to
+the items by these titles.
 
 <<background items>>=
+<<item: consent>>,
 <<item: previous programming>>,
 <<item: how learned>>,
 <<item: confidence>>,
 <<item: debugging exercise>>
+@
+
+% XXX(#10) The consent wording must follow the approved ethics
+% application; update it when the application is decided.
+
+<<item: consent>>=
+{
+  "position": 1,
+  "points_possible": 0,
+  "entry": {
+    "title": "Consent",
+    "item_body": "<p>I consent to my answers in these quizzes, and my submissions in the course, being used pseudonymised in computing education research. My participation does not affect my grade.</p>",
+    "interaction_type_slug": "true-false",
+    "interaction_data": {"true_choice": "Yes", "false_choice": "No"},
+    "scoring_data": {"value": true},
+    "scoring_algorithm": "Equivalence"
+  }
+}
 @
 
 The first item is open text: which languages, and for how long, cannot
@@ -159,7 +183,7 @@ when the answer is coded (\cref{app:quiz-analysis}).
 
 <<item: previous programming>>=
 {
-  "position": 1,
+  "position": 2,
   "points_possible": 0,
   "entry": {
     "title": "Previous programming",
@@ -183,7 +207,7 @@ The same holds for the other choice items.
 
 <<item: how learned>>=
 {
-  "position": 2,
+  "position": 3,
   "points_possible": 0,
   "entry": {
     "title": "How you learned",
@@ -209,7 +233,7 @@ colour the answer.
 
 <<item: confidence>>=
 {
-  "position": 3,
+  "position": 4,
   "points_possible": 0,
   "entry": {
     "title": "Confidence",
@@ -241,7 +265,7 @@ string instead of multiplying.
 
 <<item: debugging exercise>>=
 {
-  "position": 4,
+  "position": 5,
   "points_possible": 0,
   "entry": {
     "title": "Debugging exercise",
@@ -280,25 +304,17 @@ quiz, before the knowledge items.
 
 \subsection{The knowledge part}
 
-The knowledge part consists of questions from the course's example
-exam, translated into English and lightly improved
-(\cref{prior-knowledge,inventory-discussion}); unlike the concept
-inventories, they may be shown here in full---that transparency is part
-of why they were chosen.
-The example exam groups its questions by topic; we selected one
-question per group, so that the knowledge part spans the course's
-intended learning outcomes---naming, control structures, usable
-interaction, files, error handling, classes, and dividing programs into
-functions---while staying short enough to sit alongside the R-SPQ-2F
-and the background items.
-The improvements are slight: a typo fixed, a doubled question reduced
-to one.
-Each item keeps the example exam's correct answer, but not its points:
-the exam's growing point values implement its grading scheme, whereas
-we measure knowledge by counting correct answers, so all items weigh
-one point.
-(The result view of \cref{app:quiz} still hides correctness from the
-students.)
+The questions of the knowledge test are our own, written for this study
+against the course's intended learning outcomes
+(\cref{prior-knowledge}); the course's existing tests could have
+supplied questions, but those are their authors' copyright, and we want
+to publish ours---as done here, in full.
+There is one question per outcome area: control structures, containers
+and references, usable interaction, dividing programs into functions,
+files, error handling, classes, and reviewing others' code.
+Each question tests one concept, with the distractors expressing common
+misconceptions about it, and all weigh one point: we measure knowledge
+by counting correct answers.
 
 The items are numbered from position 11, so that their placement is
 independent of the quiz they appear in: Canvas orders by position, gaps
@@ -306,160 +322,34 @@ are fine, and the numbering leaves room for quiz-specific items before
 them, such as the end quiz's preparation item.
 
 <<knowledge-part items>>=
-<<item: variable names>>,
-<<item: control flow>>,
-<<item: asking the user>>,
-<<item: writing to a file>>,
-<<item: catching the error>>,
-<<item: method or attribute>>,
-<<item: why functions>>
+<<item: tracing a loop>>,
+<<item: two names one list>>,
+<<item: asking for input>>,
+<<item: repeated code>>,
+<<item: reading a file>>,
+<<item: a crashing answer>>,
+<<item: classes and objects>>,
+<<item: reviewing a program>>
 @
 
-Naming (the usability of source code): only one of the candidate names
-tells a human reader what the variable holds.
+Control structures: tracing a [[while]] loop whose counting the reader
+must simulate---the loop body runs a third time because 8 is still
+below 10.
 
-<<item: variable names>>=
+<<item: tracing a loop>>=
 {
   "position": 11,
   "points_possible": 1,
   "entry": {
-    "title": "Variable names",
-    "item_body": "<p>Which of the following are good names for a variable that stores a name?</p>",
-    "interaction_type_slug": "multi-answer",
-    "interaction_data": {
-      "choices": [
-        {"position": 1, "item_body": "<p>NAME</p>"},
-        {"position": 2, "item_body": "<p>name</p>"},
-        {"position": 3, "item_body": "<p>string</p>"},
-        {"position": 4, "item_body": "<p>n</p>"}
-      ]
-    },
-    "scoring_data": {"value": [2]},
-    "scoring_algorithm": "AllOrNothing"
-  }
-}
-@
-
-Control structures: tracing an [[if]]--[[elif]] chain whose conditions
-overlap---the reader must see that only the first true branch runs, and
-that none of them is true here.
-(The original's last choice had a typo, fixed in translation.)
-
-<<item: control flow>>=
-{
-  "position": 12,
-  "points_possible": 1,
-  "entry": {
-    "title": "Control flow",
-    "item_body": "<p>What does the following code print?</p><pre>speed = 50\nif speed > 70:\n    print(\"fast!\")\nelif speed > 100:\n    print(\"very fast!\")\nelif speed < 30:\n    print(\"slow\")\nelse:\n    print(\"quite slow\")</pre>",
+    "title": "Tracing a loop",
+    "item_body": "<p>What does the following program print?</p><pre>count = 0\ntotal = 0\nwhile total < 10:\n    total = total + 4\n    count = count + 1\nprint(count)</pre>",
     "interaction_type_slug": "choice",
     "interaction_data": {
       "choices": [
-        {"position": 1, "item_body": "<p>fast!</p>"},
-        {"position": 2, "item_body": "<p>very fast!</p>"},
-        {"position": 3, "item_body": "<p>slow</p>"},
-        {"position": 4, "item_body": "<p>quite slow</p>"},
-        {"position": 5, "item_body": "<p>None of the above</p>"}
-      ]
-    },
-    "scoring_data": {"value": 4},
-    "scoring_algorithm": "Equivalence"
-  }
-}
-@
-
-Usable interaction: the prompt must tell the user what to enter.
-
-<<item: asking the user>>=
-{
-  "position": 13,
-  "points_possible": 1,
-  "entry": {
-    "title": "Asking the user",
-    "item_body": "<p>You want to ask the user to enter the price per kilo of apples. Which code is clearest for the user?</p>",
-    "interaction_type_slug": "choice",
-    "interaction_data": {
-      "choices": [
-        {"position": 1, "item_body": "<pre>price = int(input(\"What do apples cost per kilo? \"))</pre>"},
-        {"position": 2, "item_body": "<pre>price = int(input(\"apples? \"))</pre>"},
-        {"position": 3, "item_body": "<pre>price = int(input(\"Value? \"))</pre>"},
-        {"position": 4, "item_body": "<pre>price = int(input(\"? \"))</pre>"}
-      ]
-    },
-    "scoring_data": {"value": 1},
-    "scoring_algorithm": "Equivalence"
-  }
-}
-@
-
-Files: what writing to a file requires (opening it for writing), with
-the distractors expressing common misconceptions.
-
-<<item: writing to a file>>=
-{
-  "position": 14,
-  "points_possible": 1,
-  "entry": {
-    "title": "Writing to a file",
-    "item_body": "<p>You want to write data that you have stored in a list to a file called \"results.txt\". Which of the statements is correct?</p>",
-    "interaction_type_slug": "choice",
-    "interaction_data": {
-      "choices": [
-        {"position": 1, "item_body": "<p>We first need to open the file \"results.txt\" for writing.</p>"},
-        {"position": 2, "item_body": "<p>It cannot be done if a file called \"results.txt\" already exists.</p>"},
-        {"position": 3, "item_body": "<p>We write: \"results.txt\".write()</p>"},
-        {"position": 4, "item_body": "<p>.write() can write integers, so we do not need to convert the values in the list to strings before writing them to the file.</p>"}
-      ]
-    },
-    "scoring_data": {"value": 1},
-    "scoring_algorithm": "Equivalence"
-  }
-}
-@
-
-Error handling in interactive programs: which exception
-[[int("twenty-three")]] raises.
-(The original asked two questions in one; the translation keeps one.)
-
-<<item: catching the error>>=
-{
-  "position": 15,
-  "points_possible": 1,
-  "entry": {
-    "title": "Catching the error",
-    "item_body": "<p>If you enter \"twenty-three\" as the answer to the question below, which type of error should your except clause catch?</p><pre>try:\n    val = int(input(\"How many litres of milk did you buy? \"))</pre>",
-    "interaction_type_slug": "choice",
-    "interaction_data": {
-      "choices": [
-        {"position": 1, "item_body": "<pre>except ValueError:\n    print(\"Not an integer.\")</pre>"},
-        {"position": 2, "item_body": "<pre>except TypeError:\n    print(\"Not an integer.\")</pre>"},
-        {"position": 3, "item_body": "<pre>except IndentationError:\n    print(\"Not an integer.\")</pre>"},
-        {"position": 4, "item_body": "<pre>except SyntaxError:\n    print(\"Not an integer.\")</pre>"}
-      ]
-    },
-    "scoring_data": {"value": 1},
-    "scoring_algorithm": "Equivalence"
-  }
-}
-@
-
-Classes: distinguishing what changes an object's state (a method) from
-what merely describes it.
-
-<<item: method or attribute>>=
-{
-  "position": 16,
-  "points_possible": 1,
-  "entry": {
-    "title": "Method or attribute",
-    "item_body": "<p>You have a class that represents a Car. What would change_owner most likely be in the class?</p>",
-    "interaction_type_slug": "choice",
-    "interaction_data": {
-      "choices": [
-        {"position": 1, "item_body": "<p>An attribute</p>"},
-        {"position": 2, "item_body": "<p>A method</p>"},
-        {"position": 3, "item_body": "<p>A function</p>"},
-        {"position": 4, "item_body": "<p>A class attribute</p>"}
+        {"position": 1, "item_body": "<p>2</p>"},
+        {"position": 2, "item_body": "<p>3</p>"},
+        {"position": 3, "item_body": "<p>4</p>"},
+        {"position": 4, "item_body": "<p>Nothing&mdash;the loop never ends</p>"}
       ]
     },
     "scoring_data": {"value": 2},
@@ -468,30 +358,180 @@ what merely describes it.
 }
 @
 
-Dividing programs into functions: the reasons are readability, no
-repetition, easier debugging and reuse---but functions are not
-mandatory, which is the lone false choice.
-That easier debugging is one of the correct answers suits this study
-well.
+Containers and references: two names for the same list, so appending
+through one name is visible through the other.
+(This is also the aspect the paper's worked example turns on, which
+makes the item doubly interesting for us.)
 
-<<item: why functions>>=
+<<item: two names one list>>=
+{
+  "position": 12,
+  "points_possible": 1,
+  "entry": {
+    "title": "Two names, one list",
+    "item_body": "<p>What does the following program print?</p><pre>a = [1, 2, 3]\nb = a\nb.append(4)\nprint(a)</pre>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>[1, 2, 3]</p>"},
+        {"position": 2, "item_body": "<p>[1, 2, 3, 4]</p>"},
+        {"position": 3, "item_body": "<p>[4]</p>"},
+        {"position": 4, "item_body": "<p>The program crashes</p>"}
+      ]
+    },
+    "scoring_data": {"value": 2},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+Usable interaction: only one of the prompts tells the user what to
+enter.
+
+<<item: asking for input>>=
+{
+  "position": 13,
+  "points_possible": 1,
+  "entry": {
+    "title": "Asking for input",
+    "item_body": "<p>A program needs the user's year of birth. Which line treats the user best?</p>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<pre>year = int(input())</pre>"},
+        {"position": 2, "item_body": "<pre>year = int(input(\"Year of birth? \"))</pre>"},
+        {"position": 3, "item_body": "<pre>year = int(input(\"Enter data: \"))</pre>"},
+        {"position": 4, "item_body": "<pre>year = int(input(\"y: \"))</pre>"}
+      ]
+    },
+    "scoring_data": {"value": 2},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+Dividing programs into functions, posed through its most common
+trigger: repeated code.
+
+<<item: repeated code>>=
+{
+  "position": 14,
+  "points_possible": 1,
+  "entry": {
+    "title": "Repeated code",
+    "item_body": "<p>The same five lines, computing the area of a room, appear three times in a program&mdash;once per room. What is the best improvement?</p>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>Put the five lines in a function and call it once per room</p>"},
+        {"position": 2, "item_body": "<p>Keep the copies but add a comment to each</p>"},
+        {"position": 3, "item_body": "<p>Delete two of the copies and compute only the first room's area</p>"},
+        {"position": 4, "item_body": "<p>Nothing&mdash;the program works, so it should not be changed</p>"}
+      ]
+    },
+    "scoring_data": {"value": 1},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+Files: reading requires opening, and the distractors express common
+confusions about what reading a file demands.
+
+<<item: reading a file>>=
+{
+  "position": 15,
+  "points_possible": 1,
+  "entry": {
+    "title": "Reading a file",
+    "item_body": "<p>A program should print every line of the file notes.txt. Which statement is true?</p>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>The file must first be opened; then the program can read its lines</p>"},
+        {"position": 2, "item_body": "<p>print(notes.txt) prints the file's lines directly</p>"},
+        {"position": 3, "item_body": "<p>Reading is only possible if the file lies in the same folder as Python itself</p>"},
+        {"position": 4, "item_body": "<p>Files can only be read once and are then deleted</p>"}
+      ]
+    },
+    "scoring_data": {"value": 1},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+Error handling in interactive programs: what actually raises the error,
+and that it can be caught.
+
+<<item: a crashing answer>>=
+{
+  "position": 16,
+  "points_possible": 1,
+  "entry": {
+    "title": "A crashing answer",
+    "item_body": "<p>The program below crashes when the user answers \"a few\". Which statement is true?</p><pre>guests = int(input(\"How many guests are coming? \"))</pre>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>int raises a ValueError, which the program could catch with try and except</p>"},
+        {"position": 2, "item_body": "<p>input cannot read answers that contain a space</p>"},
+        {"position": 3, "item_body": "<p>The crash happens because guests has no value yet</p>"},
+        {"position": 4, "item_body": "<p>Python programs cannot recover from errors</p>"}
+      ]
+    },
+    "scoring_data": {"value": 1},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+Classes: the relation between the class and its objects.
+
+<<item: classes and objects>>=
 {
   "position": 17,
   "points_possible": 1,
   "entry": {
-    "title": "Why functions",
-    "item_body": "<p>Why is it good to divide your program into functions? Check all options that are correct.</p>",
+    "title": "Classes and objects",
+    "item_body": "<p>A library program models books with a class Book. Which statement is true?</p>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>The class describes what every book has; each actual book is an object of the class</p>"},
+        {"position": 2, "item_body": "<p>Each book in the library needs a class of its own</p>"},
+        {"position": 3, "item_body": "<p>The class is created from the objects, one class per object</p>"},
+        {"position": 4, "item_body": "<p>The class stores the title and author of one particular book</p>"}
+      ]
+    },
+    "scoring_data": {"value": 1},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+Reviewing others' code---the outcome the earlier selection missed: the
+reader must recognise that names, naming-after-content and
+documentation all improve the program, while inlining the function
+would not.
+Multi-answer, so partial insight is not enough for the point.
+
+<<item: reviewing a program>>=
+{
+  "position": 18,
+  "points_possible": 1,
+  "entry": {
+    "title": "Reviewing a program",
+    "item_body": "<p>You are asked to review the following program. Which of the suggestions below would improve it? Check all that apply.</p><pre>def f(x):\n    y = x * 24\n    return y\n\nhours = int(input(\"Days? \"))\nprint(f(hours))</pre>",
     "interaction_type_slug": "multi-answer",
     "interaction_data": {
       "choices": [
-        {"position": 1, "item_body": "<p>It makes the code easier to read if it is divided so that each function does one thing.</p>"},
-        {"position": 2, "item_body": "<p>We do not need to repeat code: we can call our function several times instead.</p>"},
-        {"position": 3, "item_body": "<p>It is easier to debug if we have divided our program into smaller parts.</p>"},
-        {"position": 4, "item_body": "<p>You must have functions, otherwise the program cannot run.</p>"},
-        {"position": 5, "item_body": "<p>It makes it easier to reuse parts of your code in other programs.</p>"}
+        {"position": 1, "item_body": "<p>Rename f, x and y so that the names say what they mean</p>"},
+        {"position": 2, "item_body": "<p>The variable hours holds a number of days: name it after what it holds</p>"},
+        {"position": 3, "item_body": "<p>Explain in a docstring what the function computes</p>"},
+        {"position": 4, "item_body": "<p>Remove the function and paste its code where it is called</p>"}
       ]
     },
-    "scoring_data": {"value": [1, 2, 3, 5]},
+    "scoring_data": {"value": [1, 2, 3]},
     "scoring_algorithm": "AllOrNothing"
   }
 }
@@ -568,7 +608,7 @@ QUIZ_TITLES = {
     "end": "Concept quiz: what you know now",
 }
 STUDENT = "name"
-CLOSED_ITEMS = ["How you learned", "Confidence", "Preparation"]
+CLOSED_ITEMS = ["Consent", "How you learned", "Confidence", "Preparation"]
 OPEN_ITEMS = ["Previous programming", "Debugging exercise"]
 CODED_KEYS = ["languages", "experience", "python",
               "contrast", "generalisation", "fusion"]
