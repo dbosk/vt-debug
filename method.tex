@@ -140,8 +140,8 @@ Besides prior programming knowledge, the quiz asks the following;
 between the questions we give the reason for asking them.
 % XXX(#8) Draft wording; to be piloted before the course starts.
 \begin{enumerate}
-  \item \enquote{Have you programmed before this course?
-    Which programming languages have you used, and for roughly how long?}
+  \item Have you programmed before this course?
+    Which programming languages have you used, and for roughly how long?
 \end{enumerate}
 Experienced students will debug faster regardless of their approach to
 learning: they have already discerned many of the critical aspects the
@@ -153,15 +153,15 @@ Whether the student has programmed in Python we do not ask separately:
 the languages they list already tell us, and the analysis derives it
 when the answer is coded (\cref{app:quiz-analysis}).
 \begin{enumerate}[resume]
-  \item \enquote{If you have programmed before: how did you learn---in a
-    formal course, self-taught, or both?}
+  \item If you have programmed before: how did you learn---in a
+    formal course, self-taught, or both?
 \end{enumerate}
 The self-taught are self-directed learners by definition, which bears
 directly on the deep approach (\cref{rq:deep}): they may already generate
 their own variation.
 \begin{enumerate}[resume]
-  \item \enquote{How confident are you that you could write, run and fix a
-    small program on your own?}
+  \item How confident are you that you could write, run and fix a
+    small program on your own?
     (five-point scale)
 \end{enumerate}
 Less confident students may give up or persist differently, which
@@ -170,9 +170,9 @@ confounds the persistence-based success measures of
 We ask before the debugging exercise that follows, so that the exercise
 cannot colour the answer.
 \begin{enumerate}[resume]
-  \item \enquote{Here is a small Python program, and what happened when
+  \item Here is a small Python program, and what happened when
     it was run.
-    The programmer expected it to print 30.}
+    The programmer expected it to print 30.
 \begin{minted}{python}
 price = input("Price? ")
 total = price * 3
@@ -182,8 +182,8 @@ print(total)
 Price? 10
 101010
 \end{minted}
-    \enquote{How would you go about finding out what is wrong?
-    Describe your steps---you do not need to fix the program.}
+    How would you go about finding out what is wrong?
+    Describe your steps---you do not need to fix the program.
     (open text)
 \end{enumerate}
 The described steps can be coded for variation-thinking, and since
@@ -194,32 +194,23 @@ both the logs and the questionnaire: a third angle on the connection
 between approach and patterns (\cref{rq:deep}), and the third
 classification whose agreement \cref{mq:agreement} asks about.
 
-For the knowledge part itself we use a subset of the Second CS1 Assessment
-(SCS1), a validated, language-independent concept inventory for
-introductory programming \autocite{SCS1}, itself an isomorphic successor
-of the FCS1 \autocite{FCS1}.
-Both instruments have been widely used and adapted in computing education
-research \autocite{FCS1SCS1Uses}, which makes our prior-knowledge measure
-comparable to other studies.
-We use a subset rather than the full instrument for two reasons: the quiz
-must fit alongside the approach questionnaire (the R-SPQ-2F, which we
-introduce in \cref{approach-measure}) and the background items above, and an
-item response theory evaluation of the SCS1 found problematic items that a
-subset can avoid \autocite{SCS1IRT}; shortened adaptations that preserve
-the instrument's reliability exist \autocite{SCS1Short}.
-An alternative for the knowledge part is the Nordic Prior Knowledge Test
-in Programming, which was designed for precisely our situation: assessing
-incoming students' prior knowledge of the basic elements of CS1, in the
-Nordic setting \autocite{NPKT}.
-Its 2024 administration, with \num{3038} students across eight Norwegian
-institutions, provides a directly comparable baseline for our cohort.
-% XXX(#4) Decide between the SCS1 subset and the Nordic Prior Knowledge Test
-% (or combine them) when finalising the quiz; the chosen items then join
-% the list above.  SCS1: per the IRT results (SCS1IRT, full text), avoid
-% Q20, Q24, Q27 (unrelated to the CS1-knowledge factor) and Q5, Q13, Q15,
-% Q18 (too difficult, Q13/Q18 also poor discrimination); the instrument
-% must be requested from its maintainers (see nytid todo 171).  The
-% Nordic test's availability: check with Bolland et al.
+For the knowledge part itself we use the questions of the course's
+example exam---as many as fit alongside the approach questionnaire (the
+R-SPQ-2F, which we introduce in \cref{approach-measure}) and the
+background items above---improved where needed and translated into
+English.
+This measures what we want to measure: the exam questions are
+constructed against the course's intended learning outcomes, so the
+knowledge scores at the start, and again at the end
+(\cref{end-measure}), measure prior knowledge and knowledge gain in
+terms of what the course intends to teach.
+It also keeps the study transparent: the questions can be included in
+full in this paper (\cref{app:quiz}).
+The alternative---an established concept inventory, which would buy
+comparability with other studies at the price of both of these---we
+discuss in \cref{inventory-discussion}.
+% XXX(#4) Select, improve and translate the example-exam questions and
+% add them to the quiz program (app:quiz).
 
 \subsubsection{Measuring the approach to learning: R-SPQ-2F}
 \label{approach-measure}

@@ -237,21 +237,20 @@ quiz, before the knowledge items.
 
 \subsection{The knowledge part}
 
-The knowledge part awaits the choice between the SCS1 subset and the
-Nordic Prior Knowledge Test (\cref{prior-knowledge}); its chunk is
-empty until then.
+The knowledge part consists of the questions of the course's example
+exam, improved where needed and translated (\cref{prior-knowledge});
+its chunk is empty until they are selected.
+Unlike the concept inventories discussed in \cref{inventory-discussion},
+the exam questions may be committed to this repository and shown here
+in full---that transparency is part of why they were chosen.
 When the items are added, each must be preceded by a comma---in both
 quizzes something comes before them: the background items in the start
 quiz, the preparation item in the end quiz.
 To keep each item's placement independent of the quiz it appears in, we
 number the knowledge items from position 11; Canvas orders by position
 and gaps are fine.
-Mind also that the items must not be committed to this (public)
-repository: both instruments are distributed to researchers on request,
-so the chunk will pull them from an untracked file.
-% XXX(#4) Add the knowledge-part items once the SCS1-subset/NPKT decision is
-% made (see the corresponding note in the method section); load them from an
-% untracked file to keep them out of the public repository.
+% XXX(#4) Select, improve and translate the example-exam questions and
+% add them here.
 
 <<knowledge-part items>>=
 @
