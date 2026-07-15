@@ -201,20 +201,122 @@ They therefore see their score afterwards, but neither the correct
 answers nor which items they got right: the same questions must measure
 the gain at the end of the course (\cref{end-measure}), so they have to
 stay fresh.
-The questions of the knowledge test are our own, written for this study
-against the course's intended learning outcomes---one per outcome area,
-as many as fit alongside the approach questionnaire (the R-SPQ-2F,
-which we introduce in \cref{approach-measure}) and the background quiz.
+The questions of the knowledge test are written against the course's
+intended learning outcomes---one per outcome area, as many as fit
+alongside the approach questionnaire (the R-SPQ-2F, which we introduce
+in \cref{approach-measure}) and the background quiz.
 Being written against the outcomes, they measure prior knowledge and,
 administered again at the end (\cref{end-measure}), knowledge gain in
 terms of exactly what the course intends to teach.
-And being our own, they can be published in full (\cref{app:quiz}).
-The quizzes replace the earlier course instances' diagnostic tests, and
-are inspired by them; those tests were written by Emma Riese and
-Camilla Björn.
+They are published in full (\cref{app:quiz}).
+The quizzes are inspired by tests written by Emma Riese and Camilla
+Björn.
 The remaining alternative---an established concept inventory, which
 would buy comparability with other studies---we discuss in
 \cref{inventory-discussion}.
+
+The questions are the following; between them we give what each
+measures.
+\begin{enumerate}[series=knowledgequiz]
+  \item What does the following program print?
+\begin{minted}{python}
+count = 0
+total = 0
+while total < 10:
+    total = total + 4
+    count = count + 1
+print(count)
+\end{minted}
+    (choices: 2, 3, 4, or that the loop never ends)
+\end{enumerate}
+Control structures: predicting the output requires simulating the
+loop---the body runs a third time, since 8 is still below 10---and each
+wrong choice is one simulation error: a lap too few, a lap too many, or
+misreading the condition as never ending.
+\begin{enumerate}[resume*=knowledgequiz]
+  \item What does the following program print?
+\begin{minted}{python}
+a = [1, 2, 3]
+b = a
+b.append(4)
+print(a)
+\end{minted}
+    (choices: \mintinline{python}{[1, 2, 3]},
+    \mintinline{python}{[1, 2, 3, 4]}, \mintinline{python}{[4]}, or a
+    crash)
+\end{enumerate}
+Containers and references: two names for one list, so appending through
+one name is visible through the other---the aspect our worked example
+turns on (\cref{debugging}).
+\begin{enumerate}[resume*=knowledgequiz]
+  \item A program needs the user's year of birth.
+    Which line treats the user best?
+\begin{minted}{python}
+year = int(input())
+year = int(input("Year of birth? "))
+year = int(input("Enter data: "))
+year = int(input("y: "))
+\end{minted}
+\end{enumerate}
+Usable interfaces: the four candidates differ only in the prompt, so
+what varies is exactly how much the user is told.
+\begin{enumerate}[resume*=knowledgequiz]
+  \item The same five lines, computing the area of a room, appear three
+    times in a program---once per room.
+    What is the best improvement?
+    (choices: put the lines in a function and call it once per room;
+    comment each copy; delete two of the copies; change nothing)
+\end{enumerate}
+Dividing programs into functions, posed through its most common
+trigger: repeated code.
+\begin{enumerate}[resume*=knowledgequiz]
+  \item A program should print every line of the file
+    \texttt{notes.txt}.
+    Which statement is true?
+    (the correct choice: the file must first be opened; the distractors
+    express common confusions about what reading a file demands)
+\end{enumerate}
+Transferring data between file and program.
+\begin{enumerate}[resume*=knowledgequiz]
+  \item The program below crashes when the user answers
+    \enquote{a few}.
+    Which statement is true?
+\begin{minted}{python}
+guests = int(input("How many guests are coming? "))
+\end{minted}
+    (the correct choice: \mintinline{python}{int} raises a
+    \mintinline{python}{ValueError}, which the program could catch
+    with \mintinline{python}{try} and \mintinline{python}{except})
+\end{enumerate}
+Robust interactive programs: locating the error at the conversion
+rather than at the input, and knowing that it can be caught.
+\begin{enumerate}[resume*=knowledgequiz]
+  \item A library program models books with a class
+    \mintinline{python}{Book}.
+    Which statement is true?
+    (the correct choice: the class describes what every book has, and
+    each actual book is an object of the class)
+\end{enumerate}
+Composite data types: the relation between a class and its objects.
+\begin{enumerate}[resume*=knowledgequiz]
+  \item You are asked to review the following program.
+    Which of the suggestions below would improve it?
+    Check all that apply.
+\begin{minted}{python}
+def f(x):
+    y = x * 24
+    return y
+
+hours = int(input("Days? "))
+print(f(hours))
+\end{minted}
+    (the suggestions: renaming \mintinline{python}{f},
+    \mintinline{python}{x} and \mintinline{python}{y}; naming the
+    variable after what it holds; a docstring; inlining the function)
+\end{enumerate}
+Reviewing others' code: renaming, naming after content and documenting
+all improve the program while inlining the function does not---and the
+item is multi-answer, so partial insight does not score.
 
 \subsubsection{Measuring the approach to learning: R-SPQ-2F}
 \label{approach-measure}

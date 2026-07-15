@@ -42,9 +42,11 @@ quizzes.
     "title": "Diagnostic quiz: your programming background",
     "instructions": "<p>This quiz maps your programming background so that we can adapt the course. It is not graded and there are no wrong answers. Please answer on your own, without help from others or from tools.</p>",
     "points_possible": 0,
-    <<common quiz settings>>
-    <<ungraded result view>>
-  }
+    <<scheduling settings>>
+    "quiz_settings": {
+      <<interaction settings>>
+      <<ungraded result view>>
+    }
   },
   "items": [
     <<background items>>
@@ -59,9 +61,11 @@ quizzes.
     "title": "Concept quiz: what you know already",
     "instructions": "<p>This quiz checks which programming concepts you already know, so that we can adapt the course. You will see your score afterwards, but not the correct answers&mdash;the course will teach you those. The score does not affect your grade. Please answer on your own, without help from others or from tools.</p>",
     "points_possible": 8,
-    <<common quiz settings>>
-    <<graded result view>>
-  }
+    <<scheduling settings>>
+    "quiz_settings": {
+      <<interaction settings>>
+      <<graded result view>>
+    }
   },
   "items": [
     <<knowledge-part items>>
@@ -82,9 +86,11 @@ before measures preparation, not what the course left behind.
     "title": "Concept quiz: what you know now",
     "instructions": "<p>This quiz repeats the concept questions from the start-of-course quiz, so that we can see what you have learned during the course. You will see your score afterwards, but not the correct answers. The score does not affect your grade. Please answer on your own, without preparation, help or tools.</p>",
     "points_possible": 8,
-    <<common quiz settings>>
-    <<graded result view>>
-  }
+    <<scheduling settings>>
+    "quiz_settings": {
+      <<interaction settings>>
+      <<graded result view>>
+    }
   },
   "items": [
     <<end-quiz preparation item>>,
@@ -96,22 +102,28 @@ before measures preparation, not what the course left behind.
 All three quizzes are diagnostics: there is no time limit, a single
 attempt suffices, and answers are never shuffled (order is meaningful
 in several items).
+The shared settings come in two chunks---scheduling and
+interaction---and each chunk is a flat list of keys, so every brace
+opens and closes in the chunk that uses it: the [[quiz_settings]]
+object opens and closes in the quiz descriptions above.
 
-<<common quiz settings>>=
+<<scheduling settings>>=
 "time_limit": null,
 "due_at": null,
 "unlock_at": null,
 "lock_at": null,
-"quiz_settings": {
-  "shuffle_answers": false,
-  "shuffle_questions": false,
-  "has_time_limit": false,
-  "one_at_a_time_type": "none",
-  "allow_backtracking": true,
-  "multiple_attempts_enabled": false,
-  "result_view_restricted": true,
-  "display_items": true,
-  "display_item_response": true,
+@
+
+<<interaction settings>>=
+"shuffle_answers": false,
+"shuffle_questions": false,
+"has_time_limit": false,
+"one_at_a_time_type": "none",
+"allow_backtracking": true,
+"multiple_attempts_enabled": false,
+"result_view_restricted": true,
+"display_items": true,
+"display_item_response": true,
 @
 
 The quizzes differ in what the result view reveals.
@@ -304,11 +316,11 @@ quiz, before the knowledge items.
 
 \subsection{The knowledge part}
 
-The questions of the knowledge test are our own, written for this study
-against the course's intended learning outcomes
-(\cref{prior-knowledge}), and published here in full.
+The questions of the knowledge test are written against the course's
+intended learning outcomes (\cref{prior-knowledge}), and published
+here in full.
 They are inspired by the earlier course instances' diagnostic tests,
-written by Emma Riese and Camilla Björn, which these quizzes replace.
+written by Emma Riese and Camilla Björn.
 There is one question per outcome area: control structures, containers
 and references, usable interaction, dividing programs into functions,
 files, error handling, classes, and reviewing others' code.
