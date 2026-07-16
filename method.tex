@@ -250,7 +250,7 @@ one name is visible through the other---the aspect our worked example
 turns on (\cref{debugging}).
 \begin{enumerate}[resume*=knowledgequiz]
   \item A program needs the user's year of birth.
-    Which line treats the user best?
+    Which line is the best option?
 \begin{minted}{python}
 year = int(input())
 year = int(input("Year of birth? "))
@@ -261,11 +261,30 @@ year = int(input("y: "))
 Usable interfaces: the four candidates differ only in the prompt, so
 what varies is exactly how much the user is told.
 \begin{enumerate}[resume*=knowledgequiz]
-  \item The same five lines, computing the area of a room, appear three
-    times in a program---once per room.
+  \item In the program below, the same five lines appear three
+    times---once per room.
     What is the best improvement?
-    (choices: put the lines in a function and call it once per room;
-    comment each copy; delete two of the copies; change nothing)
+\begin{minted}{python}
+length = float(input("Length of the living room? "))
+width = float(input("Width of the living room? "))
+area = length * width
+print("The living room:")
+print(area, "square metres")
+
+length = float(input("Length of the kitchen? "))
+width = float(input("Width of the kitchen? "))
+area = length * width
+print("The kitchen:")
+print(area, "square metres")
+
+length = float(input("Length of the bedroom? "))
+width = float(input("Width of the bedroom? "))
+area = length * width
+print("The bedroom:")
+print(area, "square metres")
+\end{minted}
+    (choices: put the five lines in a function and call it once per
+    room; comment each copy; delete two of the copies; change nothing)
 \end{enumerate}
 Dividing programs into functions, posed through its most common
 trigger: repeated code.
@@ -273,10 +292,16 @@ trigger: repeated code.
   \item A program should print every line of the file
     \texttt{notes.txt}.
     Which statement is true?
-    (the correct choice: the file must first be opened; the distractors
-    express common confusions about what reading a file demands)
+    (choices: the file must first be opened, then the program can read
+    its lines; \mintinline{python}{print(notes.txt)} prints the file's
+    lines directly; reading is only possible if the file lies in the
+    same folder as Python itself; files can only be read once and are
+    then deleted)
 \end{enumerate}
-Transferring data between file and program.
+Transferring data between file and program: the correct choice is the
+opening step, and each distractor is a common confusion---that the
+file's name alone gives access to its content, that access depends on
+the interpreter's location, and that reading consumes the file.
 \begin{enumerate}[resume*=knowledgequiz]
   \item The program below crashes when the user answers
     \enquote{a few}.
@@ -284,20 +309,30 @@ Transferring data between file and program.
 \begin{minted}{python}
 guests = int(input("How many guests are coming? "))
 \end{minted}
-    (the correct choice: \mintinline{python}{int} raises a
+    (choices: \mintinline{python}{int} raises a
     \mintinline{python}{ValueError}, which the program could catch
-    with \mintinline{python}{try} and \mintinline{python}{except})
+    with \mintinline{python}{try} and \mintinline{python}{except};
+    \mintinline{python}{input} cannot read answers that contain a
+    space; the crash happens because \mintinline{python}{guests} has
+    no value yet; Python programs cannot recover from errors)
 \end{enumerate}
-Robust interactive programs: locating the error at the conversion
-rather than at the input, and knowing that it can be caught.
+Robust interactive programs: the correct choice locates the error at
+the conversion and knows it can be caught; the distractors misplace it
+at the input or at the assignment, or declare it beyond recovery.
 \begin{enumerate}[resume*=knowledgequiz]
   \item A library program models books with a class
     \mintinline{python}{Book}.
     Which statement is true?
-    (the correct choice: the class describes what every book has, and
-    each actual book is an object of the class)
+    (the statements: the class describes what every book has, and each
+    actual book is an object of the class; each book needs a class of
+    its own; the class is created from the objects, one class per
+    object; the class stores the title and author of one particular
+    book)
 \end{enumerate}
-Composite data types: the relation between a class and its objects.
+Composite data types: the correct statement is the class--object
+relation; each distractor collapses it in a different way---one class
+per book, classes derived from objects, or the class as one book's
+storage.
 \begin{enumerate}[resume*=knowledgequiz]
   \item You are asked to review the following program.
     Which of the suggestions below would improve it?

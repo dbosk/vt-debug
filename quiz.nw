@@ -406,7 +406,7 @@ enter.
   "points_possible": 1,
   "entry": {
     "title": "Asking for input",
-    "item_body": "<p>A program needs the user's year of birth. Which line treats the user best?</p>",
+    "item_body": "<p>A program needs the user's year of birth. Which line is the best option?</p>",
     "interaction_type_slug": "choice",
     "interaction_data": {
       "choices": [
@@ -431,7 +431,7 @@ trigger: repeated code.
   "points_possible": 1,
   "entry": {
     "title": "Repeated code",
-    "item_body": "<p>The same five lines, computing the area of a room, appear three times in a program&mdash;once per room. What is the best improvement?</p>",
+    "item_body": "<p>In the program below, the same five lines appear three times&mdash;once per room. What is the best improvement?</p><pre>length = float(input(\"Length of the living room? \"))\nwidth = float(input(\"Width of the living room? \"))\narea = length * width\nprint(\"The living room:\")\nprint(area, \"square metres\")\n\nlength = float(input(\"Length of the kitchen? \"))\nwidth = float(input(\"Width of the kitchen? \"))\narea = length * width\nprint(\"The kitchen:\")\nprint(area, \"square metres\")\n\nlength = float(input(\"Length of the bedroom? \"))\nwidth = float(input(\"Width of the bedroom? \"))\narea = length * width\nprint(\"The bedroom:\")\nprint(area, \"square metres\")</pre>",
     "interaction_type_slug": "choice",
     "interaction_data": {
       "choices": [
