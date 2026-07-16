@@ -217,6 +217,12 @@ would buy comparability with other studies---we discuss in
 
 The questions are the following; between them we give what each
 measures.
+Their design follows \citeauthor{NCOL}'s discussion of assessment:
+\textcquote[p.~91]{NCOL}{the questions should not point out the
+relevant aspects of the problem to be solved, as this is exactly what
+the students are supposed to find out (discern)}---so each stem
+presents a program or a situation, and leaves the critical aspect for
+the student to discern.
 \begin{enumerate}[series=knowledgequiz]
   \item What does the following program print?
 \begin{minted}{python}
@@ -261,9 +267,7 @@ year = int(input("y: "))
 Usable interfaces: the four candidates differ only in the prompt, so
 what varies is exactly how much the user is told.
 \begin{enumerate}[resume*=knowledgequiz]
-  \item In the program below, the same five lines appear three
-    times---once per room.
-    What is the best improvement?
+  \item What is the best improvement of the program below?
 \begin{minted}{python}
 length = float(input("Length of the living room? "))
 width = float(input("Width of the living room? "))
@@ -283,11 +287,16 @@ area = length * width
 print("The bedroom:")
 print(area, "square metres")
 \end{minted}
-    (choices: put the five lines in a function and call it once per
-    room; comment each copy; delete two of the copies; change nothing)
+    (choices: move the lines that repeat into a function and call it
+    once per room; add a comment above each block; use different
+    variable names in each block; nothing---the program works, so it
+    should not be changed)
 \end{enumerate}
 Dividing programs into functions, posed through its most common
 trigger: repeated code.
+The stem no longer names the repetition---seeing it is the point---and
+only one choice addresses it: the others decorate it with comments,
+mistake the reused names for the problem, or deny that there is one.
 \begin{enumerate}[resume*=knowledgequiz]
   \item A program should print every line of the file
     \texttt{notes.txt}.
@@ -352,6 +361,13 @@ print(f(hours))
 Reviewing others' code: renaming, naming after content and documenting
 all improve the program while inlining the function does not---and the
 item is multi-answer, so partial insight does not score.
+
+The remaining stems pass \citeauthor{NCOL}'s test as well: they present
+programs and behaviours---a printout to predict, a crash to
+explain---and the aspect to discern (the aliasing, the conversion, the
+repetition) is never named in the stem.
+Choices necessarily name aspects; there the student's task is to judge
+the named claims against the code, which is the reviewing skill itself.
 
 \subsubsection{Measuring the approach to learning: R-SPQ-2F}
 \label{approach-measure}

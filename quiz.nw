@@ -327,6 +327,10 @@ files, error handling, classes, and reviewing others' code.
 Each question tests one concept, with the distractors expressing common
 misconceptions about it, and all weigh one point: we measure knowledge
 by counting correct answers.
+Following \citeauthor{NCOL}'s discussion of assessment, the stems do
+not point out the relevant aspects---discerning them is what we measure
+\autocite[p.~91]{NCOL}; the design is motivated question by question in
+\cref{prior-knowledge}.
 
 The items are numbered from position 11, so that their placement is
 independent of the quiz they appear in: Canvas orders by position, gaps
@@ -431,13 +435,13 @@ trigger: repeated code.
   "points_possible": 1,
   "entry": {
     "title": "Repeated code",
-    "item_body": "<p>In the program below, the same five lines appear three times&mdash;once per room. What is the best improvement?</p><pre>length = float(input(\"Length of the living room? \"))\nwidth = float(input(\"Width of the living room? \"))\narea = length * width\nprint(\"The living room:\")\nprint(area, \"square metres\")\n\nlength = float(input(\"Length of the kitchen? \"))\nwidth = float(input(\"Width of the kitchen? \"))\narea = length * width\nprint(\"The kitchen:\")\nprint(area, \"square metres\")\n\nlength = float(input(\"Length of the bedroom? \"))\nwidth = float(input(\"Width of the bedroom? \"))\narea = length * width\nprint(\"The bedroom:\")\nprint(area, \"square metres\")</pre>",
+    "item_body": "<p>What is the best improvement of the program below?</p><pre>length = float(input(\"Length of the living room? \"))\nwidth = float(input(\"Width of the living room? \"))\narea = length * width\nprint(\"The living room:\")\nprint(area, \"square metres\")\n\nlength = float(input(\"Length of the kitchen? \"))\nwidth = float(input(\"Width of the kitchen? \"))\narea = length * width\nprint(\"The kitchen:\")\nprint(area, \"square metres\")\n\nlength = float(input(\"Length of the bedroom? \"))\nwidth = float(input(\"Width of the bedroom? \"))\narea = length * width\nprint(\"The bedroom:\")\nprint(area, \"square metres\")</pre>",
     "interaction_type_slug": "choice",
     "interaction_data": {
       "choices": [
-        {"position": 1, "item_body": "<p>Put the five lines in a function and call it once per room</p>"},
-        {"position": 2, "item_body": "<p>Keep the copies but add a comment to each</p>"},
-        {"position": 3, "item_body": "<p>Delete two of the copies and compute only the first room's area</p>"},
+        {"position": 1, "item_body": "<p>Move the lines that repeat into a function and call it once per room</p>"},
+        {"position": 2, "item_body": "<p>Add a comment above each block</p>"},
+        {"position": 3, "item_body": "<p>Use different variable names in each block</p>"},
         {"position": 4, "item_body": "<p>Nothing&mdash;the program works, so it should not be changed</p>"}
       ]
     },
