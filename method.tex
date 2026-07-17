@@ -61,8 +61,8 @@ Answered by testing \cref{h:success}:
 \hsuccess*
 The debugging outcomes---whether the bug was fixed, and in how many
 edit--run cycles---derive from the recorded episodes (\cref{analysis}) and
-provide the success measures; a diagnostic quiz (\cref{prior-knowledge})
-provides the control for prior experience.
+provide the success measures; the start-of-course diagnostics
+(\cref{prior-knowledge}) provide the controls for prior experience.
 
 \rqexperts*
 Answered descriptively---it has no hypothesis to test: we code the
@@ -133,9 +133,12 @@ the experienced students form yet another group within the cohort, whose
 debugging may exhibit the patterns from the start.
 We therefore administer a diagnostic at the start of the course: two
 short quizzes, one mapping the students' background and one testing
-prior programming knowledge.
-(Both are set up in the learning platform by the literate program in
-\cref{app:quiz}, which also prepares their results for analysis.)
+what the students already know about debugging; together with the
+companion study's concept quiz (below) they replace the earlier course
+instances' diagnostic tests, written by Emma Riese and Camilla Björn.
+(Both quizzes are set up in the learning platform by the literate
+program in \cref{app:quiz}, which also prepares their results for
+analysis.)
 The background quiz asks the following; between the questions we give
 the reason for asking them.
 % XXX(#8) Draft wording; to be piloted before the course starts.
@@ -200,23 +203,36 @@ both the logs and the questionnaire: a third angle on the connection
 between approach and patterns (\cref{rq:deep}), and the third
 classification whose agreement \cref{mq:agreement} asks about.
 
-The knowledge test is its own quiz because it differs in kind from the
+For prior knowledge of the programming \emph{concepts} we do not write
+a test of our own.
+The companion study \autocite{VTProgMisconceptions} runs its concept
+quizzes in the same course: diagnostic items at the start and the end
+of the course, each distractor encoding a catalogued misconception.
+We use its start-of-course scores as our measure of prior conceptual
+knowledge---a control variable for \cref{h:success} alongside the
+self-reported experience above---and its end-of-course scores for the
+conceptual gain (\cref{end-measure}).
+Sharing the instrument means the students are not tested twice on the
+same concepts; what remains for this study to test is what that
+instrument does not cover: debugging itself.
+
+The debugging test is its own quiz because it differs in kind from the
 background items: its questions have right and wrong answers, so it can
 be graded---and the students may well want to know how they did.
 They therefore see their score afterwards, but neither the correct
 answers nor which items they got right: the same questions must measure
 the gain at the end of the course (\cref{end-measure}), so they have to
 stay fresh.
-The questions of the knowledge test are written against the course's
-intended learning outcomes---one per outcome area, as many as fit
-alongside the approach questionnaire (the R-SPQ-2F, which we introduce
-in \cref{approach-measure}) and the background quiz.
-Being written against the outcomes, they measure prior knowledge and,
-administered again at the end (\cref{end-measure}), knowledge gain in
-terms of exactly what the course intends to teach.
-They are published in full (\cref{app:quiz}).
-The quizzes are inspired by tests written by Emma Riese and Camilla
-Björn.
+The questions are written for this study, and they follow a debugging
+episode from beginning to end: making the failure reproducible, reading
+what the crash reports, locating and explaining the fault, and
+verifying the fix---the process the expert literature prescribes
+\autocite{WhyProgramsFail}, whose variation-theoretic reading
+\cref{debugging} develops.
+Administered at the start, the test measures what the students bring;
+administered again at the end (\cref{end-measure}), the difference
+measures what the course taught them about debugging.
+The questions are published in full (\cref{app:quiz}).
 The remaining alternative---an established concept inventory, which
 would buy comparability with other studies---we discuss in
 \cref{inventory-discussion}.
@@ -228,96 +244,42 @@ the debugging exercise above already did:
 \textcquote[p.~91]{NCOL}{the questions should not point out the
 relevant aspects of the problem to be solved, as this is exactly what
 the students are supposed to find out (discern)}---so each stem
-presents a program or a situation, and leaves the critical aspect for
-the student to discern.
+presents a program and its behaviour, and leaves what is wrong, and
+what to do about it, for the student to discern.
 \begin{enumerate}[series=knowledgequiz]
-  \item What does the following program print?
-\begin{minted}{python}
-count = 0
-total = 0
-while total < 10:
-    total = total + 4
-    count = count + 1
-print(count)
-\end{minted}
-    (choices: 2, 3, 4, or that the loop never ends)
+  \item Sometimes when Alice runs her program it crashes; sometimes it
+    does not.
+    What is the best first step to find out what is wrong?
+    (choices: find out what the crashing runs have in common, so that
+    the crash can be triggered on purpose; put the whole program inside
+    \mintinline{python}{try} and \mintinline{python}{except}, so that
+    it stops crashing; leave it---a program that works most of the time
+    is good enough; retype the program from scratch---errors like this
+    usually disappear when the code is typed anew)
 \end{enumerate}
-Control structures: predicting the output requires simulating the
-loop---the body runs a third time, since 8 is still below 10---and each
-wrong choice is one simulation error: a lap too few, a lap too many, or
-misreading the condition as never ending.
+Reproducing: before anything can be located or explained, the failure
+must be made to happen on demand.
+The distractors instead silence the symptom without touching the fault,
+accept the fault, or trust superstition over observation.
 \begin{enumerate}[resume*=knowledgequiz]
-  \item What does the following program print?
-\begin{minted}{python}
-a = [1, 2, 3]
-b = a
-b.append(4)
-print(a)
-\end{minted}
-    (choices: \mintinline{python}{[1, 2, 3]},
-    \mintinline{python}{[1, 2, 3, 4]}, \mintinline{python}{[4]}, or a
-    crash)
-\end{enumerate}
-Containers and references: two names for one list, so appending through
-one name is visible through the other---the aspect our worked example
-turns on (\cref{debugging}).
-\begin{enumerate}[resume*=knowledgequiz]
-  \item A program needs the user's year of birth.
-    Which line is the best option?
-\begin{minted}{python}
-year = int(input())
-year = int(input("Year of birth? "))
-year = int(input("Enter data: "))
-year = int(input("y: "))
-\end{minted}
-\end{enumerate}
-Usable interfaces: the four candidates differ only in the prompt, so
-what varies is exactly how much the user is told.
-\begin{enumerate}[resume*=knowledgequiz]
-  \item What is the best improvement of the program below?
-\begin{minted}{python}
-length = float(input("Length of the living room? "))
-width = float(input("Width of the living room? "))
-area = length * width
-print("The living room:")
-print(area, "square metres")
-
-length = float(input("Length of the kitchen? "))
-width = float(input("Width of the kitchen? "))
-area = length * width
-print("The kitchen:")
-print(area, "square metres")
-
-length = float(input("Length of the bedroom? "))
-width = float(input("Width of the bedroom? "))
-area = length * width
-print("The bedroom:")
-print(area, "square metres")
-\end{minted}
-    (choices: move the lines that repeat into a function and call it
-    once per room; add a comment above each block; use different
-    variable names in each block; nothing---the program works, so it
-    should not be changed)
-\end{enumerate}
-Dividing programs into functions, posed through its most common
-trigger: repeated code.
-The stem no longer names the repetition---seeing it is the point---and
-only one choice addresses it: the others decorate it with comments,
-mistake the reused names for the problem, or deny that there is one.
-\begin{enumerate}[resume*=knowledgequiz]
-  \item A program should print every line of the file
-    \texttt{notes.txt}.
+  \item Running a program produced the output below.
     Which statement is true?
-    (choices: the file must first be opened, then the program can read
-    its lines; \mintinline{python}{print(notes.txt)} prints the file's
-    lines directly; reading is only possible if the file lies in the
-    same folder as Python itself; files can only be read once and are
-    then deleted)
+\begin{minted}{text}
+Traceback (most recent call last):
+  File "party.py", line 3, in <module>
+    table = seats / groups
+ZeroDivisionError: division by zero
+\end{minted}
+    (choices: the program stopped at line 3, where
+    \mintinline{python}{groups} must have been zero; the file
+    \texttt{party.py} could not be found; Python could not read line 3,
+    so it skipped the rest of the program; nothing is wrong---the
+    program printed this output itself)
 \end{enumerate}
-Transferring data between file and program: the correct choice is the
-opening step, and each distractor is a common confusion---that the
-file's name alone gives access to its content, that access depends on
-the interpreter's location, and that reading consumes the file.
+Reading the crash report: the traceback is the episode's first
+observation, and each distractor is a way of not reading it---as a
+missing file, as Python failing to read the code, or as ordinary
+output.
 \begin{enumerate}[resume*=knowledgequiz]
   \item The program below crashes when the user answers
     \enquote{a few}.
@@ -332,49 +294,126 @@ guests = int(input("How many guests are coming? "))
     space; the crash happens because \mintinline{python}{guests} has
     no value yet; Python programs cannot recover from errors)
 \end{enumerate}
-Robust interactive programs: the correct choice locates the error at
-the conversion and knows it can be caught; the distractors misplace it
-at the input or at the assignment, or declare it beyond recovery.
+Understanding the error: the correct choice locates the error at the
+conversion and knows the program could cope with it; the distractors
+misplace it at the input or at the assignment, or declare it beyond
+recovery.
 \begin{enumerate}[resume*=knowledgequiz]
-  \item A library program models books with a class
-    \mintinline{python}{Book}.
-    Which statement is true?
-    (the statements: the class describes what every book has, and each
-    actual book is an object of the class; each book needs a class of
-    its own; the class is created from the objects, one class per
-    object; the class stores the title and author of one particular
-    book)
-\end{enumerate}
-Composite data types: the correct statement is the class--object
-relation; each distractor collapses it in a different way---one class
-per book, classes derived from objects, or the class as one book's
-storage.
-\begin{enumerate}[resume*=knowledgequiz]
-  \item You are asked to review the following program.
-    Which of the suggestions below would improve it?
-    Check all that apply.
+  \item The program below should print the total 60, but crashes with
+    the message below.
 \begin{minted}{python}
-def f(x):
-    y = x * 24
-    return y
-
-hours = int(input("Days? "))
-print(f(hours))
+prices = [10, 20, 30]
+total = 0
+for i in range(4):
+    total = total + prices[i]
+print(total)
 \end{minted}
-    (the suggestions: renaming \mintinline{python}{f},
-    \mintinline{python}{x} and \mintinline{python}{y}; naming the
-    variable after what it holds; a docstring; inlining the function)
+\begin{minted}{text}
+IndexError: list index out of range
+\end{minted}
+    Which change fixes the program?
+    (choices: let the loop run over the list's length instead of a
+    fixed four; delete the line that the error message points at; add
+    a fourth number to \mintinline{python}{prices}; run the program
+    again---the error may not happen every time)
 \end{enumerate}
-Reviewing others' code: renaming, naming after content and documenting
-all improve the program while inlining the function does not---and the
-item is multi-answer, so partial insight does not score.
+The report is not the fault: the message names the line where the
+program stopped, but the mistake is the loop bound.
+The distractors patch the reported line, bend the data to fit the code,
+or hope the failure is not deterministic.
+\begin{enumerate}[resume*=knowledgequiz]
+  \item A program computes cinema ticket prices.
+    For age 12 it prints the right price; for age 70 the price comes
+    out negative.
+    What is the best next run to find out what is wrong?
+    (choices: run ages between 12 and 70, to find where the prices stop
+    being right; run age 70 again, to see whether the negative price
+    happens again; change several parts of the program at once, then
+    run age 70 again; reinstall Python, then run age 70 again)
+\end{enumerate}
+Choosing the next run: the informative run varies the input towards
+where the behaviour changes---in the patterns' terms, contrast
+(\cref{debugging}).
+The distractors repeat the observation the student already has, vary so
+much at once that no cause can be told apart, or blame the environment.
+\begin{enumerate}[resume*=knowledgequiz]
+  \item The program below should print the average 5, but prints a
+    different number.
+\begin{minted}{python}
+text = input("Numbers? ")
+parts = text.split()
+total = 0
+for part in parts:
+    total = total + int(part)
+print("Average:", total / 3)
+\end{minted}
+\begin{minted}{text}
+Numbers? 2 4 6 8
+Average: 6.666666666666667
+\end{minted}
+    You may add one print statement to find out what is wrong.
+    Which one teaches you the most?
+    (choices: \mintinline{python}{print(total, len(parts))} just before
+    the last line; \mintinline{python}{print("start")} as the first
+    line; \mintinline{python}{print("Average:", total / 3)} once more,
+    at the very end; \mintinline{python}{print("done")} as the last
+    line)
+\end{enumerate}
+Making the invisible visible: the wrong average leaves several
+explanations open---the reading, the summing or the dividing may be at
+fault---and only the print that reveals the intermediate values
+decides between them.
+The distractors show that the program ran, or repeat the symptom, but
+expose nothing new.
+\begin{enumerate}[resume*=knowledgequiz]
+  \item The program below should print the sum 60, but prints 30.
+    Which line must change to fix it?
+\begin{minted}{python}
+def total_price(prices):
+    total = 0
+    for price in prices:
+        total = price
+    return total
 
-The remaining stems pass \citeauthor{NCOL}'s test as well: they present
-programs and behaviours---a printout to predict, a crash to
-explain---and the aspect to discern (the aliasing, the conversion, the
-repetition) is never named in the stem.
+print(total_price([10, 20, 30]))
+\end{minted}
+    (the choices are the lines \mintinline{python}{total = price},
+    \mintinline{python}{total = 0},
+    \mintinline{python}{for price in prices:} and
+    \mintinline{python}{print(total_price([10, 20, 30]))})
+\end{enumerate}
+Locating without a crash: nothing stops this program, so the wrong
+output must be connected to the statement that produces it---the
+accumulation that overwrites instead of adds.
+The output 30 is itself the clue: only the last price survives.
+\begin{enumerate}[resume*=knowledgequiz]
+  \item An input used to make a program print a wrong answer.
+    After an edit, that input gets the right answer.
+    What is the best next step?
+    (choices: run the inputs that were right before the edit, since the
+    edit may have changed them too; nothing---the program is now
+    correct; run the same input again---if it passes twice, the program
+    is certainly correct; read the edited lines carefully once more;
+    more runs are not needed)
+\end{enumerate}
+Verifying the fix: a fix is checked on the behaviours it might have
+broken, not only on the one it was meant to mend---in the patterns'
+terms, generalisation, varying the input while keeping the fix
+invariant (\cref{debugging}).
+The distractors stop at the first passing run, mistake repetition for
+generality, or replace running by reading.
+
+The stems pass \citeauthor{NCOL}'s test: each presents a program and
+its behaviour---a crash to read, a wrong output to explain, a next step
+to choose---and what is wrong is never named in the stem.
 Choices necessarily name aspects; there the student's task is to judge
-the named claims against the code, which is the reviewing skill itself.
+the named claims against the code and its behaviour, which is debugging
+judgement itself.
+Note, finally, that two of the correct alternatives are the patterns
+themselves---the contrast of the informative run, the generalisation of
+the verified fix---so the test parallels the coding of the logs: the
+test measures whether the students know the moves, the logs whether
+they make them (\cref{learnlog-data,analysis}).
 
 \subsubsection{Measuring the approach to learning: R-SPQ-2F}
 \label{approach-measure}
@@ -649,18 +688,21 @@ if any, a state-of-the-art coding agent generates when it debugs.
 \label{end-measure}
 
 At the end of the course we administer both start-of-course instruments
-again: the knowledge test and the R-SPQ-2F.
-(The end-of-course knowledge quiz is pushed to the learning platform by
+again: the debugging test and the R-SPQ-2F.
+(The end-of-course debugging quiz is pushed to the learning platform by
 the same program as the start-of-course one, \cref{app:quiz}.)
 
-We need the knowledge test (\cref{prior-knowledge}) again because at
+We need the debugging test (\cref{prior-knowledge}) again because at
 the start it measures what the students brought with them; administered
-again at the end, the difference measures what they learned during the
-course.
-That gives us a learning-outcome measure that is independent of both the
+again at the end, the difference measures what the course taught them
+about debugging.
+That gives us a learning measure that is independent of both the
 grades and the debugging-success measures (\cref{analysis}), so we can
 relate the generated patterns of variation not only to debugging success
-but also to how much the student learned.
+but also to how much the student learned about the skill itself.
+The conceptual counterpart---what the students learned about the
+programming concepts---comes from the companion study's end-of-course
+concept quiz, administered in the same course (\cref{prior-knowledge}).
 The end-of-course quiz adds a single item of its own, asking whether the
 student prepared for it: preparation would confound the gain
 measure, so we need to know (\cref{app:quiz}).

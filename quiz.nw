@@ -23,17 +23,22 @@ canvaslms quizzes create -c prgi26 -f quiz-knowledge-start.json
 canvaslms quizzes create -c prgi26 -f quiz-knowledge-end.json
 \end{minted}
 There are three quizzes.
-The background quiz and the start-of-course knowledge quiz together
-form the diagnostic of \cref{prior-knowledge}; the end-of-course
-knowledge quiz repeats the knowledge questions to measure the gain
-(\cref{end-measure}).
-The knowledge test is separate from the background quiz because the two
-differ in kind: the knowledge questions have right and wrong answers,
+The background quiz and the start-of-course debugging quiz together
+form this study's part of the diagnostic of \cref{prior-knowledge}
+(the concept quizzes that measure prior conceptual knowledge are the
+companion study's \autocite{VTProgMisconceptions}, run in the same
+course); the end-of-course debugging quiz repeats the debugging
+questions to measure the gain (\cref{end-measure}).
+The debugging test is separate from the background quiz because the two
+differ in kind: the debugging questions have right and wrong answers,
 so that quiz can be graded---and the students may well want to know how
 they did---whereas the background items have no right answers and
 nothing to grade.
-The knowledge items are defined once and appear in both knowledge
+The debugging items are defined once and appear in both debugging
 quizzes.
+The quiz titles name debugging explicitly, since the companion study's
+concept quizzes run in the same course and the two sets must stay
+distinguishable for students and analysis alike.
 
 <<[[quiz-background.json]]>>=
 {
@@ -58,8 +63,8 @@ quizzes.
 {
   "quiz_type": "new",
   "settings": {
-    "title": "Concept quiz: what you know already",
-    "instructions": "<p>This quiz checks which programming concepts you already know, so that we can adapt the course. You will see your score afterwards, but not the correct answers&mdash;the course will teach you those. The score does not affect your grade. Please answer on your own, without help from others or from tools.</p>",
+    "title": "Debugging quiz: what you know already",
+    "instructions": "<p>This quiz checks what you already know about finding and fixing errors in programs, so that we can adapt the course. The questions show Python code; if you have not programmed before, answer as well as you can&mdash;guessing is fine, and a low score is expected and completely okay. You will see your score afterwards, but not the correct answers&mdash;the course will teach you those. The score does not affect your grade. Please answer on your own, without help from others or from tools.</p>",
     "points_possible": 8,
     <<scheduling settings>>
     "quiz_settings": {
@@ -73,9 +78,9 @@ quizzes.
 }
 @
 
-The end-of-course knowledge quiz opens with a question of its own:
+The end-of-course debugging quiz opens with a question of its own:
 whether the student prepared for the quiz.
-We ask because preparation would confound the knowledge-gain measure of
+We ask because preparation would confound the gain measure of
 \cref{end-measure}---a student who reviews the material the night
 before measures preparation, not what the course left behind.
 
@@ -83,8 +88,8 @@ before measures preparation, not what the course left behind.
 {
   "quiz_type": "new",
   "settings": {
-    "title": "Concept quiz: what you know now",
-    "instructions": "<p>This quiz repeats the concept questions from the start-of-course quiz, so that we can see what you have learned during the course. You will see your score afterwards, but not the correct answers. The score does not affect your grade. Please answer on your own, without preparation, help or tools.</p>",
+    "title": "Debugging quiz: what you know now",
+    "instructions": "<p>This quiz repeats the debugging questions from the start-of-course quiz, so that we can see what you have learned during the course. You will see your score afterwards, but not the correct answers. The score does not affect your grade. Please answer on your own, without preparation, help or tools.</p>",
     "points_possible": 8,
     <<scheduling settings>>
     "quiz_settings": {
@@ -129,7 +134,7 @@ object opens and closes in the quiz descriptions above.
 The quizzes differ in what the result view reveals.
 The background quiz has nothing to grade, so it shows no points and no
 correctness.
-The knowledge quizzes show the points awarded---how well the student
+The debugging quizzes show the points awarded---how well the student
 did---but neither per-item correctness nor the correct answers: the
 same questions must measure the gain at the end of the course
 (\cref{end-measure}), so they have to stay fresh.
@@ -152,7 +157,8 @@ same questions must measure the gain at the end of the course
 \label{app:background-items}
 
 The background quiz opens with the consent item---an idea kept from the
-course's earlier diagnostic tests, which these quizzes replace:
+course's earlier diagnostic tests, written by Emma Riese and Camilla
+Björn, which these quizzes replace:
 participation in the study is opt-in (\cref{ethics}), so we ask before
 collecting anything.
 Then follow the four background items motivated in
@@ -291,7 +297,7 @@ string instead of multiplying.
 @
 
 The preparation item of the end-of-course quiz comes first in that
-quiz, before the knowledge items.
+quiz, before the debugging items.
 
 <<end-quiz preparation item>>=
 {
@@ -314,19 +320,17 @@ quiz, before the knowledge items.
 }
 @
 
-\subsection{The knowledge part}
+\subsection{The debugging items}
 
-The questions of the knowledge test are written against the course's
-intended learning outcomes (\cref{prior-knowledge}), and published
-here in full.
-They are inspired by the earlier course instances' diagnostic tests,
-written by Emma Riese and Camilla Björn.
-There is one question per outcome area: control structures, containers
-and references, usable interaction, dividing programs into functions,
-files, error handling, classes, and reviewing others' code.
-Each question tests one concept, with the distractors expressing common
-misconceptions about it, and all weigh one point: we measure knowledge
-by counting correct answers.
+The questions of the debugging test are written for this study and
+published here in full.
+They follow a debugging episode from beginning to end---making the
+failure reproducible, reading what the crash reports, locating and
+explaining the fault, and verifying the fix---the process the expert
+literature prescribes \autocite{WhyProgramsFail}; each question tests
+one step of it, each distractor expresses a common way of skipping or
+botching that step, and all weigh one point: we measure knowledge by
+counting correct answers.
 Following \citeauthor{NCOL}'s discussion of assessment, the stems do
 not point out the relevant aspects---discerning them is what we measure
 \autocite[p.~91]{NCOL}; the design is motivated question by question in
@@ -338,111 +342,59 @@ are fine, and the numbering leaves room for quiz-specific items before
 them, such as the end quiz's preparation item.
 
 <<knowledge-part items>>=
-<<item: tracing a loop>>,
-<<item: two names one list>>,
-<<item: asking for input>>,
-<<item: repeated code>>,
-<<item: reading a file>>,
+<<item: a bug that comes and goes>>,
+<<item: what the crash says>>,
 <<item: a crashing answer>>,
-<<item: classes and objects>>,
-<<item: reviewing a program>>
+<<item: the line to change>>,
+<<item: the telling run>>,
+<<item: one print statement>>,
+<<item: finding the bug>>,
+<<item: after the fix>>
 @
 
-Control structures: tracing a [[while]] loop whose counting the reader
-must simulate---the loop body runs a third time because 8 is still
-below 10.
+Reproducing: before anything can be located or explained, the failure
+must be made to happen on demand.
 
-<<item: tracing a loop>>=
+<<item: a bug that comes and goes>>=
 {
   "position": 11,
   "points_possible": 1,
   "entry": {
-    "title": "Tracing a loop",
-    "item_body": "<p>What does the following program print?</p><pre>count = 0\ntotal = 0\nwhile total < 10:\n    total = total + 4\n    count = count + 1\nprint(count)</pre>",
+    "title": "A bug that comes and goes",
+    "item_body": "<p>Sometimes when Alice runs her program it crashes; sometimes it does not. What is the best first step to find out what is wrong?</p>",
     "interaction_type_slug": "choice",
     "interaction_data": {
       "choices": [
-        {"position": 1, "item_body": "<p>2</p>"},
-        {"position": 2, "item_body": "<p>3</p>"},
-        {"position": 3, "item_body": "<p>4</p>"},
-        {"position": 4, "item_body": "<p>Nothing&mdash;the loop never ends</p>"}
+        {"position": 1, "item_body": "<p>Find out what the crashing runs have in common, so that the crash can be triggered on purpose</p>"},
+        {"position": 2, "item_body": "<p>Put the whole program inside try and except, so that it stops crashing</p>"},
+        {"position": 3, "item_body": "<p>Leave it&mdash;a program that works most of the time is good enough</p>"},
+        {"position": 4, "item_body": "<p>Retype the program from scratch&mdash;errors like this usually disappear when the code is typed anew</p>"}
       ]
     },
-    "scoring_data": {"value": 2},
+    "scoring_data": {"value": 1},
     "scoring_algorithm": "Equivalence"
   }
 }
 @
 
-Containers and references: two names for the same list, so appending
-through one name is visible through the other.
-(This is also the aspect the paper's worked example turns on, which
-makes the item doubly interesting for us.)
+Reading the crash report: each distractor is a way of not reading
+it---as a missing file, as Python failing to read the code, or as
+ordinary output.
 
-<<item: two names one list>>=
+<<item: what the crash says>>=
 {
   "position": 12,
   "points_possible": 1,
   "entry": {
-    "title": "Two names, one list",
-    "item_body": "<p>What does the following program print?</p><pre>a = [1, 2, 3]\nb = a\nb.append(4)\nprint(a)</pre>",
+    "title": "What the crash says",
+    "item_body": "<p>Running a program produced the output below. Which statement is true?</p><pre>Traceback (most recent call last):\n  File \"party.py\", line 3, in &lt;module&gt;\n    table = seats / groups\nZeroDivisionError: division by zero</pre>",
     "interaction_type_slug": "choice",
     "interaction_data": {
       "choices": [
-        {"position": 1, "item_body": "<p>[1, 2, 3]</p>"},
-        {"position": 2, "item_body": "<p>[1, 2, 3, 4]</p>"},
-        {"position": 3, "item_body": "<p>[4]</p>"},
-        {"position": 4, "item_body": "<p>The program crashes</p>"}
-      ]
-    },
-    "scoring_data": {"value": 2},
-    "scoring_algorithm": "Equivalence"
-  }
-}
-@
-
-Usable interaction: only one of the prompts tells the user what to
-enter.
-
-<<item: asking for input>>=
-{
-  "position": 13,
-  "points_possible": 1,
-  "entry": {
-    "title": "Asking for input",
-    "item_body": "<p>A program needs the user's year of birth. Which line is the best option?</p>",
-    "interaction_type_slug": "choice",
-    "interaction_data": {
-      "choices": [
-        {"position": 1, "item_body": "<pre>year = int(input())</pre>"},
-        {"position": 2, "item_body": "<pre>year = int(input(\"Year of birth? \"))</pre>"},
-        {"position": 3, "item_body": "<pre>year = int(input(\"Enter data: \"))</pre>"},
-        {"position": 4, "item_body": "<pre>year = int(input(\"y: \"))</pre>"}
-      ]
-    },
-    "scoring_data": {"value": 2},
-    "scoring_algorithm": "Equivalence"
-  }
-}
-@
-
-Dividing programs into functions, posed through its most common
-trigger: repeated code.
-
-<<item: repeated code>>=
-{
-  "position": 14,
-  "points_possible": 1,
-  "entry": {
-    "title": "Repeated code",
-    "item_body": "<p>What is the best improvement of the program below?</p><pre>length = float(input(\"Length of the living room? \"))\nwidth = float(input(\"Width of the living room? \"))\narea = length * width\nprint(\"The living room:\")\nprint(area, \"square metres\")\n\nlength = float(input(\"Length of the kitchen? \"))\nwidth = float(input(\"Width of the kitchen? \"))\narea = length * width\nprint(\"The kitchen:\")\nprint(area, \"square metres\")\n\nlength = float(input(\"Length of the bedroom? \"))\nwidth = float(input(\"Width of the bedroom? \"))\narea = length * width\nprint(\"The bedroom:\")\nprint(area, \"square metres\")</pre>",
-    "interaction_type_slug": "choice",
-    "interaction_data": {
-      "choices": [
-        {"position": 1, "item_body": "<p>Move the lines that repeat into a function and call it once per room</p>"},
-        {"position": 2, "item_body": "<p>Add a comment above each block</p>"},
-        {"position": 3, "item_body": "<p>Use different variable names in each block</p>"},
-        {"position": 4, "item_body": "<p>Nothing&mdash;the program works, so it should not be changed</p>"}
+        {"position": 1, "item_body": "<p>The program stopped at line 3, where groups must have been zero</p>"},
+        {"position": 2, "item_body": "<p>The file party.py could not be found</p>"},
+        {"position": 3, "item_body": "<p>Python could not read line 3, so it skipped the rest of the program</p>"},
+        {"position": 4, "item_body": "<p>Nothing is wrong&mdash;the program printed this output itself</p>"}
       ]
     },
     "scoring_data": {"value": 1},
@@ -451,37 +403,12 @@ trigger: repeated code.
 }
 @
 
-Files: reading requires opening, and the distractors express common
-confusions about what reading a file demands.
-
-<<item: reading a file>>=
-{
-  "position": 15,
-  "points_possible": 1,
-  "entry": {
-    "title": "Reading a file",
-    "item_body": "<p>A program should print every line of the file notes.txt. Which statement is true?</p>",
-    "interaction_type_slug": "choice",
-    "interaction_data": {
-      "choices": [
-        {"position": 1, "item_body": "<p>The file must first be opened; then the program can read its lines</p>"},
-        {"position": 2, "item_body": "<p>print(notes.txt) prints the file's lines directly</p>"},
-        {"position": 3, "item_body": "<p>Reading is only possible if the file lies in the same folder as Python itself</p>"},
-        {"position": 4, "item_body": "<p>Files can only be read once and are then deleted</p>"}
-      ]
-    },
-    "scoring_data": {"value": 1},
-    "scoring_algorithm": "Equivalence"
-  }
-}
-@
-
-Error handling in interactive programs: what actually raises the error,
-and that it can be caught.
+Understanding the error: what actually raises it, and that the program
+could cope.
 
 <<item: a crashing answer>>=
 {
-  "position": 16,
+  "position": 13,
   "points_possible": 1,
   "entry": {
     "title": "A crashing answer",
@@ -501,22 +428,23 @@ and that it can be caught.
 }
 @
 
-Classes: the relation between the class and its objects.
+The report is not the fault: the message names the line where the
+program stopped, but the mistake is the loop bound.
 
-<<item: classes and objects>>=
+<<item: the line to change>>=
 {
-  "position": 17,
+  "position": 14,
   "points_possible": 1,
   "entry": {
-    "title": "Classes and objects",
-    "item_body": "<p>A library program models books with a class Book. Which statement is true?</p>",
+    "title": "The line to change",
+    "item_body": "<p>The program below should print the total 60, but crashes with the message below. Which change fixes the program?</p><pre>prices = [10, 20, 30]\ntotal = 0\nfor i in range(4):\n    total = total + prices[i]\nprint(total)</pre><pre>IndexError: list index out of range</pre>",
     "interaction_type_slug": "choice",
     "interaction_data": {
       "choices": [
-        {"position": 1, "item_body": "<p>The class describes what every book has; each actual book is an object of the class</p>"},
-        {"position": 2, "item_body": "<p>Each book in the library needs a class of its own</p>"},
-        {"position": 3, "item_body": "<p>The class is created from the objects, one class per object</p>"},
-        {"position": 4, "item_body": "<p>The class stores the title and author of one particular book</p>"}
+        {"position": 1, "item_body": "<p>Let the loop run over range(len(prices)) instead of range(4)</p>"},
+        {"position": 2, "item_body": "<p>Delete the line that the error message points at</p>"},
+        {"position": 3, "item_body": "<p>Add a fourth number to prices</p>"},
+        {"position": 4, "item_body": "<p>Run the program again&mdash;the error may not happen every time</p>"}
       ]
     },
     "scoring_data": {"value": 1},
@@ -525,34 +453,108 @@ Classes: the relation between the class and its objects.
 }
 @
 
-Reviewing others' code---the outcome the earlier selection missed: the
-reader must recognise that names, naming-after-content and
-documentation all improve the program, while inlining the function
-would not.
-Multi-answer, so partial insight is not enough for the point.
+Choosing the next run: the informative run varies the input towards
+where the behaviour changes---the contrast pattern
+(\cref{prior-knowledge}).
 
-<<item: reviewing a program>>=
+<<item: the telling run>>=
 {
-  "position": 18,
+  "position": 15,
   "points_possible": 1,
   "entry": {
-    "title": "Reviewing a program",
-    "item_body": "<p>You are asked to review the following program. Which of the suggestions below would improve it? Check all that apply.</p><pre>def f(x):\n    y = x * 24\n    return y\n\nhours = int(input(\"Days? \"))\nprint(f(hours))</pre>",
-    "interaction_type_slug": "multi-answer",
+    "title": "The telling run",
+    "item_body": "<p>A program computes cinema ticket prices. For age 12 it prints the right price; for age 70 the price comes out negative. What is the best next run to find out what is wrong?</p>",
+    "interaction_type_slug": "choice",
     "interaction_data": {
       "choices": [
-        {"position": 1, "item_body": "<p>Rename f, x and y so that the names say what they mean</p>"},
-        {"position": 2, "item_body": "<p>The variable hours holds a number of days: name it after what it holds</p>"},
-        {"position": 3, "item_body": "<p>Explain in a docstring what the function computes</p>"},
-        {"position": 4, "item_body": "<p>Remove the function and paste its code where it is called</p>"}
+        {"position": 1, "item_body": "<p>Run ages between 12 and 70, to find where the prices stop being right</p>"},
+        {"position": 2, "item_body": "<p>Run age 70 again, to see whether the negative price happens again</p>"},
+        {"position": 3, "item_body": "<p>Change several parts of the program at once, then run age 70 again</p>"},
+        {"position": 4, "item_body": "<p>Reinstall Python, then run age 70 again</p>"}
       ]
     },
-    "scoring_data": {"value": [1, 2, 3]},
-    "scoring_algorithm": "AllOrNothing"
+    "scoring_data": {"value": 1},
+    "scoring_algorithm": "Equivalence"
   }
 }
 @
 
+Making the invisible visible: only the print that reveals the
+intermediate values decides between the candidate explanations.
+
+<<item: one print statement>>=
+{
+  "position": 16,
+  "points_possible": 1,
+  "entry": {
+    "title": "One print statement",
+    "item_body": "<p>The program below should print the average 5, but prints a different number.</p><pre>text = input(\"Numbers? \")\nparts = text.split()\ntotal = 0\nfor part in parts:\n    total = total + int(part)\nprint(\"Average:\", total / 3)</pre><p>When run:</p><pre>Numbers? 2 4 6 8\nAverage: 6.666666666666667</pre><p>You may add one print statement to find out what is wrong. Which one teaches you the most?</p>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>print(total, len(parts)) just before the last line</p>"},
+        {"position": 2, "item_body": "<p>print(\"start\") as the first line</p>"},
+        {"position": 3, "item_body": "<p>print(\"Average:\", total / 3) once more, at the very end</p>"},
+        {"position": 4, "item_body": "<p>print(\"done\") as the last line</p>"}
+      ]
+    },
+    "scoring_data": {"value": 1},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+Locating without a crash: the wrong output must be connected to the
+statement that produces it---the accumulation that overwrites instead
+of adds.
+
+<<item: finding the bug>>=
+{
+  "position": 17,
+  "points_possible": 1,
+  "entry": {
+    "title": "Finding the bug",
+    "item_body": "<p>The program below should print the sum 60, but prints 30. Which line must change to fix it?</p><pre>def total_price(prices):\n    total = 0\n    for price in prices:\n        total = price\n    return total\n\nprint(total_price([10, 20, 30]))</pre>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<pre>total = price</pre>"},
+        {"position": 2, "item_body": "<pre>total = 0</pre>"},
+        {"position": 3, "item_body": "<pre>for price in prices:</pre>"},
+        {"position": 4, "item_body": "<pre>print(total_price([10, 20, 30]))</pre>"}
+      ]
+    },
+    "scoring_data": {"value": 1},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
+
+Verifying the fix: a fix is checked on the behaviours it might have
+broken, not only on the one it was meant to mend---the generalisation
+pattern (\cref{prior-knowledge}).
+
+<<item: after the fix>>=
+{
+  "position": 18,
+  "points_possible": 1,
+  "entry": {
+    "title": "After the fix",
+    "item_body": "<p>An input used to make a program print a wrong answer. After an edit, that input gets the right answer. What is the best next step?</p>",
+    "interaction_type_slug": "choice",
+    "interaction_data": {
+      "choices": [
+        {"position": 1, "item_body": "<p>Run the inputs that were right before the edit, since the edit may have changed them too</p>"},
+        {"position": 2, "item_body": "<p>Nothing&mdash;the program is now correct</p>"},
+        {"position": 3, "item_body": "<p>Run the same input again; if it passes twice, the program is certainly correct</p>"},
+        {"position": 4, "item_body": "<p>Read the edited lines carefully once more; more runs are not needed</p>"}
+      ]
+    },
+    "scoring_data": {"value": 1},
+    "scoring_algorithm": "Equivalence"
+  }
+}
+@
 \subsection{Analysing the results}
 \label{app:quiz-analysis}
 
@@ -620,8 +622,8 @@ columns by containment rather than equality.
 COURSE = "prgi26"
 QUIZ_TITLES = {
     "background": "Diagnostic quiz: your programming background",
-    "start": "Concept quiz: what you know already",
-    "end": "Concept quiz: what you know now",
+    "start": "Debugging quiz: what you know already",
+    "end": "Debugging quiz: what you know now",
 }
 STUDENT = "name"
 CLOSED_ITEMS = ["Consent", "How you learned", "Confidence", "Preparation"]
@@ -694,7 +696,7 @@ def fetch_results(which):
 Tabulating a closed item is counting its answer frequencies; we print
 one table per item present in the report (the preparation item only
 exists in the end quiz).
-For the knowledge quizzes Canvas grades the items, so their reports
+For the debugging quizzes Canvas grades the items, so their reports
 carry a score column, which we summarise.
 
 <<tabulate the closed items>>=
