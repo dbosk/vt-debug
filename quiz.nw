@@ -647,10 +647,18 @@ lookup and the report machinery, so the program reuses them instead of
 reimplementing the Canvas API calls.
 The report is generated on demand by Canvas, so we request it, wait for
 it, and download the CSV it points to.
+The fetcher takes the quiz title, so the survey program of
+\cref{app:rspq} can reuse it for its administrations;
+[[fetch_results]] merely looks the title up.
 
 <<fetch the results from Canvas>>=
 def fetch_results(which):
     """Download the student-analysis rows for the start or end quiz."""
+    return fetch_report(QUIZ_TITLES[which])
+
+
+def fetch_report(title):
+    """Download the student-analysis rows for the quiz with this title."""
     import appdirs
     import requests
     import canvaslms.cli
@@ -676,7 +684,7 @@ def fetch_results(which):
         c for c in canvas.get_courses()
         if COURSE in (c.name or "") or COURSE in (c.course_code or "")
     )
-    quiz = next(filter_quizzes([course], QUIZ_TITLES[which]))
+    quiz = next(filter_quizzes([course], title))
     if not is_new_quiz(quiz):
         sys.exit(f"quiz {quiz.title!r} is not a New Quiz")
 

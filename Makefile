@@ -21,6 +21,7 @@ SRC+=related-work.tex
 SRC+=discussion.tex
 SRC+=conclusions.tex
 SRC+=quiz.tex
+SRC+=rspq.tex
 SRC+=episodes.tex
 SRC+=search-protocol.tex
 
@@ -42,7 +43,8 @@ article.pdf: noweb_lexer.py
 
 .PHONY: programs
 programs: quiz-background.json quiz-knowledge-start.json \
-	quiz-knowledge-end.json analyze_quiz.py analyze_episodes.py
+	quiz-knowledge-end.json analyze_quiz.py analyze_episodes.py \
+	make_rspq.py analyze_rspq.py rspq-start.json rspq-end.json
 quiz-background.json: quiz.nw
 	${NOTANGLE.json}
 quiz-knowledge-start.json: quiz.nw
@@ -53,6 +55,13 @@ analyze_quiz.py: quiz.nw
 	${NOTANGLE.py}
 analyze_episodes.py: episodes.nw
 	${NOTANGLE.py}
+make_rspq.py: rspq.nw
+	${NOTANGLE.py}
+analyze_rspq.py: rspq.nw
+	${NOTANGLE.py}
+# make_rspq.py writes both survey descriptions in one run.
+rspq-start.json rspq-end.json &: make_rspq.py
+	python3 make_rspq.py
 
 # The C++ counterexample's output is compiled and captured at build time so
 # the paper shows real output, same as the PythonTeX examples.
@@ -80,9 +89,10 @@ article.pdf slides.pdf: latexmkrc
 clean:
 	latexmk -C
 	${RM} article.bbl article.run.xml
-	${RM} quiz.tex episodes.tex noweb_lexer.py
+	${RM} quiz.tex rspq.tex episodes.tex noweb_lexer.py
 	${RM} quiz-background.json quiz-knowledge-start.json
 	${RM} quiz-knowledge-end.json analyze_quiz.py analyze_episodes.py
+	${RM} make_rspq.py analyze_rspq.py rspq-start.json rspq-end.json
 
 INCLUDE_MAKEFILES?=./makefiles
 include ${INCLUDE_MAKEFILES}/noweb.mk

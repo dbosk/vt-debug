@@ -1,0 +1,335 @@
+\section{Setting up the R-SPQ-2F surveys, literately}
+\label{app:rspq}
+
+This appendix is the paper's third literate program.
+It implements the two administrations of the R-SPQ-2F
+(\cref{approach-measure,end-measure}) as Canvas surveys, and their
+harvest.
+Two programs are tangled from this section: [[make_rspq.py]], which
+writes the survey descriptions [[rspq-start.json]] and
+[[rspq-end.json]] that the [[canvaslms]] tool pushes to Canvas, and
+[[analyze_rspq.py]], which fetches both administrations' reports back
+from Canvas and writes [[rspq.csv]] for the episode analysis
+(\cref{app:episodes}).
+
+Unlike the quizzes of \cref{app:quiz}, the surveys are not written as
+JSON directly: the twenty items share one form---the same five
+responses, the same settings---so the instrument lives here once, as
+constants, and [[make_rspq.py]] unfolds it into the JSON that the
+platform tool consumes:
+\begin{minted}{bash}
+python3 make_rspq.py
+canvaslms quizzes create -c prgi26 -f rspq-start.json
+canvaslms quizzes create -c prgi26 -f rspq-end.json
+\end{minted}
+Both programs include the same constants chunk below, so the surveys
+and their analysis cannot drift apart.
+Consent is not asked again here: it is collected once, at the head of
+the background quiz (\cref{app:quiz}, \cref{ethics}).
+
+\subsection{The instrument as constants}
+
+The survey titles are the keys by which the analysis finds the two
+administrations in Canvas, and they name the difference between them:
+the start administration asks about the student's studying in general,
+the end administration about this course (\cref{end-measure}).
+The item titles are zero-padded ([[Item 01]]) because the analysis
+matches report columns by containment ([[column_for]],
+\cref{app:quiz-analysis}), and [[Item 1]] would also match the columns
+of [[Item 10]] through [[Item 19]].
+
+<<the instrument as constants>>=
+SURVEY_TITLES = {
+    "start": "Study process questionnaire: your studying in general",
+    "end": "Study process questionnaire: your studying in this course",
+}
+ITEM_TITLES = [f"Item {number:02d}" for number in range(1, 21)]
+@
+
+The items and the five responses are those of the questionnaire as
+printed in the appendix of \textcite{RSPQ2F}, verbatim
+(\cref{approach-measure}); choosing response \(k\) scores \(k\) on the
+five-point scale that the episode analysis sums
+(\cref{app:episodes}).
+
+<<the instrument as constants>>=
+RESPONSES = [
+    "this item is never or only rarely true of me",
+    "this item is sometimes true of me",
+    "this item is true of me about half the time",
+    "this item is frequently true of me",
+    "this item is always or almost always true of me",
+]
+ITEMS = [
+    "I find that at times studying gives me a feeling of deep personal satisfaction.",
+    "I find that I have to do enough work on a topic so that I can form my own conclusions before I am satisfied.",
+    "My aim is to pass the course while doing as little work as possible.",
+    "I only study seriously what's given out in class or in the course outlines.",
+    "I feel that virtually any topic can be highly interesting once I get into it.",
+    "I find most new topics interesting and often spend extra time trying to obtain more information about them.",
+    "I do not find my course very interesting so I keep my work to the minimum.",
+    "I learn some things by rote, going over and over them until I know them by heart even if I do not understand them.",
+    "I find that studying academic topics can at times be as exciting as a good novel or movie.",
+    "I test myself on important topics until I understand them completely.",
+    "I find I can get by in most assessments by memorising key sections rather than trying to understand them.",
+    "I generally restrict my study to what is specifically set as I think it is unnecessary to do anything extra.",
+    "I work hard at my studies because I find the material interesting.",
+    "I spend a lot of my free time finding out more about interesting topics which have been discussed in different classes.",
+    "I find it is not helpful to study topics in depth. It confuses and wastes time, when all you need is a passing acquaintance with topics.",
+    "I believe that lecturers shouldn't expect students to spend significant amounts of time studying material everyone knows won't be examined.",
+    "I come to most classes with questions in mind that I want answering.",
+    "I make a point of looking at most of the suggested readings that go with the lectures.",
+    "I see no point in learning material which is not likely to be in the examination.",
+    "I find the best way to pass examinations is to try to remember answers to likely questions.",
+]
+@
+
+The instructions are the only part that differs between the two
+administrations (\cref{end-measure}).
+The start survey keeps \citeauthor{RSPQ2F}'s original preliminary
+instructions with one adaptation: the two sentences about the paper
+answer sheet (\enquote{Please fill in the appropriate circle
+alongside the question number on the `General Purpose Survey/Answer
+Sheet'\ldots}) are replaced by a sentence noting that every question
+offers the same five responses, since Canvas shows them with each
+item.
+The end survey's instructions instead ask about this course---the
+adaptation \textcite{RSPQ2F} themselves recommend for course-level
+use, quoted in \cref{end-measure}: the opening sentences name this
+course rather than the studies in general, and the sentence about
+choosing the most important subject is dropped, since the subject is
+now fixed.
+The rest is verbatim in both.
+
+<<the instrument as constants>>=
+COMMON_INSTRUCTIONS = (
+    "<p>Each question offers the same five responses."
+    " Please choose the one most appropriate response to each"
+    " question: the one that best fits your immediate reaction."
+    " Do not spend a long time on each item; your first reaction is"
+    " probably the best one. Please answer each item.</p>"
+    "<p>Do not worry about projecting a good image."
+    " Your answers are confidential."
+    " Thank you for your cooperation.</p>"
+)
+INSTRUCTIONS = {
+    "start": (
+        "<p>This questionnaire has a number of questions about your"
+        " attitudes towards your studies and your usual way of"
+        " studying. There is no right way of studying. It depends on"
+        " what suits your own style and the course you are studying."
+        " It is accordingly important that you answer each question"
+        " as honestly as you can. If you think your answer to a"
+        " question would depend on the subject being studied, give"
+        " the answer that would apply to the subject(s) most"
+        " important to you.</p>" + COMMON_INSTRUCTIONS
+    ),
+    "end": (
+        "<p>This questionnaire has a number of questions about your"
+        " attitudes towards this course and your way of studying in"
+        " it. There is no right way of studying. It depends on what"
+        " suits your own style and the course. It is accordingly"
+        " important that you answer each question as honestly as you"
+        " can, with this course in mind.</p>" + COMMON_INSTRUCTIONS
+    ),
+}
+@
+
+\subsection{Writing the survey descriptions}
+
+The survey settings mirror those of the quizzes in \cref{app:quiz}:
+no time limit, a single attempt, no shuffling---the R-SPQ-2F's item
+order is part of the validated instrument---and, since there is
+nothing to grade, the result view of the background quiz, which
+reveals neither points nor correctness.
+
+<<[[make_rspq.py]]>>=
+"""Write the R-SPQ-2F survey descriptions for Canvas.
+
+The two files, rspq-start.json and rspq-end.json, are pushed to the
+learning platform with canvaslms; the surveys differ only in their
+title and instructions.  Tangled from the appendix of the paper,
+which documents the instrument and the adaptations.
+"""
+
+import json
+
+<<the instrument as constants>>
+<<build one survey description>>
+<<write both survey files>>
+
+if __name__ == "__main__":
+    main()
+@
+
+Canvas requires a \enquote{correct} answer even in an ungraded
+survey.
+The [[scoring_data]] value is arbitrary and never shown, as in
+\cref{app:quiz}.
+
+<<build one survey description>>=
+def item(number):
+    """Return the survey item for the 1-based item number."""
+    return {
+        "position": number,
+        "points_possible": 0,
+        "entry": {
+            "title": ITEM_TITLES[number - 1],
+            "item_body": f"<p>{ITEMS[number - 1]}</p>",
+            "interaction_type_slug": "choice",
+            "interaction_data": {
+                "choices": [
+                    {"position": value, "item_body": f"<p>{response}</p>"}
+                    for value, response in enumerate(RESPONSES, start=1)
+                ]
+            },
+            "scoring_data": {"value": 1},
+            "scoring_algorithm": "Equivalence",
+        },
+    }
+
+
+def survey(which):
+    """Return the survey description for the start or end administration."""
+    return {
+        "quiz_type": "new",
+        "settings": {
+            "title": SURVEY_TITLES[which],
+            "instructions": INSTRUCTIONS[which],
+            "points_possible": 0,
+            "time_limit": None,
+            "due_at": None,
+            "unlock_at": None,
+            "lock_at": None,
+            "quiz_settings": {
+                "shuffle_answers": False,
+                "shuffle_questions": False,
+                "has_time_limit": False,
+                "one_at_a_time_type": "none",
+                "allow_backtracking": True,
+                "multiple_attempts_enabled": False,
+                "result_view_restricted": True,
+                "display_items": True,
+                "display_item_response": True,
+                "display_item_response_correctness": False,
+                "display_item_correct_answer": False,
+                "display_points_awarded": False,
+                "display_points_possible": False,
+            },
+        },
+        "items": [item(number) for number in range(1, 21)],
+    }
+@
+
+<<write both survey files>>=
+def main():
+    for which in SURVEY_TITLES:
+        filename = f"rspq-{which}.json"
+        with open(filename, "w") as outfile:
+            json.dump(survey(which), outfile, indent=2)
+        print(f"wrote {filename}")
+@
+
+\subsection{Fetching the answers}
+
+The results come back the same way the quiz results do: the fetcher
+of \cref{app:quiz-analysis} takes a quiz title, so this program
+imports it and passes the survey titles.
+Each report row is one student; the item columns hold the chosen
+response texts, which map back to the five-point scale by their
+position in [[RESPONSES]].
+A student who did not answer every item cannot be scored---the
+approach scores sum all twenty items (\cref{app:episodes})---so
+incomplete rows are reported and skipped, not written with holes.
+
+<<[[analyze_rspq.py]]>>=
+"""Fetch the R-SPQ-2F survey results and write rspq.csv.
+
+The surveys are described by rspq-start.json and rspq-end.json,
+written by make_rspq.py; this program and those files are tangled
+from the same literate source (the appendix of the paper), so the
+titles and response texts cannot drift apart.  The results come
+straight from Canvas via the fetcher of analyze_quiz (appendix A).
+
+Requires canvaslms (and its configured credentials).
+"""
+
+import argparse
+import csv
+import sys
+
+import analyze_quiz
+
+<<the instrument as constants>>
+<<map a report row to the twenty answers>>
+<<write the rspq csv>>
+<<rspq main>>
+
+if __name__ == "__main__":
+    main()
+@
+
+<<map a report row to the twenty answers>>=
+def answers(report_row):
+    """Return the item1..item20 dict for one report row, or None."""
+    result = {}
+    for number, title in enumerate(ITEM_TITLES, start=1):
+        column = analyze_quiz.column_for(title, report_row.keys())
+        cell = report_row.get(column, "") if column else ""
+        value = next(
+            (
+                value
+                for value, response in enumerate(RESPONSES, start=1)
+                if response in cell
+            ),
+            None,
+        )
+        if value is None:
+            return None
+        result[f"item{number}"] = value
+    return result
+@
+
+The output follows the [[rspq.csv]] schema of \cref{app:episodes}:
+one row per student and administration, [[student]] keyed the same
+way as in the quiz analysis.
+
+<<write the rspq csv>>=
+def write_rspq(filename):
+    """Fetch both administrations and write the rspq.csv file."""
+    fieldnames = ["student", "administration"] + [
+        f"item{number}" for number in range(1, 21)
+    ]
+    with open(filename, "w", newline="") as outfile:
+        writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for which, title in SURVEY_TITLES.items():
+            for row in analyze_quiz.fetch_report(title):
+                student = row.get(analyze_quiz.STUDENT, "")
+                mapped = answers(row)
+                if mapped is None:
+                    print(
+                        f"skipping incomplete answers:"
+                        f" {student} ({which})",
+                        file=sys.stderr,
+                    )
+                    continue
+                writer.writerow(
+                    {"student": student, "administration": which}
+                    | mapped
+                )
+    print(f"wrote {filename}")
+@
+
+<<rspq main>>=
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "-o",
+        "--output",
+        default="rspq.csv",
+        help="output CSV file (default rspq.csv)",
+    )
+    args = parser.parse_args()
+    write_rspq(args.output)
+@

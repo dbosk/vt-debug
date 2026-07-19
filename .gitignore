@@ -31,14 +31,20 @@ didactic_output_*.txt
 examples/experiment5
 examples/experiment5.out
 
-# woven and tangled from the appendix literate programs (quiz.nw, episodes.nw)
+# woven and tangled from the appendix literate programs (quiz.nw, rspq.nw,
+# episodes.nw); the rspq-*.json files are written by the tangled make_rspq.py
 quiz.tex
+rspq.tex
 episodes.tex
 quiz-background.json
 quiz-knowledge-start.json
 quiz-knowledge-end.json
 analyze_quiz.py
 analyze_episodes.py
+make_rspq.py
+analyze_rspq.py
+rspq-start.json
+rspq-end.json
 
 # byte-compiled checks of the tangled programs
 __pycache__/
