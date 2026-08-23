@@ -107,10 +107,19 @@ before measures preparation, not what the course left behind.
 All three quizzes are diagnostics: there is no time limit, a single
 attempt suffices, and answers are never shuffled (order is meaningful
 in several items).
-The shared settings come in two chunks---scheduling and
-interaction---and each chunk is a flat list of keys, so every brace
-opens and closes in the chunk that uses it: the [[quiz_settings]]
-object opens and closes in the quiz descriptions above.
+The shared settings come in two chunks---scheduling and interaction.
+Canvas keeps two groups of settings in objects of their own,
+[[multiple_attempts]] and [[result_view_settings]], and silently
+ignores the same keys written flat; so the interaction chunk carries
+the attempts object whole, and the result-view chunks below are each
+a complete [[result_view_settings]] object.
+(The sibling quizzes of the terminal module were deployed with the
+keys flat, and reading the settings back from Canvas is what caught
+it: the result view came back empty, that is, Canvas's defaults, which
+would have shown the correct answers after the pre-test.)
+Every brace still opens and closes in the chunk that writes it: the
+[[quiz_settings]] object opens and closes in the quiz descriptions
+above.
 
 <<scheduling settings>>=
 "time_limit": null,
@@ -125,10 +134,7 @@ object opens and closes in the quiz descriptions above.
 "has_time_limit": false,
 "one_at_a_time_type": "none",
 "allow_backtracking": true,
-"multiple_attempts_enabled": false,
-"result_view_restricted": true,
-"display_items": true,
-"display_item_response": true,
+"multiple_attempts": {"multiple_attempts_enabled": false},
 @
 
 The quizzes differ in what the result view reveals.
@@ -140,17 +146,25 @@ same questions must measure the gain at the end of the course
 (\cref{end-measure}), so they have to stay fresh.
 
 <<ungraded result view>>=
+"result_view_settings": {
+  "result_view_restricted": true,
+  "display_items": true,
+  "display_item_response": true,
   "display_item_response_correctness": false,
   "display_item_correct_answer": false,
   "display_points_awarded": false,
   "display_points_possible": false
-@
-
+}
 <<graded result view>>=
+"result_view_settings": {
+  "result_view_restricted": true,
+  "display_items": true,
+  "display_item_response": true,
   "display_item_response_correctness": false,
   "display_item_correct_answer": false,
   "display_points_awarded": true,
   "display_points_possible": true
+}
 @
 
 \subsection{The background items}

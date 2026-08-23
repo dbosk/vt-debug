@@ -166,6 +166,11 @@ Canvas requires a \enquote{correct} answer even in an ungraded
 survey.
 The [[scoring_data]] value is arbitrary and never shown, as in
 \cref{app:quiz}.
+The quiz settings follow the ungraded quiz of \cref{app:quiz} too:
+the attempts and result-view keys sit in the [[multiple_attempts]]
+and [[result_view_settings]] objects, because Canvas ignores them when
+written flat, and the result view hides correctness and points so
+that the survey reads as a survey.
 
 <<build one survey description>>=
 def item(number):
@@ -207,14 +212,16 @@ def survey(which):
                 "has_time_limit": False,
                 "one_at_a_time_type": "none",
                 "allow_backtracking": True,
-                "multiple_attempts_enabled": False,
-                "result_view_restricted": True,
-                "display_items": True,
-                "display_item_response": True,
-                "display_item_response_correctness": False,
-                "display_item_correct_answer": False,
-                "display_points_awarded": False,
-                "display_points_possible": False,
+                "multiple_attempts": {"multiple_attempts_enabled": False},
+                "result_view_settings": {
+                    "result_view_restricted": True,
+                    "display_items": True,
+                    "display_item_response": True,
+                    "display_item_response_correctness": False,
+                    "display_item_correct_answer": False,
+                    "display_points_awarded": False,
+                    "display_points_possible": False,
+                },
             },
         },
         "items": [item(number) for number in range(1, 21)],
