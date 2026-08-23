@@ -298,8 +298,16 @@ def answers(report_row):
 @
 
 The output follows the [[rspq.csv]] schema of \cref{app:episodes}:
-one row per student and administration, [[student]] keyed the same
-way as in the quiz analysis.
+one row per student and administration, with [[student]] keyed the
+same way as in the quiz analysis---by [[analyze_quiz.student_of]],
+that is by the login ID (\cref{app:student-identity}).
+This file is the only place where a student's start and end answers
+meet, and the change score of \cref{approach-measure} is the
+difference between two rows of it, so the key has to be one a student
+cannot share.
+A name can be shared, even here where there is only one course; the
+login ID cannot, which is why the quiz program attaches it and why we
+ask that program rather than read the name column ourselves.
 
 <<write the rspq csv>>=
 def write_rspq(filename):
@@ -312,7 +320,7 @@ def write_rspq(filename):
         writer.writeheader()
         for which, title in SURVEY_TITLES.items():
             for row in analyze_quiz.fetch_report(title):
-                student = row.get(analyze_quiz.STUDENT, "")
+                student = analyze_quiz.student_of(row)
                 mapped = answers(row)
                 if mapped is None:
                     print(

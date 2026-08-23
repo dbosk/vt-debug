@@ -694,6 +694,7 @@ import sys
 
 <<the course and the item titles are the keys>>
 <<fetch the results from Canvas>>
+<<attach the login IDs>>
 <<tabulate the closed items>>
 <<pre-code the open answers with an LLM>>
 <<write the coding sheet>>
@@ -729,6 +730,96 @@ SUGGESTED_COLUMNS = [f"suggested_{key}" for key in CODED_KEYS + ["rationale"]]
 def column_for(title, fieldnames):
     """Return the report column whose name contains the item title."""
     return next((name for name in fieldnames if title in name), None)
+@
+
+\subsubsection{Who a row belongs to}
+\label{app:student-identity}
+
+The item titles join the tangled files to the report; what joins the
+report's \emph{rows} to each other is the student, and there a name
+will not do.
+Two students can share a name, and they need not be in different
+courses for that: one course is enough, and this study has only one.
+The identifier we use instead is the student's \emph{login ID}---an
+email address, unique across the institution, and the identifier the
+surrounding [[canvaslms]] machinery already keys results by.
+The student-analysis report does not carry it, so [[fetch_report]]
+attaches it to every row from the course's own roster
+(\cref{app:login-lookup}).
+
+Every join goes through [[student_of]], and through it alone: the
+survey program of \cref{app:rspq} pairs a student's two administrations
+with it, and it is also what that program writes into the [[student]]
+column of [[rspq.csv]], the key the episode analysis
+(\cref{app:episodes}) joins on.
+One function is what keeps a join from quietly degrading---a join
+written against [[STUDENT]] would work on every test data set anyone
+would think to make, and fail only on the pair of real students it was
+supposed to keep apart.
+Rows read from a saved report have no login column, and those fall back
+to the course and the name.
+Within one course that is the name alone, so a saved report cannot tell
+namesakes apart at all; the course still prefixes the fallback, which
+makes a fallback key visibly not a login ID and leaves room for a
+second course later.
+Nothing here can repair a report that lacks the column, but the program
+can refuse to guess, which is why the one lookup that has to resolve a
+name warns instead of choosing (\cref{app:login-lookup}).
+
+<<the course and the item titles are the keys>>=
+LOGIN_COLUMN = "login"
+
+
+def student_of(row):
+    """Return the identifier of the student behind a row.
+
+    The login ID attached by fetch_report when available; rows read
+    from a saved report lack it and fall back to course and name.
+    """
+    return row.get(LOGIN_COLUMN) or f"{COURSE}/{row[STUDENT]}"
+@
+
+The tests below are tangled into their own file, which stands alone:
+it needs neither Canvas nor its credentials, because the only part of
+the program that talks to Canvas is the fetcher, and the roster it
+reads is replaced here by a stand-in.
+We name the test functions [[test_*]] so that [[pytest]] collects them
+where it is installed, but we do not depend on it---the paper builds
+without any test framework, and a check nobody can run is no check---so
+the file also runs itself.
+
+<<[[test_analyze_quiz.py]]>>=
+"""Check how the quiz analysis decides who a report row belongs to.
+
+Run with pytest, or on its own: python3 test_analyze_quiz.py
+"""
+
+import contextlib
+import csv
+import io
+import os
+import tempfile
+
+from analyze_quiz import *
+
+<<test doubles for the roster>>
+<<test functions>>
+<<run the tests without a framework>>
+@
+
+Let us start with the identity itself.
+A report saved to disk is the case the fallback exists for, and a
+fetched one the case it exists to avoid:
+
+<<test functions>>=
+def test_student_of_falls_back_to_the_name_without_a_login():
+    row = {STUDENT: "Ann Andersson", "Consent": "Yes"}
+    assert student_of(row) == f"{COURSE}/Ann Andersson"
+
+
+def test_student_of_prefers_the_login_over_the_name():
+    row = {STUDENT: "Ann Andersson", LOGIN_COLUMN: "ann@kth.se"}
+    assert student_of(row) == "ann@kth.se"
 @
 
 \subsubsection{Fetching the report from Canvas}
@@ -788,7 +879,175 @@ def fetch_report(title):
         sys.exit("Canvas did not produce the student-analysis report")
     response = requests.get(url)
     response.raise_for_status()
-    return list(csv.DictReader(response.text.splitlines()))
+    rows = list(csv.DictReader(response.text.splitlines()))
+    attach_logins(rows, course)
+    return rows
+@
+
+\subsubsection{Finding the login ID of a row}
+\label{app:login-lookup}
+
+The report names its students and, in its [[id]] and [[sis_id]]
+columns, identifies them by the platform's and the institution's
+numbers; the login ID itself lives in the course roster, one API call
+away.
+So each row is looked up in the roster by the identifier it does carry:
+the platform ID first, since Canvas assigns it and it is the one the
+report is built from, then the institutional ID, and only for a report
+carrying neither does the name come into it---accepted then, but only
+when exactly one enrolled student bears it.
+A name borne by two is reported and left alone, so the two rows keep
+the fallback of \cref{app:student-identity} and remain visibly
+unresolved, rather than both being handed the same login and silently
+merged into one student.
+
+<<attach the login IDs>>=
+def attach_logins(rows, course):
+    """Attach each row's student login ID from the course roster."""
+    <<index the roster by every identifier it offers>>
+    <<look each row up in that index>>
+@
+
+A roster we cannot read is a reason to fall back, not to stop: the
+analysis of the answers themselves does not need the identity, and a
+missing enrolment scope or an expired token should not cost us the
+summaries.
+So the failure is announced and the rows are left as they came.
+
+<<index the roster by every identifier it offers>>=
+by_id, by_sis, by_name = {}, {}, {}
+try:
+    students = list(course.get_users(enrollment_type=["student"]))
+except Exception as error:
+    print(f"warning: cannot read the roster of {COURSE}: {error}")
+    return
+for user in students:
+    login = getattr(user, "login_id", None)
+    if not login:
+        continue
+    by_id[str(user.id)] = login
+    sis = getattr(user, "sis_user_id", None)
+    if sis:
+        by_sis[str(sis)] = login
+    by_name.setdefault(user.name, []).append(login)
+@
+
+A roster entry without a login ID is skipped rather than indexed under
+its name: indexing it would make a name that belongs to one usable
+student look ambiguous, and we would refuse a lookup we could have
+made.
+
+The report's column headings are Canvas's, so we find the two ID
+columns by name once and reuse them for every row.
+The three lookups are tried in turn and the first that answers wins,
+which is also the order of how much we trust them.
+A row that none of them answers is left without the column, which is
+exactly what [[student_of]] reads as \enquote{fall back}.
+
+<<look each row up in that index>>=
+if not rows:
+    return
+id_column = next((c for c in rows[0] if c.strip().lower() == "id"), None)
+sis_column = next((c for c in rows[0]
+                   if c.strip().lower() == "sis_id"), None)
+for row in rows:
+    login = None
+    if id_column and row.get(id_column):
+        login = by_id.get(str(row[id_column]).strip())
+    if not login and sis_column and row.get(sis_column):
+        login = by_sis.get(str(row[sis_column]).strip())
+    if not login:
+        candidates = by_name.get(row[STUDENT], [])
+        if len(candidates) == 1:
+            login = candidates[0]
+        elif len(candidates) > 1:
+            print(f"warning: several students in {COURSE} are named"
+                  f" {row[STUDENT]!r} and the report has no usable ID"
+                  f" column; falling back to the name, which cannot"
+                  f" tell them apart")
+    if login:
+        row[LOGIN_COLUMN] = login
+@
+
+The case worth checking is the one the whole section exists for: two
+students in this one course who share a name.
+Given an ID column, the two rows must come out as two students; given
+only the name, the program must say so and resolve nothing.
+
+<<test doubles for the roster>>=
+class FakeUser:
+    """A roster entry with the attributes the lookup reads."""
+
+    def __init__(self, user_id, name, login_id, sis_user_id=None):
+        self.id = user_id
+        self.name = name
+        self.login_id = login_id
+        self.sis_user_id = sis_user_id
+
+
+class FakeCourse:
+    """A course whose roster is a fixed list of users."""
+
+    def __init__(self, users):
+        self.users = users
+
+    def get_users(self, **kwargs):
+        return self.users
+
+
+NAMESAKES = FakeCourse([
+    FakeUser(1, "Ann Andersson", "ann@kth.se", sis_user_id="a1"),
+    FakeUser(2, "Ann Andersson", "anna@kth.se", sis_user_id="a2"),
+])
+<<test functions>>=
+def test_namesakes_are_told_apart_by_the_id_column():
+    rows = [{"id": "1", STUDENT: "Ann Andersson"},
+            {"id": "2", STUDENT: "Ann Andersson"}]
+    attach_logins(rows, NAMESAKES)
+    assert [student_of(row) for row in rows] == ["ann@kth.se",
+                                                 "anna@kth.se"]
+
+
+def test_namesakes_are_told_apart_by_the_sis_id_column():
+    rows = [{"sis_id": "a2", STUDENT: "Ann Andersson"}]
+    attach_logins(rows, NAMESAKES)
+    assert student_of(rows[0]) == "anna@kth.se"
+
+
+def test_an_ambiguous_name_warns_instead_of_resolving():
+    rows = [{STUDENT: "Ann Andersson"}]
+    warnings = io.StringIO()
+    with contextlib.redirect_stdout(warnings):
+        attach_logins(rows, NAMESAKES)
+    assert "warning" in warnings.getvalue()
+    assert LOGIN_COLUMN not in rows[0]
+    assert student_of(rows[0]) == f"{COURSE}/Ann Andersson"
+
+
+def test_a_name_borne_by_one_student_resolves():
+    course = FakeCourse([FakeUser(3, "Bo Berg", "bo@kth.se")])
+    rows = [{STUDENT: "Bo Berg"}]
+    attach_logins(rows, course)
+    assert student_of(rows[0]) == "bo@kth.se"
+@
+
+The roster we cannot read must leave the analysis runnable, so that
+path is worth a test of its own:
+
+<<test doubles for the roster>>=
+class ForbiddenCourse:
+    """A course whose roster the token may not read."""
+
+    def get_users(self, **kwargs):
+        raise RuntimeError("403 Forbidden")
+<<test functions>>=
+def test_an_unreadable_roster_warns_and_keeps_the_rows():
+    rows = [{STUDENT: "Bo Berg"}]
+    warnings = io.StringIO()
+    with contextlib.redirect_stdout(warnings):
+        attach_logins(rows, ForbiddenCourse())
+    assert "warning" in warnings.getvalue()
+    assert student_of(rows[0]) == f"{COURSE}/Bo Berg"
 @
 
 \subsubsection{Summaries and the coding sheet}
@@ -882,6 +1141,12 @@ def llm_precode(rows):
 The coding sheet holds the open-text answers, the model's suggested
 codes when [[--llm]] was given, and the empty columns for the human
 coder's verified codes.
+It carries the login ID beside the name, because the sheet is not read
+in isolation: its codes are the [[quiz_class]] of [[students.csv]]
+(\cref{app:episodes}), which the episode analysis joins against the
+questionnaire scores, and that join is on the login ID.
+The name stays because the coder is a person, who needs to recognise
+whose answer this is when a code has to be discussed.
 
 <<write the coding sheet>>=
 def write_coding_sheet(rows, path, suggestions=None):
@@ -889,18 +1154,41 @@ def write_coding_sheet(rows, path, suggestions=None):
     open_columns = {
         item: column_for(item, rows[0].keys()) for item in OPEN_ITEMS
     }
-    fields = ([STUDENT] + OPEN_ITEMS
+    fields = ([STUDENT, LOGIN_COLUMN] + OPEN_ITEMS
               + (SUGGESTED_COLUMNS if suggestions else []) + CODING_COLUMNS)
     with open(path, "w", newline="") as out:
         writer = csv.DictWriter(out, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
         for index, row in enumerate(rows):
-            record = {STUDENT: row.get(STUDENT, "")}
+            record = {STUDENT: row.get(STUDENT, ""),
+                      LOGIN_COLUMN: row.get(LOGIN_COLUMN, "")}
             for item, column in open_columns.items():
                 record[item] = row.get(column, "") if column else ""
             if suggestions:
                 record.update(suggestions[index])
             writer.writerow(record)
+@
+
+The sheet is what a namesake pair would spoil quietly, since two rows
+under one name look like one student's two attempts, so let us see
+both columns come out:
+
+<<test functions>>=
+def test_the_coding_sheet_carries_the_login_beside_the_name():
+    rows = [{"id": "1", STUDENT: "Ann Andersson",
+             "1: Previous programming": "a year of Python"},
+            {"id": "2", STUDENT: "Ann Andersson",
+             "1: Previous programming": "none"}]
+    attach_logins(rows, NAMESAKES)
+    with tempfile.TemporaryDirectory() as directory:
+        path = os.path.join(directory, "sheet.csv")
+        write_coding_sheet(rows, path)
+        with open(path, newline="") as sheet:
+            written = list(csv.DictReader(sheet))
+    assert [row[STUDENT] for row in written] == ["Ann Andersson",
+                                                 "Ann Andersson"]
+    assert [row[LOGIN_COLUMN] for row in written] == ["ann@kth.se",
+                                                      "anna@kth.se"]
 @
 
 The main function ties the pieces together: fetch (or read) the
@@ -937,4 +1225,31 @@ def main():
         suggestions = llm_precode(rows) if args.llm else None
         write_coding_sheet(rows, args.coding_sheet, suggestions)
         print(f"\ncoding sheet written to {args.coding_sheet}")
+@
+
+The test file gets an entry point of its own, so that
+[[python3 test_analyze_quiz.py]] is a complete check without any
+framework installed.
+It collects by the [[test_]] prefix rather than by a list of names, so
+that a test added above needs no second edit here to be run---the
+failure mode of a hand-kept list is a test that quietly stops being
+run, which is the same class of silent failure the login IDs are here
+to prevent.
+
+<<run the tests without a framework>>=
+def main():
+    """Run every test function in this module."""
+    tests = sorted(
+        (name, function)
+        for name, function in globals().items()
+        if name.startswith("test_") and callable(function)
+    )
+    for name, function in tests:
+        function()
+        print(f"ok {name}")
+    print(f"{len(tests)} tests passed")
+
+
+if __name__ == "__main__":
+    main()
 @

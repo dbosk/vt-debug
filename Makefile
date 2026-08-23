@@ -44,7 +44,8 @@ article.pdf: noweb_lexer.py
 .PHONY: programs
 programs: quiz-background.json quiz-knowledge-start.json \
 	quiz-knowledge-end.json analyze_quiz.py analyze_episodes.py \
-	make_rspq.py analyze_rspq.py rspq-start.json rspq-end.json
+	make_rspq.py analyze_rspq.py rspq-start.json rspq-end.json \
+	test_analyze_quiz.py
 quiz-background.json: quiz.nw
 	${NOTANGLE.json}
 quiz-knowledge-start.json: quiz.nw
@@ -52,6 +53,8 @@ quiz-knowledge-start.json: quiz.nw
 quiz-knowledge-end.json: quiz.nw
 	${NOTANGLE.json}
 analyze_quiz.py: quiz.nw
+	${NOTANGLE.py}
+test_analyze_quiz.py: quiz.nw
 	${NOTANGLE.py}
 analyze_episodes.py: episodes.nw
 	${NOTANGLE.py}
@@ -62,6 +65,12 @@ analyze_rspq.py: rspq.nw
 # make_rspq.py writes both survey descriptions in one run.
 rspq-start.json rspq-end.json &: make_rspq.py
 	python3 make_rspq.py
+
+# The tests of the analysis programs run without a test framework; see
+# the appendix section on what identifies a student (quiz.nw).
+.PHONY: test
+test: analyze_quiz.py test_analyze_quiz.py
+	python3 test_analyze_quiz.py
 
 # The C++ counterexample's output is compiled and captured at build time so
 # the paper shows real output, same as the PythonTeX examples.
@@ -93,6 +102,7 @@ clean:
 	${RM} quiz-background.json quiz-knowledge-start.json
 	${RM} quiz-knowledge-end.json analyze_quiz.py analyze_episodes.py
 	${RM} make_rspq.py analyze_rspq.py rspq-start.json rspq-end.json
+	${RM} test_analyze_quiz.py
 
 INCLUDE_MAKEFILES?=./makefiles
 include ${INCLUDE_MAKEFILES}/noweb.mk
