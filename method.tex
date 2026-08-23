@@ -222,7 +222,7 @@ be graded---and the students may well want to know how they did.
 They therefore see their score afterwards, but neither the correct
 answers nor which items they got right: the same questions must measure
 the gain at the end of the course (\cref{end-measure}), so they have to
-stay fresh.
+stay fresh until then.
 The questions are written for this study, and they follow a debugging
 episode from beginning to end: making the failure reproducible, reading
 what the crash reports, locating and explaining the fault, and
@@ -711,6 +711,22 @@ concept quiz, administered in the same course (\cref{prior-knowledge}).
 The end-of-course quiz adds a single item of its own, asking whether the
 student prepared for it: preparation would confound the gain
 measure, so we need to know (\cref{app:quiz}).
+
+The end-of-course quiz also answers its own questions, so that the last
+diagnostic teaches as well as measures: under each item it shows why
+the keyed alternative is right and what each distractor
+assumes---the distractor a student chose is the misconception they can
+now read against it (\cref{app:debugging-items}).
+The two administrations share their items, so that text rides into the
+start-of-course quiz as well; a single result-view setting hides it
+there, which is what keeps the questions fresh for the second
+administration.
+It is shown only after submission and only at the end, and the coder
+never sees it: what each distractor assumes is our expectation, and the
+analysis is meant to find the misconceptions rather than to confirm
+them.
+Once the first cohort has answered, the observed distractor frequencies
+revise these texts.
 
 We need the R-SPQ-2F (\cref{approach-measure}) again because the approach
 to learning is not a fixed trait---students adapt it to their conception of the task

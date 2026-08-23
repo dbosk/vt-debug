@@ -69,7 +69,7 @@ distinguishable for students and analysis alike.
     <<scheduling settings>>
     "quiz_settings": {
       <<interaction settings>>
-      <<graded result view>>
+      <<start result view>>
     }
   },
   "items": [
@@ -89,12 +89,12 @@ before measures preparation, not what the course left behind.
   "quiz_type": "new",
   "settings": {
     "title": "Debugging quiz: what you know now",
-    "instructions": "<p>This quiz repeats the debugging questions from the start-of-course quiz, so that we can see what you have learned during the course. You will see your score afterwards, but not the correct answers. The score does not affect your grade. Please answer on your own, without preparation, help or tools.</p>",
+    "instructions": "<p>This quiz repeats the debugging questions from the start-of-course quiz, so that we can see what you have learned during the course. Afterwards you will see your score and, for each question, which answer is right and why. The score does not affect your grade. Please answer on your own, without preparation, help or tools.</p>",
     "points_possible": 8,
     <<scheduling settings>>
     "quiz_settings": {
       <<interaction settings>>
-      <<graded result view>>
+      <<end result view>>
     }
   },
   "items": [
@@ -145,6 +145,16 @@ did---but neither per-item correctness nor the correct answers: the
 same questions must measure the gain at the end of the course
 (\cref{end-measure}), so they have to stay fresh.
 
+The end-of-course quiz is the exception, since after it the measurement
+is over: it shows, under each debugging item, a short text of ours
+saying why the keyed alternative is right and what each distractor
+assumes (\cref{app:debugging-items}), so that the last diagnostic
+teaches as well as measures.
+That text travels with the item, and the two debugging quizzes share
+their items, so the start quiz carries it too; the last key of each
+object below is the one switch that hides it everywhere but at the end,
+and it is worth reading back from Canvas like the rest of the settings.
+
 <<ungraded result view>>=
 "result_view_settings": {
   "result_view_restricted": true,
@@ -153,9 +163,10 @@ same questions must measure the gain at the end of the course
   "display_item_response_correctness": false,
   "display_item_correct_answer": false,
   "display_points_awarded": false,
-  "display_points_possible": false
+  "display_points_possible": false,
+  "display_item_feedback": false
 }
-<<graded result view>>=
+<<start result view>>=
 "result_view_settings": {
   "result_view_restricted": true,
   "display_items": true,
@@ -163,7 +174,19 @@ same questions must measure the gain at the end of the course
   "display_item_response_correctness": false,
   "display_item_correct_answer": false,
   "display_points_awarded": true,
-  "display_points_possible": true
+  "display_points_possible": true,
+  "display_item_feedback": false
+}
+<<end result view>>=
+"result_view_settings": {
+  "result_view_restricted": true,
+  "display_items": true,
+  "display_item_response": true,
+  "display_item_response_correctness": false,
+  "display_item_correct_answer": false,
+  "display_points_awarded": true,
+  "display_points_possible": true,
+  "display_item_feedback": true
 }
 @
 
@@ -335,6 +358,7 @@ quiz, before the debugging items.
 @
 
 \subsection{The debugging items}
+\label{app:debugging-items}
 
 The questions of the debugging test are written for this study and
 published here in full.
@@ -349,6 +373,32 @@ Following \citeauthor{NCOL}'s discussion of assessment, the stems do
 not point out the relevant aspects---discerning them is what we measure
 \autocite[p.~91]{NCOL}; the design is motivated question by question in
 \cref{prior-knowledge}.
+
+Each item is followed by the text the end-of-course quiz shows under
+it: a short account of why the keyed alternative is right and what each
+distractor assumes---the distractor a student chose is the
+misconception they can now read against it, so that the last of the two
+measurements also teaches.
+Every item of the debugging test is closed, so this is the only kind of
+answer there is to give here; the open accounts of the study sit in the
+ungraded background quiz (\cref{app:background-items}), which shows no
+feedback at all.
+The text may name the aspect the item tests, since it is shown only
+after the answer is submitted and only at the end of the course: the
+start quiz hides all feedback, which it must, since the two quizzes
+share these items and the questions have to stay fresh.
+It paraphrases the rationale given before the item, and the two must be
+kept in step.
+A third guard keeps the text out of the data: neither the human coder
+nor the pre-coding model is ever shown it (\cref{app:quiz-analysis}),
+since a coder who had our expectation in front of them would be
+confirming it rather than finding it.
+What each distractor assumes is, for now, anticipated rather than
+observed---no cohort has answered these questions yet---so the first
+cohort's distractor frequencies are what will revise these texts.
+% TODO(#13): revise the feedback texts below against cohort 1's
+% answers, then re-apply both debugging quizzes with
+% canvaslms --no-cache quizzes edit --replace-items.
 
 The items are numbered from position 11, so that their placement is
 independent of the quiz they appear in: Canvas orders by position, gaps
@@ -386,9 +436,12 @@ must be made to happen on demand.
       ]
     },
     "scoring_data": {"value": 1},
-    "scoring_algorithm": "Equivalence"
+    "scoring_algorithm": "Equivalence",
+    <<feedback: a bug that comes and goes>>
   }
 }
+<<feedback: a bug that comes and goes>>=
+"feedback": {"neutral": "<p>A failure that cannot be made to happen on demand cannot be studied: reading the crash, locating the fault and checking a fix all need a run you can repeat, so the first move is to find what the crashing runs have in common. Wrapping the program in try and except hides the crash instead of explaining it; leaving it assumes that a failure which is rare is harmless; and retyping the program assumes the fault is in the typing rather than in what the program does.</p>"}
 @
 
 Reading the crash report: each distractor is a way of not reading
@@ -412,9 +465,12 @@ ordinary output.
       ]
     },
     "scoring_data": {"value": 1},
-    "scoring_algorithm": "Equivalence"
+    "scoring_algorithm": "Equivalence",
+    <<feedback: what the crash says>>
   }
 }
+<<feedback: what the crash says>>=
+"feedback": {"neutral": "<p>The traceback is a report, and it is meant to be read: it names where the program stopped (line 3 of party.py), the statement it stopped in, and why&mdash;a division by zero, so groups was zero. The file name says where that line is, not that the file is missing; Python read the line perfectly well and stopped because the division could not be done, so nothing was skipped; and the traceback is printed by Python when it gives up, not by the program.</p>"}
 @
 
 Understanding the error: what actually raises it, and that the program
@@ -437,9 +493,12 @@ could cope.
       ]
     },
     "scoring_data": {"value": 1},
-    "scoring_algorithm": "Equivalence"
+    "scoring_algorithm": "Equivalence",
+    <<feedback: a crashing answer>>
   }
 }
+<<feedback: a crashing answer>>=
+"feedback": {"neutral": "<p>Reading the answer succeeds; it is int that cannot turn \"a few\" into a number, and it says so by raising a ValueError, which the program can catch with try and except and answer to. The space is irrelevant&mdash;input returns whatever line was typed. And guests has no value only because the error happened first, so that is the consequence, not the cause.</p>"}
 @
 
 The report is not the fault: the message names the line where the
@@ -462,9 +521,12 @@ program stopped, but the mistake is the loop bound.
       ]
     },
     "scoring_data": {"value": 1},
-    "scoring_algorithm": "Equivalence"
+    "scoring_algorithm": "Equivalence",
+    <<feedback: the line to change>>
   }
 }
+<<feedback: the line to change>>=
+"feedback": {"neutral": "<p>The message points at the line where the program stopped, not at the mistake: the indexing is right and the loop bound is wrong, since range(4) asks for a fourth price from a list of three. Tying the bound to the list with range(len(prices)) fixes the fault itself. Deleting the line the message names takes the sum with it; adding a fourth number changes what the program is asked to compute; and the crash is not a matter of luck, so running again gives the same crash.</p>"}
 @
 
 Choosing the next run: the informative run varies the input towards
@@ -488,9 +550,12 @@ where the behaviour changes---the contrast pattern
       ]
     },
     "scoring_data": {"value": 1},
-    "scoring_algorithm": "Equivalence"
+    "scoring_algorithm": "Equivalence",
+    <<feedback: the telling run>>
   }
 }
+<<feedback: the telling run>>=
+"feedback": {"neutral": "<p>What you know is that age 12 is right and age 70 is wrong; what you need is where the two part company. Running the ages in between narrows that gap until the behaviour changes, and the point where it does tells you which part of the program is responsible. Repeating age 70 only confirms what you have already seen; changing several things at once means the next run cannot tell you which change mattered; and reinstalling Python assumes the fault is in the tools rather than in the program.</p>"}
 @
 
 Making the invisible visible: only the print that reveals the
@@ -513,9 +578,12 @@ intermediate values decides between the candidate explanations.
       ]
     },
     "scoring_data": {"value": 1},
-    "scoring_algorithm": "Equivalence"
+    "scoring_algorithm": "Equivalence",
+    <<feedback: one print statement>>
   }
 }
+<<feedback: one print statement>>=
+"feedback": {"neutral": "<p>The average is wrong either because the sum is wrong or because it is divided by the wrong count, and the print worth adding is the one whose output decides between those two. Printing total and len(parts) does exactly that: it shows 20 and 4, so the sum is right and the 3 is wrong. The other three show that the program started, or that it reached the end, or repeat a number you have already seen&mdash;none of them makes an intermediate value visible.</p>"}
 @
 
 Locating without a crash: the wrong output must be connected to the
@@ -539,9 +607,12 @@ of adds.
       ]
     },
     "scoring_data": {"value": 1},
-    "scoring_algorithm": "Equivalence"
+    "scoring_algorithm": "Equivalence",
+    <<feedback: finding the bug>>
   }
 }
+<<feedback: finding the bug>>=
+"feedback": {"neutral": "<p>The program prints 30, which is the last price, and that is what a plain assignment inside the loop produces: every turn replaces total instead of adding to it, so total = price is the line to change (to total = total + price). Starting total at 0 is right, the loop already visits every price, and the call passes the list the question is about; none of those can explain why only the last price survives.</p>"}
 @
 
 Verifying the fix: a fix is checked on the behaviours it might have
@@ -565,9 +636,12 @@ pattern (\cref{prior-knowledge}).
       ]
     },
     "scoring_data": {"value": 1},
-    "scoring_algorithm": "Equivalence"
+    "scoring_algorithm": "Equivalence",
+    <<feedback: after the fix>>
   }
 }
+<<feedback: after the fix>>=
+"feedback": {"neutral": "<p>An edit changes the program for every input, not only for the one that was failing, so a fix has to be checked against the behaviours it might have broken as well as the one it was meant to mend. One input coming out right says nothing about the rest; running it a second time says even less, since the program is not a matter of luck and will do the same thing again; and rereading the edited lines checks what you meant to write, not what the program now does.</p>"}
 @
 \subsection{Analysing the results}
 \label{app:quiz-analysis}
@@ -593,6 +667,10 @@ suggest the codes for each answer, and the human coder verifies or
 overrides them in the sheet.
 The suggested codes are kept in separate columns from the verified
 ones, so the sheet always shows which is which.
+The per-item texts of \cref{app:debugging-items} are for the student
+and never enter this program: the coding sheet and the pre-coding
+prompt carry the students' own answers alone, so what we expect an
+answer to show is put in front of neither the coder nor the model.
 
 <<[[analyze_quiz.py]]>>=
 """Fetch and summarise the quiz results, and prepare the coding sheet.
