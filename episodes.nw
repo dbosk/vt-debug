@@ -35,6 +35,18 @@ The program reads three CSV files, one per data source.
     open-text answers ([[deep]], [[surface]], or empty).
 \end{description}
 
+The [[student]] key is the same key in all three files, and it is the
+student's login ID (\cref{app:student-identity}): an email address,
+unique across the institution, not the student's name.
+Two students can share a name inside this one course, so a file keyed
+by name would join against the wrong row, or against none, and report
+neither; [[episodes.csv]] and [[students.csv]] are written by the
+coders themselves, which is why the key has to be said here.
+The one exception is a row the quiz program read back from a saved
+report, which carries the course-and-name fallback of
+\cref{app:student-identity} instead---visibly not a login ID, and so
+visibly unjoined.
+
 The extraction of [[rspq.csv]] is automated the same way as the quiz
 results: the two R-SPQ-2F administrations are Canvas surveys, and the
 survey program of \cref{app:rspq} fetches both administrations'

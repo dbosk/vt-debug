@@ -89,7 +89,7 @@ before measures preparation, not what the course left behind.
   "quiz_type": "new",
   "settings": {
     "title": "Debugging quiz: what you know now",
-    "instructions": "<p>This quiz repeats the debugging questions from the start-of-course quiz, so that we can see what you have learned during the course. Afterwards you will see your score and, for each question, which answer is right and why. The score does not affect your grade. Please answer on your own, without preparation, help or tools.</p>",
+    "instructions": "<p>This quiz repeats the debugging questions from the start-of-course quiz, so that we can see what you have learned during the course. Afterwards you will see your score and, for each question, the correct answer. The score does not affect your grade. Please answer on your own, without preparation, help or tools.</p>",
     "points_possible": 8,
     <<scheduling settings>>
     "quiz_settings": {
@@ -140,20 +140,24 @@ above.
 The quizzes differ in what the result view reveals.
 The background quiz has nothing to grade, so it shows no points and no
 correctness.
-The debugging quizzes show the points awarded---how well the student
-did---but neither per-item correctness nor the correct answers: the
-same questions must measure the gain at the end of the course
-(\cref{end-measure}), so they have to stay fresh.
+The start-of-course debugging quiz shows the points awarded---how well
+the student did---but neither per-item correctness nor the correct
+answers: the same questions must measure the gain at the end of the
+course (\cref{end-measure}), so they have to stay fresh.
 
-The end-of-course quiz is the exception, since after it the measurement
-is over: it shows, under each debugging item, a short text of ours
-saying why the keyed alternative is right and what each distractor
-assumes (\cref{app:debugging-items}), so that the last diagnostic
-teaches as well as measures.
+The end-of-course quiz has nothing left to protect, and the students
+have earned the answers: it shows, item by item, whether the answer was
+right and which alternative was, so that the last diagnostic teaches as
+well as measures---the distractor a student chose is the misconception
+they can now read against the correct one.
+It also shows, under each item, a short text of ours saying why the
+keyed alternative is right and what each distractor assumes
+(\cref{app:debugging-items}).
 That text travels with the item, and the two debugging quizzes share
 their items, so the start quiz carries it too; the last key of each
-object below is the one switch that hides it everywhere but at the end,
-and it is worth reading back from Canvas like the rest of the settings.
+object below is what hides it everywhere but at the end, just as the
+two correctness keys above it hide the platform's own verdict, and all
+three are worth reading back from Canvas like the rest of the settings.
 
 <<ungraded result view>>=
 "result_view_settings": {
@@ -182,8 +186,8 @@ and it is worth reading back from Canvas like the rest of the settings.
   "result_view_restricted": true,
   "display_items": true,
   "display_item_response": true,
-  "display_item_response_correctness": false,
-  "display_item_correct_answer": false,
+  "display_item_response_correctness": true,
+  "display_item_correct_answer": true,
   "display_points_awarded": true,
   "display_points_possible": true,
   "display_item_feedback": true
