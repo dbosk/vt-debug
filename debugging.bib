@@ -1153,3 +1153,152 @@
   year =	 {2005},
   doi =		 {10.1016/j.econedurev.2004.04.010},
 }
+
+% === provenance: Skolverket2018Hogskola ===
+% CLAIM: Students who graduated from a Swedish independent (fristående)
+%   upper-secondary school complete a smaller share of their first-year
+%   higher-education credits than students from municipal schools --- even
+%   though they enter with HIGHER upper-secondary grades, and even after
+%   controlling for those grades.
+% FOUND-VIA: citation chaining from \cite{Skolverket2020Betyg} (p. 46,
+%   fn. 83), which cites "Skolverket (2018a)" for exactly this finding; the
+%   full reference was read off that report's reference list (p. 50) and the
+%   report retrieved from the agency by the web search \texttt{Skolverket
+%   rapport 466 "Från gymnasieskola till högskola" registerstudie 2018 pdf}
+%   (2026-08-24).  Not indexed in WoS, Scopus or OpenAlex --- national grey
+%   literature.
+% PICKED: this is the specific study behind the recollection that friskola
+%   students "drop out more"; it is the full-population register study that
+%   links upper-secondary huvudman to first-year higher-education outcomes,
+%   and the only one that reports the effect CONDITIONAL on grades.
+% QUOTE (p. 6, summary): "De studenter som gått på gymnasieskola med enskild
+%   huvudman har lägre prestation -- trots att denna grupp generellt har
+%   något högre betyg från gymnasieskolan.  Denna skillnad gäller för
+%   studenter i olika nivåer av betygspoäng, och från vart och ett av de
+%   högskoleförberedande programmen."
+% QUOTE (p. 30): "Eftersom betygen samvarierar tydligt med resultat i
+%   högskolan borde alltså studenter från gymnasieskolor med enskilda
+%   huvudmän ha något högre prestationer i högskolan.  Diagrammet nedan
+%   visar emellertid att det förhåller sig tvärtom."
+% QUOTE (p. 32): "Studenterna med examen från skolor med enskilda huvudmän
+%   har signifikant högre risk för otillräcklig prestation högskolans första
+%   år.  Detta gäller för studenter från vart och ett av de fyra största
+%   högskoleförberedande programmen."
+% VERIFIED (2026-08-24): full text read (40 pp., Swedish),
+%   https://www.skolverket.se/download/18.6bfaca41169863e6a65d0b1/
+%   1553967792373/pdf3902.pdf.  Diagram~16 (p. 30): 66 per cent of students
+%   from municipal schools completed 75--100 per cent of their credits
+%   against 61 per cent from independent schools; at the other end, 16 per
+%   cent against 21 per cent completed under half.  Entry grades ran the
+%   other way (fn. 14, p. 30): mean 16.2 betygspoäng for independent against
+%   15.9 for municipal, with 33 against 26 per cent above 17.5.  Table~8
+%   (p. 39, logistic regression on the risk of completing under 50 per cent,
+%   controlling for sex, Swedish/foreign background, parental education,
+%   upper-secondary GPA and higher-education choice) gives odds ratios for
+%   enskild against offentlig huvudman of 1.75 (economics), 1.58 (natural
+%   science), 2.07 (social science) and 1.72 (technology), all significant at
+%   the 0.1 per cent level.
+% SCOPE LIMIT --- THE CLAIM MUST NOT BE WORDED AS DROPOUT: the outcome is
+%   \emph{prestationsgrad}, the share of REGISTERED credits completed in the
+%   first year, not dropout.  The report is explicit (p. 9) that
+%   interruptions contribute to it and that it cannot separate them: "Att vi
+%   enbart inkluderar studenter som varit registrerade två terminer innebär
+%   inte att vi helt kommer ifrån att studieavbrotten förklarar en del av
+%   prestationsgraden."  Students who left after one term are excluded from
+%   the population altogether.  So this backs UNDERPERFORMANCE conditional on
+%   grades, not a higher dropout rate.
+% COUNTER: \cite{EdmarkPersson2021} find independent-school students MORE
+%   likely to register for university and more likely to actually take
+%   university credits.  That is the extensive margin (reaching higher
+%   education at all, helped by the higher grades); this report measures the
+%   intensive margin (share completed once enrolled).  Both hold, and our
+%   prose says so rather than citing only the convenient one.  Topic-driven
+%   counter-searches for a peer-reviewed refutation found nothing either way:
+%   scholar 'TS=((Sweden OR Swedish) AND ("grade inflation" OR "inflated
+%   grades" OR "grading standards") AND (university OR "higher education" OR
+%   college) AND (performance OR dropout OR completion OR credits))' -p wos
+%   returned one irrelevant hit, and the international query
+%   'TS=(("private school" OR "independent school" OR voucher OR charter) AND
+%   ("college performance" OR ... ) AND (grades OR grading OR "grade
+%   inflation"))' -p wos returned zero.
+% DATE: 2026-08-24
+@techreport{Skolverket2018Hogskola,
+  author =	 {{Skolverket}},
+  title =	 {Fr{\aa}n gymnasieskola till h{\"o}gskola: en registerstudie},
+  institution =	 {Skolverket},
+  type =	 {Rapport},
+  number =	 {466},
+  address =	 {Stockholm},
+  year =	 {2018},
+  note =	 {ISRN SKOLV-R-466-SE},
+  url =		 {https://www.skolverket.se/publikationer?id=3902},
+}
+
+% === provenance: UKASkolverket2024 ===
+% CLAIM: The first-year higher-education performance gap between students
+%   from independent and municipal upper-secondary schools is stable across
+%   cohorts and survives controls for upper-secondary grades; it is larger
+%   for students from for-profit (aktiebolag) than from non-profit
+%   (idéburna) independent schools.
+% FOUND-VIA: web search \texttt{Skolverket rapport 466 "Från gymnasieskola
+%   till högskola" registerstudie 2018 pdf} (2026-08-24), which surfaced this
+%   joint Skolverket/UKÄ successor report alongside the 2018 study; retrieved
+%   from UKÄ.  Not indexed in WoS, Scopus or OpenAlex.
+% PICKED: the most recent and most rigorous version of the analysis --- eight
+%   cohorts instead of one, a richer control set, and the for-profit split.
+%   Retained as the CORROBORATION that makes \cite{Skolverket2018Hogskola}
+%   more than a single-cohort curiosity, and as the source we cite for the
+%   size of the gap.
+% QUOTE (p. 3, summary): "På samma sätt har studenter med examen från
+%   offentliga gymnasieskolor i genomsnitt högre prestationsgrad än studenter
+%   från fristående skolor."
+% QUOTE (p. 33): "Studenter med examen från gymnasieskolor med enskild
+%   huvudman har en lägre prestationsgrad det första året i högskolan jämfört
+%   med studenter med examen från gymnasieskolor med offentlig huvudman.
+%   Denna skillnad är stabil över tid".
+% QUOTE (p. 36): "den genomsnittliga prestationsgraden bland studenter från
+%   aktiebolagsskolor är 8 procentenheter (läsåret 2017/18) respektive 6,4
+%   procentenheter (läsåret 2021/22) lägre jämfört med studenter som
+%   examinerats från offentliga gymnasieskolor.  Prestationsgraden bland
+%   studenter från idéburna friskolor [...] är 6 respektive 4,2
+%   procentenheter lägre".
+% QUOTE (p. 47, conclusions): "Även om gymnasiebetygen är den faktor som
+%   bäst predicerar resultat i högskolan så kan det alltså finnas variationer
+%   i betygsättningens träffsäkerhet, vilket innebär att betygen inte
+%   nödvändigtvis återspeglar elevernas kunskapsnivåer."
+% VERIFIED (2026-08-24): full text read (Swedish),
+%   https://www.uka.se/download/18.44b70bc18de87661d8be409/1709738156562/
+%   Till%20h%C3%B6gskolan%20fr%C3%A5n%20gymnasieskolan.pdf.  Table~1
+%   (pp. 36--37) reports the regression coefficients above, controlling for
+%   sex, Swedish/foreign background, parental education, upper-secondary
+%   grades, upper-secondary programme, county of the school, and field of
+%   higher education (n = 11{,}580 and 15{,}218).  Footnote~31 (p. 36) rules
+%   out the mechanical explanation: independent-school students do not simply
+%   register for more credits --- students from aktiebolag schools register
+%   for the same number as municipal-school students and students from
+%   idéburna friskolor for slightly fewer, while both complete fewer.
+% SCOPE LIMIT: as in \cite{Skolverket2018Hogskola}, the outcome is
+%   prestationsgrad and NOT dropout; the report carries the same caveat about
+%   avbrott (p. 20).  Its own subtitle is "Studenternas prestationer det
+%   första studieåret".  Both reports are agency register studies, not
+%   peer-reviewed research, and neither identifies a causal effect --- the
+%   report states plainly (p. 47) that the statistics "kan i sig inte förklara
+%   vad skillnaderna beror på".
+% COUNTER: recorded under \cite{Skolverket2018Hogskola}; the standing
+%   counter-evidence is \cite{EdmarkPersson2021} at the extensive margin.
+%   Note this report offers the same reading as our previous round's verdict:
+%   grades may not reflect knowledge, rather than friskola students being
+%   weaker students.
+% DATE: 2026-08-24
+@techreport{UKASkolverket2024,
+  author =	 {Furusten, Thomas and Dahl, Erik and Lundstedt, Jonas},
+  title =	 {Till h{\"o}gskolan fr{\aa}n gymnasieskolan: Studenternas
+                  prestationer det f{\"o}rsta studie{\aa}ret},
+  institution =	 {Skolverket and Universitetskanslers{\"a}mbetet},
+  type =	 {Rapport},
+  number =	 {2024:1},
+  address =	 {Solna and Stockholm},
+  year =	 {2024},
+  note =	 {Skolverket Dnr 2023:468; UK{\"A} Dnr 511-00370-23},
+  url =		 {https://www.uka.se/download/18.44b70bc18de87661d8be409/1709738156562/Till%20h%C3%B6gskolan%20fr%C3%A5n%20gymnasieskolan.pdf},
+}
