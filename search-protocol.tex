@@ -167,3 +167,137 @@ see above),
 and the passages of \citetitle{NCOL} cited throughout.
 All other references are verified at abstract level, with
 \textcite{DebuggingReview} cited only as a pointer to the review it is.
+
+\paragraph{Grading and knowledge in Swedish independent schools (2026-08-24)}
+
+This round backs the background claim that Swedish \emph{friskolor}
+(independent, voucher-funded schools) award higher grades than
+\emph{kommunala} (municipal) schools while their students know less.
+The claim splits into two sub-claims that the literature treats very
+differently, and the round was run to keep them apart:
+(a)~friskolor grade more leniently \emph{relative to externally measured
+knowledge}; and (b)~friskola students have \emph{lower knowledge} in
+absolute terms.
+The research question is therefore: \emph{is it true that Swedish
+independent schools grade more generously than municipal schools, and is
+it true that their students learn less?}
+
+\subparagraph{Method}
+Searches were run with the \texttt{scholar} tool.  A provider health check
+(\texttt{scholar providers check}) was run first and is part of the record:
+Semantic Scholar was rejecting its key (HTTP 403) and OpenAlex was rate
+limited (HTTP 429) on the day, so the sweep rests on Web of Science and
+Scopus, which are in any case the stronger indexes for
+economics-of-education.  Verbatim queries:
+\begin{itemize}
+  \item \texttt{grade inflation independent schools voucher Sweden}
+    (\texttt{-p wos -p scopus});
+  \item \texttt{school competition grading standards national tests
+    leniency} (\texttt{-p wos -p scopus});
+  \item \texttt{TS=("grade inflation" AND (Sweden OR Swedish) AND (school
+    OR voucher OR "independent school"))} (\texttt{-p wos});
+  \item \texttt{TS=((voucher OR "independent school" OR "free school") AND
+    (Sweden OR Swedish) AND (achievement OR "test score" OR grades))}
+    (\texttt{-p wos}).
+\end{itemize}
+Counter-searches, phrased to surface work refuting or qualifying the
+claim:
+\begin{itemize}
+  \item \texttt{voucher reform private schools long run effects student
+    achievement Sweden} (\texttt{-p wos -p scopus});
+  \item \texttt{independent school attendance effect achievement selection
+    bias no difference} (\texttt{-p wos -p scopus});
+  \item \texttt{TS=((Sweden OR Swedish) AND ("independent school" OR
+    voucher OR "free school") AND (TIMSS OR PISA OR "international
+    assessment" OR "externally graded"))} (\texttt{-p wos});
+  \item \texttt{TS=((Sweden OR Swedish) AND school AND ("grading
+    standards" OR "grade inflation") AND (criticism OR "no difference" OR
+    overestimate OR contested))} (\texttt{-p wos}) --- \emph{zero hits};
+  \item \texttt{TS=((Sweden OR Swedish) AND ("independent school" OR
+    friskola OR voucher) AND ("higher achievement" OR outperform OR
+    "positive effect") AND (school OR student))} (\texttt{-p wos}) ---
+    \emph{zero hits}.
+\end{itemize}
+The two broad Scopus counter-queries returned 120 and 277 hits
+respectively, almost all of them monographs on unrelated policy topics;
+they were screened by title and venue and discarded, and the field-syntax
+queries above were substituted as the reproducible record.
+Full texts were read from the freely available working-paper versions
+(IFAU, IFN, IZA) and checked against the published abstracts, since
+ScienceDirect returns HTTP 403 to automated fetches.
+Skolverket's reports are not indexed by any of the providers; they were
+found by web search for
+\texttt{Skolverket analyser likvärdig betygssättning huvudman fristående
+kommunala skolor nationella prov betyg avvikelse rapport} and retrieved
+from the agency, after \textcite{EdmarkPersson2021} pointed to them.
+
+\subparagraph{Results}
+Sub-claim~(a) is well supported, and by the one design that can establish
+it.  \Textcite{HinnerichVlachos2017} observe the \emph{same} standardized
+tests graded both internally by the school and externally by the Schools'
+Inspectorate, and find voucher schools \(0.14\) standard deviations more
+generous in their internal grading.  It is corroborated at both school
+levels by Skolverket's full-population analyses, of year~9
+\autocite{Skolverket2019Betyg} and of upper secondary
+\autocite{Skolverket2020Betyg}; by \textcite{EdmarkPersson2021}, who find independent
+students more often \enquote{up-graded} relative to their test result but
+no more often down-graded, and historically by
+\textcite{WikstromWikstrom2005}.
+Sub-claim~(b) is \emph{not} supported.  In
+\textcite{HinnerichVlachos2017} the raw difference in externally graded
+test scores is \(-0.064\) standard deviations and not statistically
+significant (Table~2, column~1 of the IFAU working paper); only the
+value-added estimate---an effect of attendance conditional on prior
+achievement, not a statement about absolute knowledge---reaches
+significance, at \(-0.056\).  \Textcite{EdmarkPersson2021} conclude that
+the added value of independent schools may be \enquote{close to zero},
+not negative.  \Textcite{BohlmarkLindahl2015} run the opposite way
+outright, finding that the expansion of the independent sector improved
+average outcomes, primarily through external effects such as competition,
+and finding no differential grade inflation at the municipal level.
+Retained: all six references above.
+Discarded after screening the abstracts: Ding, Klapp and Yang Hansen
+(2024), whose comparison of public and independent schools turned out to
+be about mathematics self-concept and self-efficacy rather than any
+achievement gap; and IFAU working paper 2024:17 by Edmark, Hussain and
+Haelermans, which concerns track choice and long-run labour outcomes.
+Both bear on the Swedish voucher system but not on this claim.
+
+\subparagraph{The mechanism was searched for and not found}
+Because the intended use of the claim is to relate a student's school
+history to their approach to learning
+(\cref{approach-measure}), two searches looked specifically for
+literature connecting school type to deep and surface approaches:
+\texttt{TS=(("approach to learning" OR "surface approach" OR "deep
+approach" OR "study process questionnaire") AND (school AND (private OR
+independent OR voucher OR "school type" OR marketization)))}
+(\texttt{-p wos}, 38 hits, all in medical, music or teacher education and
+none about school type in this sense), and
+\texttt{TS=(("approaches to learning" OR "deep learning approach" OR
+"surface learning") AND (secondary OR "upper secondary" OR "high school")
+AND (grades OR "grade inflation" OR assessment) AND (Sweden OR Swedish OR
+Nordic))} (\texttt{-p wos}, one hit, on IQ and personality).
+No study relates Swedish \emph{huvudman} type to the deep or surface
+approach.  The link is ours to hypothesise, and is reported as such.
+
+\subparagraph{Conclusion}
+Yes on the first count, no on the second.  Independent schools do grade
+more generously than municipal schools relative to externally measured
+knowledge; the literature does \emph{not} show that their students know
+less.  Three qualifications survive into the prose.
+First, the leniency evidence is strongest at the upper-secondary level:
+\textcite{BohlmarkLindahl2015} find no differential grade inflation at
+the compulsory level, and \textcite{EdmarkPersson2021} suggest the
+reconciliation that the problem may be specific to upper secondary.
+Second, the effect is small and the \emph{huvudman} variable is a weak
+predictor: Skolverket puts the share of between-school variation in
+grading explained by huvudman at about \(1.5\)~per cent in year~9
+\autocite{Skolverket2019Betyg} and \(0.5\)--\(1\)~per cent in upper
+secondary \autocite{Skolverket2020Betyg}, with a \emph{wider} spread within
+the independent sector than within the municipal one; relative grading
+against a school's own performance level is a far larger factor.
+Third, \textcite{HinnerichVlachos2017} explain their own findings by
+schools responding to differences in educational \emph{preferences}, not
+by any difference in how their students go about learning.
+The safe formulation is therefore about grades and their relation to
+demonstrated knowledge, never about friskola students knowing less.

@@ -803,3 +803,353 @@
   year =	 {1984},
   doi =		 {10.1093/comjnl/27.2.97},
 }
+
+% === provenance: HinnerichVlachos2017 ===
+% CLAIM: Swedish upper-secondary voucher (independent) schools grade their
+%   students' standardized tests more leniently than municipal schools:
+%   comparing internal and external evaluations of the *same* tests, voucher
+%   schools are about 0.14 standard deviations more generous.
+% FOUND-VIA: scholar search 'TS=((voucher OR "independent school" OR "free
+%   school") AND (Sweden OR Swedish) AND (achievement OR "test score" OR
+%   grades))' -p wos (2026-08-24); also surfaced by the broader query
+%   "grade inflation independent schools voucher Sweden" -p wos -p scopus.
+% PICKED: the only Swedish study that observes the SAME test graded both
+%   internally (by the school) and externally (re-graded by the Schools'
+%   Inspectorate), which identifies grading leniency separately from
+%   achievement.  Every other full-population Swedish achievement measure is
+%   internally graded, so this is the primary source for the leniency claim.
+% QUOTE (published abstract): "Using a value added approach, we find that
+%   students at upper-secondary voucher schools on average score 0.06
+%   standard deviations lower on externally graded standardized tests in
+%   first year core courses. [...] For high achieving students, the voucher
+%   school impact is around zero.  Comparing internal and external
+%   evaluations of the exact same standardized tests, we find that voucher
+%   schools are 0.14 standard deviations more generous than municipal
+%   schools in their internal test grading."
+% QUOTE (IFAU WP p. 40, conclusions): "Despite having similar external test
+%   scores, voucher school students at academic programs therefore come out
+%   around 0.15 standard deviations ahead of their municipal school
+%   counterparts when considering the internal test evaluations."
+% QUOTE (IFAU WP p. 42, conclusions): "More lax grading standards among
+%   voucher schools presumably translate into higher upper-secondary final
+%   grades. [...] Voucher school students can therefore outperform municipal
+%   students in post-secondary outcomes, despite not having built more or
+%   better human capital during upper-secondary school."
+% VERIFIED (2026-08-24): full text of the IFAU working-paper version read
+%   (WP 2016:9, https://www.ifau.se/globalassets/pdf/se/2016/wp2016-09-
+%   impact-of-upper-secondary-voucher-school-attendance-on-student-
+%   achievement.pdf); the published Labour Economics abstract (retrieved via
+%   RePEc, since ScienceDirect returns HTTP 403) is word-for-word identical
+%   to the working paper's for every figure cited here.  Table 2 (WP p. 24)
+%   gives the estimates: column (1), the RAW difference in external test
+%   scores, is -0.064 SD and NOT statistically significant (s.e. 0.055);
+%   column (7), the value-added specification, is -0.056 SD (p<0.05); column
+%   (9), the internal-minus-external difference, is +0.133 SD (p<0.01).
+%   IMPORTANT SCOPE LIMIT: the -0.06 SD is a VALUE-ADDED estimate (an effect
+%   of attendance conditional on compulsory-school GPA), not a statement
+%   that voucher students have lower absolute skill; the raw gap is not
+%   significant.  Heterogeneity (WP p. 40): -0.17 SD for vocational-programme
+%   students without highly educated parents, but "around zero" for academic-
+%   programme students with highly educated parents.  The authors also
+%   explicitly caution (WP p. 42) against generalizing to the compulsory
+%   level.  Their own preferred explanation is that voucher schools respond
+%   more to differences in educational PREFERENCES -- not that their students
+%   adopt a surface approach to learning.
+% COUNTER: scholar search 'TS=((Sweden OR Swedish) AND ("independent school"
+%   OR friskola OR voucher) AND ("higher achievement" OR outperform OR
+%   "positive effect") AND (school OR student))' -p wos -- 0 hits; and
+%   'TS=((Sweden OR Swedish) AND ("independent school" OR voucher OR "free
+%   school") AND (TIMSS OR PISA OR "international assessment" OR "externally
+%   graded"))' -p wos, which surfaced \cite{BohlmarkLindahl2015}.  Counter-
+%   evidence FOUND and cited: Böhlmark and Lindahl find no differential grade
+%   inflation at the compulsory/municipal level, and Edmark and Persson find
+%   a POSITIVE (not negative) attendance effect on achievement measures.  The
+%   leniency finding stands; the "lower skills" reading does not, and our
+%   prose must not state it.  See \cite{BohlmarkLindahl2015},
+%   \cite{EdmarkPersson2021}.
+% DATE: 2026-08-24
+@article{HinnerichVlachos2017,
+  author =	 {Hinnerich, Bj{\"o}rn Tyrefors and Vlachos, Jonas},
+  title =	 {The impact of upper-secondary voucher school attendance on
+                  student achievement. {Swedish} evidence using external and
+                  internal evaluations},
+  journal =	 {Labour Economics},
+  volume =	 {47},
+  pages =	 {1--14},
+  year =	 {2017},
+  doi =		 {10.1016/j.labeco.2017.03.009},
+}
+
+% === provenance: EdmarkPersson2021 ===
+% CLAIM: Attending a Swedish independent upper-secondary school is associated
+%   with higher grades and better post-secondary transition, but the
+%   advantage may be entirely explained by more lenient grading rather than
+%   by greater knowledge.
+% FOUND-VIA: scholar search "grade inflation independent schools voucher
+%   Sweden" -p wos -p scopus (2026-08-24); confirmed by the WoS field query
+%   'TS=("grade inflation" AND (Sweden OR Swedish) AND (school OR voucher OR
+%   "independent school"))'.
+% PICKED: the most recent full-population Swedish attendance-effect study,
+%   and the one that states the grades-versus-knowledge distinction most
+%   explicitly.  Retained *both* as corroboration for the leniency claim and
+%   as the key QUALIFIER against the "lower skills" claim, since its point
+%   estimates on achievement are positive-to-zero, never negative.
+% QUOTE (published abstract): "we [...] estimate a positive relationship
+%   between independent upper secondary school attendance and grades,
+%   graduation rates, and post-secondary education.  We however also find
+%   strong indications of more lenient grading standards in independent
+%   schools, especially in schools organized as for-profit entities and in
+%   schools with a low share of qualified teachers."
+% QUOTE (IFN WP 1371, conclusions): "the independent school effect on test
+%   grades is positive in Swedish and English, but zero in Mathematics, which
+%   can be argued to be the more reliable of the tests in terms of less scope
+%   for overly lenient grading. [...] The fact that independent schools do
+%   not display positive added value on a test where teacher
+%   degrees-of-freedom (when grading) is small, could mean that the overall
+%   added value of independent schools is close to zero".
+% QUOTE (IFN WP 1371, fn. 7): "Note that in Sweden standardized tests are
+%   corrected and graded internally, by the teachers."
+% VERIFIED (2026-08-24): full text of the IFN working-paper version read
+%   (WP 1371, https://www.ifn.se/media/c22ldbru/wp1371.pdf); the published
+%   abstract retrieved from OpenAlex (the article is hybrid OA) and checked
+%   against it.  CRITICAL for our use: their conclusion is "close to zero"
+%   added value, NOT negative -- this paper does not support a claim that
+%   independent-school students have less knowledge, only that their grade
+%   advantage is probably not knowledge.  Their achievement measure is the
+%   internally graded national test (fn. 7), which is why they cannot
+%   separate the two directly and defer to \cite{HinnerichVlachos2017}.
+% COUNTER: this entry IS the qualifying counter-evidence for the "less
+%   skills" sub-claim; the counter-search that surfaced it is recorded under
+%   \cite{HinnerichVlachos2017}.  A further counter-search for criticism of
+%   the leniency finding, 'TS=((Sweden OR Swedish) AND school AND ("grading
+%   standards" OR "grade inflation") AND (criticism OR "no difference" OR
+%   overestimate OR contested))' -p wos, returned 0 hits: no published
+%   refutation of the leniency finding was found.
+% DATE: 2026-08-24
+@article{EdmarkPersson2021,
+  author =	 {Edmark, Karin and Persson, Lovisa},
+  title =	 {The impact of attending an independent upper secondary
+                  school: {Evidence} from {Sweden} using school ranking data},
+  journal =	 {Economics of Education Review},
+  volume =	 {84},
+  pages =	 {102148},
+  year =	 {2021},
+  doi =		 {10.1016/j.econedurev.2021.102148},
+}
+
+% === provenance: BohlmarkLindahl2015 ===
+% CLAIM (as counter-evidence): The expansion of the Swedish independent-school
+%   sector after the 1992 voucher reform IMPROVED average educational
+%   outcomes, and this is not an artefact of differential grade inflation.
+% FOUND-VIA: scholar search 'TS=((voucher OR "independent school" OR "free
+%   school") AND (Sweden OR Swedish) AND (achievement OR "test score" OR
+%   grades))' -p wos (2026-08-24), run as a COUNTER-search against the claim
+%   that friskola students learn less.
+% PICKED: the standard reference for the long-run/system-level effect of the
+%   voucher reform, and the strongest published result pointing the opposite
+%   way from \cite{HinnerichVlachos2017}.  Cited so that our prose does not
+%   state the claim over known counter-evidence.
+% QUOTE (published abstract): "we find that an increase in the share of
+%   independent school students improves average short- and long-run
+%   outcomes, explained primarily by external effects (e.g. school
+%   competition). [...] By using regional level TIMSS data, we can reconcile
+%   our results with the negative national trend for Swedish students in
+%   international achievement tests."
+% QUOTE (IZA DP 6683 p. 18): "We find a statistically insignificant
+%   association between the change in average \enquote{grade inflation} in
+%   the municipality between 1992 and 2009 and the change in the share of
+%   independent-school students between the same years.  If anything, the
+%   negative point estimates indicate that there is less grade inflation in
+%   areas with more independent-school students.  We therefore conclude that
+%   differential grade inflation does not drive our positive results".
+% VERIFIED (2026-08-24): published abstract read via Crossref (DOI
+%   10.1111/ecca.12130); full text of the IZA working-paper version read
+%   (DP 6683, https://docs.iza.org/dp6683.pdf) for the grade-inflation
+%   robustness analysis.  SCOPE LIMIT, and it is the decisive one: the
+%   estimand is the MUNICIPALITY-LEVEL share of independent-school students
+%   at the COMPULSORY level, not individual attendance at upper secondary.
+%   The IZA abstract states the effects are "primarily [...] due to external
+%   effects (e.g., school competition), and not that independent-school
+%   students gain significantly more than public-school students" -- i.e. it
+%   is evidence about the system, and evidence AGAINST an individual-level
+%   friskola/kommunal skill gap in either direction.  The TIMSS reconciliation
+%   sentence is in the published (2015) abstract; the IZA 2012 version does
+%   not yet contain that analysis, so it is attributed to the published paper.
+% COUNTER: the support-side searches recorded under \cite{HinnerichVlachos2017}
+%   are this entry's counter-searches; they found the leniency evidence that
+%   qualifies this paper in turn.  Edmark and Persson (2021, WP fn. 8) note
+%   the two strands conflict and suggest the reconciliation we adopt: the
+%   grading problem may be specific to the upper-secondary level.
+% DATE: 2026-08-24
+@article{BohlmarkLindahl2015,
+  author =	 {B{\"o}hlmark, Anders and Lindahl, Mikael},
+  title =	 {Independent Schools and Long-run Educational Outcomes:
+                  {Evidence} from {Sweden}'s Large-scale Voucher Reform},
+  journal =	 {Economica},
+  volume =	 {82},
+  number =	 {327},
+  pages =	 {508--551},
+  year =	 {2015},
+  doi =		 {10.1111/ecca.12130},
+}
+
+% === provenance: Skolverket2019Betyg ===
+% CLAIM: In Swedish compulsory school (year 9), independent schools grade more
+%   generously relative to the national tests than municipal schools -- but
+%   the huvudman difference explains only about 1.5 per cent of the total
+%   variation in grading between schools.
+% FOUND-VIA: web search "Skolverket analyser likvärdig betygssättning
+%   huvudman fristående kommunala skolor nationella prov betyg avvikelse
+%   rapport" (2026-08-24), after \cite{EdmarkPersson2021} (WP fn. 44) pointed
+%   to Skolverket's grading analyses.  Not indexed in WoS/Scopus/OpenAlex:
+%   this is national grey literature, retrieved from the agency itself.
+% PICKED: the only full-population, national analysis at the COMPULSORY level,
+%   which is the level most of our students' school history falls under; and
+%   the source that quantifies how little of the between-school grading
+%   variation the huvudman variable actually accounts for.
+% QUOTE (p. 37): "Elever i kommunala skolor skulle alltså få något högre
+%   betyg än elever i fristående skolor i de tio ämnen som har nationella
+%   prov om det inte vore för den mer generösa betygssättningen för elever i
+%   fristående skolor."  (Students in municipal schools would in fact receive
+%   somewhat HIGHER grades than students in independent schools in the ten
+%   subjects with national tests, were it not for the more generous grading
+%   of independent-school students.)
+% QUOTE (p. 30): "kan skillnader i betygssättning mellan fristående och
+%   kommunala skolor endast förklara omkring 1,5 procent av de totala
+%   skillnaderna i betygssättning mellan skolor."
+% QUOTE (p. 26): "Bland kommunala skolor är spridningen (mätt som
+%   standardavvikelsen) i skolors nettoavvikelse i exempelvis matematik 21,3
+%   procentenheter medan den är 24,6 procentenheter bland fristående skolor."
+% VERIFIED (2026-08-24): full text read (59 pp. plus appendices, Swedish),
+%   https://www.skolverket.se/download/18.1c754e50169863bf01e99d/
+%   1556616645903/pdf4035.pdf.  The p. 37 sentence is the closest thing in
+%   the literature to the "higher grades, not more knowledge" claim, and it
+%   is stated at the level of GROUP AVERAGES after controlling for student
+%   composition.  The p. 30 and p. 26 figures are the reason we must not use
+%   huvudman as if it were a strong individual-level predictor: the spread
+%   WITHIN each huvudman category is larger than the gap between them.
+%   Skolverket itself notes (p. 37, fn. 71) that the national tests are also
+%   graded internally and are themselves graded more generously in
+%   independent schools, so the reported gap may be an underestimate.
+% COUNTER: \cite{BohlmarkLindahl2015} find no differential grade inflation at
+%   the municipal level over 1992--2009 using a different (subjects-without-
+%   tests minus subjects-with-tests) measure; both are cited.  The
+%   quantitative counter is internal to this very report -- the ~1.5 per cent
+%   explained share -- and is quoted above rather than omitted.
+% DATE: 2026-08-24
+@techreport{Skolverket2019Betyg,
+  author =	 {{Skolverket}},
+  title =	 {Analyser av likv{\"a}rdig betygss{\"a}ttning mellan
+                  elevgrupper och skolor: {J}{\"a}mf{\"o}relser mellan betyg och
+                  nationella prov i {\aa}rskurs 9},
+  institution =	 {Skolverket},
+  type =	 {Rapport},
+  number =	 {475},
+  address =	 {Stockholm},
+  year =	 {2019},
+  note =	 {ISRN SKOLV-R-475-SE},
+  url =		 {https://www.skolverket.se/publikationer?id=4035},
+}
+
+% === provenance: Skolverket2020Betyg ===
+% CLAIM: In Swedish upper-secondary school, independent schools set somewhat
+%   higher course grades relative to the national course tests than municipal
+%   schools; roughly half of the independent-school grade advantage would
+%   disappear absent the grading difference -- but differences between
+%   huvudmän explain only about 0.5--1 per cent of the total between-school
+%   variation in grading.
+% FOUND-VIA: web search "Skolverket analyser likvärdig betygssättning
+%   huvudman fristående kommunala skolor nationella prov betyg avvikelse
+%   rapport" (2026-08-24); the gymnasium companion to
+%   \cite{Skolverket2019Betyg}.
+% PICKED: the upper-secondary counterpart, at the level our own study's
+%   students most recently attended, and the source that puts the huvudman
+%   effect in proportion against relative grading, which is far larger.
+% QUOTE (p. 42): "När vi tagit hänsyn till bakgrundsfaktorer
+%   (socioekonomisk-, migrationsbakgrund etc.) så finns en faktisk skillnad i
+%   betyg på 1,7 respektive 1,4 betygspoäng till elever i fristående skolors
+%   fördel.  Skillnaden i betygssättning i relation till de nationella proven
+%   visar att elever i fristående skolor gynnas med 0,6 respektive 0,8
+%   betygspoäng.  Det innebär att om det inte funnits några skillnader i
+%   betygssättning så skulle ungefär hälften av det försteg fristående skolor
+%   har i betyg [...] försvinna".
+% QUOTE (p. 46): "Våra analyser visar att skillnaderna i betygssättning
+%   mellan huvudmän förklarar en mycket liten del (omkring 0,5--1 procent) av
+%   de totala skillnaderna i betygssättning mellan skolor.  Betygssättningen
+%   mellan huvudmän är därmed inte det största problemet när det gäller
+%   likvärdig betygssättning i gymnasieskolan."
+% VERIFIED (2026-08-24): full text read (59 pp., Swedish),
+%   https://www.skolverket.se/download/18.1a8151cc170ae4599bce10/
+%   1585902805741/pdf6564.pdf.  Diagram 6 (p. 34) gives the per-course
+%   estimates in betygspoäng on a 0--20 scale: the systematic grading
+%   differences run 0.03--0.28 points, and the report's own note to the
+%   diagram states that the estimates for Ma 1a, Ma 1c, Ma 2b, Ma 3b, En 5
+%   and Sv 1 are NOT statistically significant.  So the effect is real on
+%   average but small, and absent in several individual courses.
+% COUNTER: internal to the report and quoted above (the 0.5--1 per cent
+%   explained share, and the non-significant per-course estimates); the
+%   report also names the far larger factor, relative grading against the
+%   school's own performance level (14--34 per cent of the variation in
+%   mathematics, p. 46).  External counter-searches are recorded under
+%   \cite{HinnerichVlachos2017} and \cite{EdmarkPersson2021}.
+% DATE: 2026-08-24
+@techreport{Skolverket2020Betyg,
+  author =	 {{Skolverket}},
+  title =	 {Analyser av likv{\"a}rdig betygss{\"a}ttning i gymnasieskolan:
+                  {J}{\"a}mf{\"o}relser mellan kursbetyg och kursprov},
+  institution =	 {Skolverket},
+  type =	 {Rapport},
+  number =	 {2020:3},
+  address =	 {Stockholm},
+  year =	 {2020},
+  note =	 {ISRN SKOLV-R-2020:3-SE},
+  url =		 {https://www.skolverket.se/publikationer?id=6564},
+}
+
+% === provenance: WikstromWikstrom2005 ===
+% CLAIM: Swedish independent upper-secondary schools award higher final grades
+%   than their students' results on an external test (the SweSAT) warrant.
+% FOUND-VIA: scholar search "grade inflation independent schools voucher
+%   Sweden" -p wos -p scopus (2026-08-24); also the first hit of
+%   'TS=("grade inflation" AND (Sweden OR Swedish) AND (school OR voucher OR
+%   "independent school"))' -p wos.
+% PICKED: the earliest empirical Swedish grade-inflation study using an
+%   external ability measure, and the one both \cite{EdmarkPersson2021} and
+%   \cite{Skolverket2020Betyg} cite as the historical precedent for the
+%   leniency finding.  Retained as CORROBORATION for a claim whose primary
+%   source is \cite{HinnerichVlachos2017}, not as the primary source itself.
+% QUOTE: n/a --- full text paywalled and the abstract elided by the publisher
+%   in every record checked (see ACCESS LIMIT below); the finding is quoted
+%   below at second hand, from two sources whose full texts we did read.
+% ACCESS LIMIT (2026-08-24): the full text is paywalled and the publisher has
+%   ELIDED the abstract everywhere -- Crossref returns no abstract, OpenAlex
+%   returns none, the Semantic Scholar record carries an explicit publisher
+%   elision notice, Unpaywall reports oa_status "closed" with zero OA
+%   locations, and ScienceDirect returns HTTP 403.  No repository or author
+%   copy surfaced.  NOT verified in full text or at abstract level.
+% VERIFIED (secondary, 2026-08-24): the finding is attributed to this paper by
+%   two sources whose full texts we DID read.  \cite{EdmarkPersson2021} (IFN
+%   WP 1371, fn. 44): "Wikström and Wikström (2005) show that students from
+%   upper secondary school have a relatively high final GPA in comparison to
+%   their results on the Swedish SATs."  \cite{Skolverket2020Betyg} (p. 46,
+%   fn. 83): "Även Wikström \& Wikström (2005) finner att fristående
+%   gymnasieskolor sätter högre betyg, utifrån en analys av hur de presterar
+%   på högskoleproven."  Bibliographic metadata (vol. 24, no. 3, pp.
+%   309--322, 2005) verified against Crossref.  Following the precedent of
+%   \cite{MartonWenWong2005} in this file: cited as reported by sources we
+%   read, and our prose must not attach a page locator or a verbatim finding
+%   to it.
+% COUNTER: recorded under \cite{HinnerichVlachos2017}; \cite{BohlmarkLindahl2015}
+%   is the counter-evidence at the compulsory level.
+% DATE: 2026-08-24
+@article{WikstromWikstrom2005,
+  author =	 {Wikstr{\"o}m, Christina and Wikstr{\"o}m, Magnus},
+  title =	 {Grade inflation and school competition: an empirical analysis
+                  based on the {Swedish} upper secondary schools},
+  journal =	 {Economics of Education Review},
+  volume =	 {24},
+  number =	 {3},
+  pages =	 {309--322},
+  year =	 {2005},
+  doi =		 {10.1016/j.econedurev.2004.04.010},
+}
