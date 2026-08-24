@@ -76,6 +76,22 @@ The material-use measure (\cref{material-use}) identifies the groups;
 approach and prior experience are controlled for; since the groups are
 self-selected, the answer is correlational.
 
+\rqschool*
+Answered descriptively, and by testing \cref{h:school}:
+\hschool*
+The background quiz asks which schools the student went to
+(\cref{prior-knowledge}); the principal of each is looked up in
+Skolverket's register once the answers are coded (\cref{school-lookup}).
+We then relate the huvudman type to the approach measure
+(\cref{approach-measure,end-measure}) and to the outcomes the study
+already has---the debugging test and its gain
+(\cref{prior-knowledge,end-measure}), the companion study's concept
+scores (\cref{prior-knowledge}), and the debugging success and pattern
+completeness of the coded episodes (\cref{analysis}).
+No student is assigned a school at random and the covariate is a weak
+one, so the answer is exploratory throughout: we report distributions
+and associations, not effects (\cref{school-lookup}).
+
 The methodological questions are answered by comparing independent
 measurements of the same thing.
 \mqcoding*
@@ -202,6 +218,47 @@ This gives a baseline measure of the debugging approach, independent of
 both the logs and the questionnaire: a third angle on the connection
 between approach and patterns (\cref{rq:deep}), and the third
 classification whose agreement \cref{mq:agreement} asks about.
+
+The last six items ask which schools the student went to, one item per
+stage of Swedish schooling and two for what has no school unit to name.
+\begin{enumerate}[resume]
+  \item Which school did you go to in lågstadiet (years 1--3)?
+    Give the school's name and its municipality on one line, for
+    example \enquote{Vasaskolan, Gävle}.
+    If you went to school outside Sweden, give the country instead of
+    the municipality.
+    Leave blank if it does not apply.
+  \item The same question for mellanstadiet (years 4--6).
+  \item The same question for högstadiet (years 7--9).
+  \item The same question for gymnasiet.
+  \item Which gymnasieprogram did you take, for example
+    \enquote{naturvetenskapsprogrammet}?
+  \item Did you take a basår before starting your university studies?
+    If so, which one and where?
+\end{enumerate}
+What we are after is not the name but the school's principal---run by
+the municipality (\emph{kommunal huvudman}) or by an independent one
+(\emph{enskild huvudman}, a \emph{friskola})---which \cref{rq:school}
+relates to the approach the student brings and to how they fare.
+We do not ask the students for the type, because it is not a fact they
+reliably have: many do not know who ran their school, and a school that
+has changed hands since would make even a confident answer wrong.
+The register does know, so the items collect only what a student can
+state without judging anything, and the type is settled afterwards by a
+lookup (\cref{school-lookup}).
+A name alone will not resolve there---Swedish school names repeat across
+the country, and there is a Vasaskolan in several municipalities---so
+each stem asks for the municipality on the same line as the name; that
+pair picks out one school unit.
+The stages are separate items because the principal can differ between
+them: a municipal lågstadiet and an independent högstadiet is an
+ordinary history, and one answer would hide the switch.
+The gymnasieprogram is separate for the opposite reason---a programme is
+not a school unit and has no principal to look up---but it records what
+the student studied, which the school's name does not.
+Every item may be left blank, and every stem says so: not everyone went
+to school in Sweden, and most will not have taken a basår.
+The items are given in full in \cref{app:background-items}.
 
 For prior knowledge of the programming \emph{concepts} we do not write
 a test of our own.
@@ -823,6 +880,83 @@ The experts can also be expected to have discerned more aspects than the
 students: they have more to vary, and their prerequisites for the search
 are richer (\cref{debugging}).
 
+\subsubsection{Determining the schools' principals}
+\label{school-lookup}
+
+The school answers (\cref{prior-knowledge}) arrive as free text, and the
+huvudman type is determined from them by a lookup rather than by a
+judgement.
+Skolverket publishes a statistics file per läsår listing every school unit
+with its name, its municipality and the type of its principal; we mirror
+those files and match each answer against the file for the läsår the
+student attended, since about a fifth of the compulsory-school unit names
+and over a third of the gymnasium ones differ today from what they were
+ten years ago.
+The match is on the pair of name and municipality, normalised for case and
+spacing and stripped of the grade-span suffixes that units carry in the
+register but students never write (\enquote{Lendahlsskolan F--3}): the
+pair identifies a unit uniquely, whereas the name alone is ambiguous for
+about one compulsory-school unit in eleven.
+Any fuzzy matching stays inside the municipality the student stated.
+Answers that still do not match fall back to the current school-unit
+register, whose interface can be asked how a unit stood on a given date
+and which retains units that have since closed.
+The lookup is part of the analysis program (\cref{app:quiz-analysis}).
+
+Its result goes into the coding sheet as one column per stage of
+schooling---lågstadiet, mellanstadiet, högstadiet and gymnasiet---and
+follows the sheet's existing division between a suggested value and the
+coder's verified one.
+Here the suggestion comes from the register and not from the language
+model that pre-codes the other open answers; the model never sees the
+school answers at all, because who ran a school is a fact to be looked up
+rather than a judgement to be made.
+The coder verifies each suggestion, and the verified column is the datum.
+Four of the codes are the register's own categories---\emph{kommunal},
+\emph{enskild}, \emph{region} and \emph{statlig}---and three cover what
+the register cannot settle: \emph{abroad} for schooling outside Sweden,
+\emph{utlandsskola} for the Swedish schools abroad, which the register
+carries under a placeholder principal that must not be propagated, and
+\emph{unknown} for an answer that does not resolve.
+Komvux is coded kommunal whoever delivers the teaching, since the
+municipality remains the principal by law even when it is contracted out.
+The gymnasieprogram and the basår get no such column: a programme is not a
+school unit, and preparatory years are run by universities and are not in
+the register at all, so there the answers themselves are the datum.
+
+The register resolves every unit from läsår 2013/14 onwards, which is also
+the earliest date the current register can be asked about; the mirrored
+statistics files reach further back, but a small share of the older units
+no longer resolves.
+A student who started school at the usual age and reaches us in 2026 falls
+inside that window for every stage; students who took time between
+gymnasiet and university have their earliest stages partly outside it, and
+a stage that does not resolve is coded unknown rather than guessed.
+
+The analysis itself is descriptive.
+We report how the huvudman types are distributed across the cohort and
+across the stages; the headline comparison is the binary one, kommunal
+against enskild, at each stage and above all at gymnasiet, where
+\cref{h:school} expects the difference to be clearest, and the remaining
+codes are reported as they fall rather than pooled into either side.
+Against that split we report the R-SPQ-2F deep and surface scores
+(\cref{approach-measure,end-measure}) and the outcomes the study already
+collects: the debugging test at the start and at the end and the gain
+between them (\cref{prior-knowledge,end-measure}), the companion study's
+concept scores (\cref{prior-knowledge}), and the debugging success and
+pattern completeness of the coded episodes above.
+
+One course is one cohort, and the groups will be small---students from
+independent schools are a minority of an already single-course
+sample---so we report distributions and associations and stop there.
+Nothing in this says anything about causes: nobody is assigned a school at
+random, the families who choose one differ in ways we do not measure, and
+the huvudman type explains very little even of what it is known to be
+associated with (\cref{hypotheses}).
+What the analysis can establish is whether the association \cref{h:school}
+predicts is present at all in this cohort, and what it looks like---which
+is what an unexamined conjecture needs before anything is built on it.
+
 \subsection{Pilot}
 \label{method-pilot}
 
@@ -849,5 +983,12 @@ arrangement kept from the course's earlier diagnostic tests.)
 The learnlog data contains the students' source code and program
 interactions, but no more than what the students already submit with their
 lab solutions.
+The school questions (\cref{prior-knowledge}) collect personal data of a
+further kind---where a student went to school---under the same consent as
+the rest of the background quiz, and pseudonymously like everything else.
+The school names serve only the register lookup: once the huvudman type of
+each stage has been determined and verified (\cref{school-lookup}), it is
+the type that enters the analysis data, and the names and municipalities
+stay in the coding sheet.
 % XXX(#10) Ethical review application for prgi26 data collection: reference number
 % and details to be added.
