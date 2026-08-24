@@ -202,18 +202,28 @@ from the course's earlier diagnostic tests, which these quizzes
 replace:
 participation in the study is opt-in (\cref{ethics}), so we ask before
 collecting anything.
-Then follow the four background items motivated in
-\cref{prior-knowledge}.
+Then follow the background items motivated in
+\cref{prior-knowledge}: four about the student's programming, then six
+about the schools the student went to.
 The item titles double as the keys under which Canvas reports the
 answers, so the analysis program (\cref{app:quiz-analysis}) refers to
 the items by these titles.
+Positions are counted within a quiz, so the eleven here have nothing to
+do with the debugging items numbered from eleven below
+(\cref{app:debugging-items}): no quiz holds both.
 
 <<background items>>=
 <<item: consent>>,
 <<item: previous programming>>,
 <<item: how learned>>,
 <<item: confidence>>,
-<<item: debugging exercise>>
+<<item: debugging exercise>>,
+<<item: school in years 1-3>>,
+<<item: school in years 4-6>>,
+<<item: school in years 7-9>>,
+<<item: upper secondary school>>,
+<<item: upper secondary programme>>,
+<<item: preparatory year>>
 @
 
 % XXX(#10) The consent wording must follow the approved ethics
@@ -329,6 +339,137 @@ string instead of multiplying.
   "entry": {
     "title": "Debugging exercise",
     "item_body": "<p>Here is a small Python program, and what happened when it was run. The programmer expected it to print 30.</p><pre>price = input(\"Price? \")\ntotal = price * 3\nprint(total)</pre><p>When run:</p><pre>Price? 10\n101010</pre><p>How would you go about finding out what is wrong? Describe your steps&mdash;you do not need to fix the program.</p>",
+    "interaction_type_slug": "essay",
+    "interaction_data": {"rce": false, "word_limit_enabled": false},
+    "scoring_data": {"value": ""},
+    "scoring_algorithm": "None"
+  }
+}
+@
+
+The last six items ask which schools the student went to.
+What we are after is the school's type---run by the municipality
+(\emph{kommunal huvudman}) or by an independent principal
+(\emph{enskild huvudman}, a \emph{friskola})---which may bear on the
+approach to learning a student brings to the course
+(\cref{prior-knowledge}).
+We do not ask the student for the type, though, because it is not a
+fact they reliably have: many do not know who ran their school, and a
+school that has changed hands since would make even a confident answer
+wrong.
+The register does know.
+So these items collect only what a student can state without judging
+anything---the name of the school---and the type is determined
+afterwards, when the answers are coded, by looking each school up in
+Skolverket's Skolenhetsregistret, which records the huvudman of every
+school unit in Sweden (\cref{app:quiz-analysis}).
+
+A name on its own will not resolve there: Swedish school names repeat
+across the country, and there is a Vasaskolan in several
+municipalities, so each item asks for the municipality on the same line
+as the name---that pair is what picks out one school unit.
+Students who went to school outside Sweden write the country instead,
+which the stems say: the register cannot resolve those at all, and the
+country is what tells the coder so, rather than a foreign name that
+might be taken for a Swedish one.
+
+The stages are separate items because the huvudman can differ between
+them: a student may have gone to a municipal lågstadiet and an
+independent högstadiet, and one answer would hide the switch.
+The gymnasieprogram is separate for the opposite reason---a programme
+is not a school unit and has no huvudman to look up---but it records
+what the student studied, which the school name does not.
+Every item may be left blank, and every stem says so, because there is
+nothing to invent when there is nothing to report: not everyone has
+taken a basår, and not everyone went to school in Sweden.
+
+% XXX(#8) Draft wording; to be piloted with the rest of the quiz.
+
+<<item: school in years 1-3>>=
+{
+  "position": 6,
+  "points_possible": 0,
+  "entry": {
+    "title": "School: lågstadiet",
+    "item_body": "<p>Which school did you go to in lågstadiet (years 1&ndash;3)? Give the school's name and its municipality on one line, for example \"Vasaskolan, Gävle\". If you went to school outside Sweden, give the country instead of the municipality. Leave blank if it does not apply.</p>",
+    "interaction_type_slug": "essay",
+    "interaction_data": {"rce": false, "word_limit_enabled": false},
+    "scoring_data": {"value": ""},
+    "scoring_algorithm": "None"
+  }
+}
+<<item: school in years 4-6>>=
+{
+  "position": 7,
+  "points_possible": 0,
+  "entry": {
+    "title": "School: mellanstadiet",
+    "item_body": "<p>Which school did you go to in mellanstadiet (years 4&ndash;6)? Give the school's name and its municipality on one line, for example \"Vasaskolan, Gävle\". If you went to school outside Sweden, give the country instead of the municipality. Leave blank if it does not apply.</p>",
+    "interaction_type_slug": "essay",
+    "interaction_data": {"rce": false, "word_limit_enabled": false},
+    "scoring_data": {"value": ""},
+    "scoring_algorithm": "None"
+  }
+}
+<<item: school in years 7-9>>=
+{
+  "position": 8,
+  "points_possible": 0,
+  "entry": {
+    "title": "School: högstadiet",
+    "item_body": "<p>Which school did you go to in högstadiet (years 7&ndash;9)? Give the school's name and its municipality on one line, for example \"Vasaskolan, Gävle\". If you went to school outside Sweden, give the country instead of the municipality. Leave blank if it does not apply.</p>",
+    "interaction_type_slug": "essay",
+    "interaction_data": {"rce": false, "word_limit_enabled": false},
+    "scoring_data": {"value": ""},
+    "scoring_algorithm": "None"
+  }
+}
+<<item: upper secondary school>>=
+{
+  "position": 9,
+  "points_possible": 0,
+  "entry": {
+    "title": "School: gymnasiet",
+    "item_body": "<p>Which gymnasieskola did you go to (upper secondary school, after year 9)? Give the school's name and its municipality on one line, for example \"Vasaskolan, Gävle\". If you went to school outside Sweden, give the country instead of the municipality. Leave blank if it does not apply.</p>",
+    "interaction_type_slug": "essay",
+    "interaction_data": {"rce": false, "word_limit_enabled": false},
+    "scoring_data": {"value": ""},
+    "scoring_algorithm": "None"
+  }
+}
+@
+
+The gymnasieprogram is free text rather than a list of the national
+programmes: the answer has to admit the programmes that no longer go by
+those names, and the schooling that was never Swedish to begin with.
+
+<<item: upper secondary programme>>=
+{
+  "position": 10,
+  "points_possible": 0,
+  "entry": {
+    "title": "Gymnasieprogram",
+    "item_body": "<p>Which gymnasieprogram did you take, for example \"naturvetenskapsprogrammet\"? If you went to upper secondary school outside Sweden, name the programme you took there instead. Leave blank if it does not apply.</p>",
+    "interaction_type_slug": "essay",
+    "interaction_data": {"rce": false, "word_limit_enabled": false},
+    "scoring_data": {"value": ""},
+    "scoring_algorithm": "None"
+  }
+}
+@
+
+The basår is the one stage most students will not have, so its stem
+says outright that a blank is the expected answer for them.
+It asks where the year was taken as well, since a basår belongs to a
+university rather than to a school unit, and so is looked up nowhere.
+
+<<item: preparatory year>>=
+{
+  "position": 11,
+  "points_possible": 0,
+  "entry": {
+    "title": "Basår",
+    "item_body": "<p>Did you take a basår (a preparatory year) before starting your university studies? If so, write which one and where, for example \"tekniskt basår, KTH\". Leave this blank if you did not take a basår.</p>",
     "interaction_type_slug": "essay",
     "interaction_data": {"rce": false, "word_limit_enabled": false},
     "scoring_data": {"value": ""},
@@ -663,7 +804,9 @@ We code all the data we asked for, so that every collected answer is
 usable: from the languages answer the languages themselves, roughly how
 much they were used, and whether Python is among them; from the
 debugging exercise whether the described steps exhibit contrast,
-generalisation or fusion thinking (\cref{analysis,mq:agreement}).
+generalisation or fusion thinking (\cref{analysis,mq:agreement}); and
+from the school answers the type of each school, which is looked up
+rather than judged (\cref{app:background-items}).
 
 The coding is done by a human, but a large language model prepares it:
 with [[--llm]] the program asks a model (via the [[llm]] package) to
@@ -713,7 +856,19 @@ tangled files: if a title changes in a quiz, this dictionary is the
 only other place to change---and they live in the same source, side by
 side.
 Canvas prefixes the report's columns with item identifiers, so we match
-columns by containment rather than equality.
+columns by containment rather than equality---which is also why no
+item title may be contained in another.
+
+The school answers are open text as well, and they go on the coding
+sheet with the rest, since the sheet is where the coder has them to
+look up; but they are not among the answers the model pre-codes, as
+which huvudman ran a school is settled by the register rather than by a
+judgement anything could suggest.
+Hence two lists where one would do: the prompt below is built from
+[[CODED_OPEN_ITEMS]], the sheet from [[OPEN_ITEMS]].
+
+% XXX The column the school lookup writes into is settled once the
+% method section fixes the coding scheme; until then it goes in notes.
 
 <<the course and the item titles are the keys>>=
 COURSE = "prgi26"
@@ -724,7 +879,11 @@ QUIZ_TITLES = {
 }
 STUDENT = "name"
 CLOSED_ITEMS = ["Consent", "How you learned", "Confidence", "Preparation"]
-OPEN_ITEMS = ["Previous programming", "Debugging exercise"]
+CODED_OPEN_ITEMS = ["Previous programming", "Debugging exercise"]
+SCHOOL_ITEMS = ["School: lågstadiet", "School: mellanstadiet",
+                "School: högstadiet", "School: gymnasiet",
+                "Gymnasieprogram", "Basår"]
+OPEN_ITEMS = CODED_OPEN_ITEMS + SCHOOL_ITEMS
 CODED_KEYS = ["languages", "experience", "python",
               "contrast", "generalisation", "fusion"]
 CODING_COLUMNS = CODED_KEYS + ["notes"]
@@ -1087,10 +1246,10 @@ def summarize_scores(rows):
               f", max={max(scores):.0f}")
 @
 
-The model suggests the codes from the two open answers: the languages,
-the rough amount of experience and whether Python is among the
-languages from the first, and which of the three patterns of variation
-the described steps exhibit from the second.
+The model suggests the codes from the two open answers it is shown:
+the languages, the rough amount of experience and whether Python is
+among the languages from the first, and which of the three patterns of
+variation the described steps exhibit from the second.
 The prompt defines the patterns briefly; the model must answer in JSON
 so that the suggestions land in columns.
 The suggestions are exactly that---\cref{analysis} requires a human
@@ -1128,8 +1287,10 @@ def llm_precode(rows):
     suggestions = []
     for row in rows:
         prompt = CODING_PROMPT.format(
-            previous=row.get(column_for(OPEN_ITEMS[0], row.keys()) or "", ""),
-            exercise=row.get(column_for(OPEN_ITEMS[1], row.keys()) or "", ""),
+            previous=row.get(
+                column_for(CODED_OPEN_ITEMS[0], row.keys()) or "", ""),
+            exercise=row.get(
+                column_for(CODED_OPEN_ITEMS[1], row.keys()) or "", ""),
         )
         try:
             suggestion = json.loads(model.prompt(prompt).text())
