@@ -867,8 +867,15 @@ judgement anything could suggest.
 Hence two lists where one would do: the prompt below is built from
 [[CODED_OPEN_ITEMS]], the sheet from [[OPEN_ITEMS]].
 
-% XXX The column the school lookup writes into is settled once the
-% method section fixes the coding scheme; until then it goes in notes.
+What the register answers with goes in a column of its own, one per
+stage, laid out exactly as the model's codes are: the lookup of
+\cref{app:school-lookup} writes [[suggested_huvudman: lågstadiet]] and
+its three siblings, and the coder writes the verified value in the bare
+[[huvudman: lågstadiet]] beside it.
+The four stage names are written down once and the rest is derived from
+them---the item titles Canvas reports under, the coder's columns and
+the register lookup's own table of school years---because these have to
+agree, and three lists that must agree are three chances to disagree.
 
 <<the course and the item titles are the keys>>=
 COURSE = "prgi26"
@@ -880,14 +887,16 @@ QUIZ_TITLES = {
 STUDENT = "name"
 CLOSED_ITEMS = ["Consent", "How you learned", "Confidence", "Preparation"]
 CODED_OPEN_ITEMS = ["Previous programming", "Debugging exercise"]
-SCHOOL_ITEMS = ["School: lågstadiet", "School: mellanstadiet",
-                "School: högstadiet", "School: gymnasiet",
-                "Gymnasieprogram", "Basår"]
+SCHOOL_STAGES = ["lågstadiet", "mellanstadiet", "högstadiet", "gymnasiet"]
+STAGE_ITEMS = [f"School: {stage}" for stage in SCHOOL_STAGES]
+SCHOOL_ITEMS = STAGE_ITEMS + ["Gymnasieprogram", "Basår"]
 OPEN_ITEMS = CODED_OPEN_ITEMS + SCHOOL_ITEMS
 CODED_KEYS = ["languages", "experience", "python",
               "contrast", "generalisation", "fusion"]
-CODING_COLUMNS = CODED_KEYS + ["notes"]
+HUVUDMAN_KEYS = [f"huvudman: {stage}" for stage in SCHOOL_STAGES]
+CODING_COLUMNS = CODED_KEYS + HUVUDMAN_KEYS + ["notes"]
 SUGGESTED_COLUMNS = [f"suggested_{key}" for key in CODED_KEYS + ["rationale"]]
+SUGGESTED_HUVUDMAN = [f"suggested_{key}" for key in HUVUDMAN_KEYS]
 
 
 def column_for(title, fieldnames):
@@ -1306,6 +1315,10 @@ def llm_precode(rows):
 The coding sheet holds the open-text answers, the model's suggested
 codes when [[--llm]] was given, and the empty columns for the human
 coder's verified codes.
+The suggested huvudman columns are there whether or not the lookup has
+run: the register is a directory of files rather than a service that
+may be unavailable, so the sheet has one shape and not two, and a blank
+there means \enquote{not looked up yet} rather than \enquote{no column}.
 It carries the login ID beside the name, because the sheet is not read
 in isolation: its codes are the [[quiz_class]] of [[students.csv]]
 (\cref{app:episodes}), which the episode analysis joins against the
@@ -1319,7 +1332,7 @@ def write_coding_sheet(rows, path, suggestions=None):
     open_columns = {
         item: column_for(item, rows[0].keys()) for item in OPEN_ITEMS
     }
-    fields = ([STUDENT, LOGIN_COLUMN] + OPEN_ITEMS
+    fields = ([STUDENT, LOGIN_COLUMN] + OPEN_ITEMS + SUGGESTED_HUVUDMAN
               + (SUGGESTED_COLUMNS if suggestions else []) + CODING_COLUMNS)
     with open(path, "w", newline="") as out:
         writer = csv.DictWriter(out, fieldnames=fields, extrasaction="ignore")
@@ -1417,4 +1430,896 @@ def main():
 
 if __name__ == "__main__":
     main()
+@
+
+\subsubsection{Looking the schools up in the register}
+\label{app:school-lookup}
+
+The coding sheet now carries the school answers, and this is where they
+are settled.
+What we want from them---who ran the school---is not a judgement about
+the answer but a fact about the school, recorded by Skolverket in
+Skolenhetsregistret, and the same answer looked up in the same register
+file yields the same huvudman today, next year, and in whatever
+replication comes after.
+That is why this is a program of its own rather than another prompt for
+the model of \cref{app:quiz-analysis}: the model is asked what an
+answer \emph{shows}, which is a reading and needs a human to verify it,
+whereas the register is asked what \emph{is}, which needs only to be
+looked up correctly.
+Mixing the two would put a retrieved fact and a suggested reading in
+the same column and make the sheet stop distinguishing them.
+
+The coder still verifies, and the pair of columns of
+\cref{app:quiz-analysis} is what makes room for that: the register can
+only be as right as the answer it is given, and a student who misremembers
+the name, writes the school next door, or names a school that is not a
+school unit at all produces a lookup that is deterministic and wrong.
+The lookup writes only into the suggested column, and never touches the
+verified one, so re-running it after the coder has started costs
+nothing.
+
+\paragraph{Why the register of that year, and why a mirror of it}
+
+A register answers about a moment, and the moment the current
+Skolenhetsregistret answers about is today.
+The students went to school between six and twelve years ago, and
+school names drift: a fifth of the grundskola units and better than a
+third of the gymnasium units on record for läsår 2015/16 go by a
+different name now.
+Al-Azharskolan is Jacobiskolan today, under a different stiftelse.
+Looked up in today's register, the name a student writes for a school
+that has since been renamed matches nothing---or, worse, matches the
+school that took the name over, and returns a huvudman that was never
+theirs.
+The huvudmannatyp itself hardly ever moves (about one grundskola unit
+in a thousand has changed type since 2013), so the year we look in is
+not about the type changing under the school; it is about finding the
+school at all.
+
+So we look in the register of the year the student was there, which
+means having the register of that year.
+Skolverket's legacy SIRIS export API still serves one CSV per läsår,
+but it is undocumented, its web interface is already decommissioned,
+and nothing about it promises to answer tomorrow.
+The files under [[skolenheter/]] are therefore mirrored into the
+repository and committed with it: they are the record, and the
+Makefile's [[skolenheter]] and [[skolenheter-refresh]] targets are a
+convenience for fetching them again, not the source of truth.
+
+Which year belongs to which stage follows from the cohort.
+A student starting the course in 2026 straight from gymnasiet was born
+around 2007, began årskurs~1 in the autumn of 2014, and moved up a
+stage every three years from there.
+We take the year each stage \emph{began}, since that is the school the
+student is likeliest to name when asked where they went in lågstadiet,
+and a student who moved mid-stage is a case for the coder either way.
+The keys are the stage names of \cref{app:quiz-analysis}; a stage
+missing here is a [[KeyError]] the moment the registers load, which is
+as early as we could want to hear about it.
+
+<<the school stages and their register years>>=
+REGISTER_DIRECTORY = "skolenheter"
+STAGE_REGISTERS = {
+    "lågstadiet": ("grundskola", 2014),
+    "mellanstadiet": ("grundskola", 2017),
+    "högstadiet": ("grundskola", 2020),
+    "gymnasiet": ("gymnasieskola", 2023),
+}
+@
+
+Those years fit a student of the nominal age, and the cohort will not
+consist only of those.
+A student who took a gap year, a basår, or a second gymnasium
+programme was at each stage earlier than the table says, and one who
+started school late was there later.
+The mirror spans läsår 2010--2022 for grundskola and 2015--2024 for
+gymnasieskola so that such a student still lands in a mirrored year,
+and the loader falls back to the nearest one it has rather than
+failing.
+The cost of being a year or two off is small for the same reason the
+year matters at all: it is the name that drifts, not the type.
+
+\paragraph{The program}
+
+<<[[lookup_schools.py]]>>=
+"""Suggest each student's school huvudman from the register.
+
+Fills the suggested_huvudman columns of the coding sheet written by
+analyze_quiz.py, by looking each school answer up in the mirrored
+Skolenhetsregistret exports under skolenheter/.  The verified columns
+are the human coder's and are never touched.
+
+Needs no network and no credentials: run it after analyze_quiz.py, as
+    python3 lookup_schools.py --sheet quiz-coding-sheet.csv
+"""
+
+import argparse
+import collections
+import csv
+import glob
+import os
+import re
+import sys
+import unicodedata
+
+from analyze_quiz import SCHOOL_STAGES, STAGE_ITEMS, SUGGESTED_HUVUDMAN
+
+<<the school stages and their register years>>
+<<read one register export>>
+<<normalise what students and the register write differently>>
+<<index one register export>>
+<<the register's vocabulary and ours>>
+<<read one school answer>>
+<<suggest the huvudman for one answer>>
+<<load the register each stage needs>>
+<<fill in the suggested columns>>
+<<report what the lookup settled>>
+<<the lookup main>>
+
+if __name__ == "__main__":
+    main()
+@
+
+The tests go in a file of their own, alongside those of
+\cref{app:student-identity} and built the same way---collected by
+[[pytest]] where it is installed, and runnable without it.
+They share that file's entry point verbatim, since a second copy of a
+test runner is a second thing to keep working.
+Nothing here touches the mirrored register: every test writes the
+export it needs, which is how a fixture can afford to contain the
+malformed and the contradictory.
+
+<<[[test_lookup_schools.py]]>>=
+"""Check how the school lookup reads the register and matches answers.
+
+Run with pytest, or on its own: python3 test_lookup_schools.py
+"""
+
+import contextlib
+import csv
+import io
+import os
+import tempfile
+
+from lookup_schools import *
+
+<<register fixtures>>
+<<lookup test functions>>
+<<run the tests without a framework>>
+@
+
+\paragraph{Reading an export}
+
+The export is a CSV in the loosest sense, and four of its habits have
+to be met before any of it can be read.
+It is UTF-8 with a byte order mark, so it is opened as [[utf-8-sig]]
+rather than [[utf-8]], which would otherwise hand us a first column
+name with an invisible character glued to its front.
+It is semicolon-delimited, as Swedish spreadsheet exports are.
+It opens with a preamble---the source, the report's name, the läsår, and
+blank lines---whose length is not the same in the two exports we read:
+the grundskola header sits on line six and the gymnasium header on line
+seven.
+So the header is found rather than counted, by looking for the line
+that has the huvudman column among its fields, which is a property of
+the header rather than of any particular report's layout.
+And it ends with a trailer of prose---the report's description and
+definitions---which parses as rows with almost every field empty.
+
+We could not tell that trailer from a school by its name field, which
+is where the prose lands, but every real row carries a school unit
+code and no prose line does.
+That also disposes of the register's suppressed cells, written as a
+lone [[.]] where a figure is withheld for privacy: the identifying
+columns are never suppressed, so a row whose unit code is a [[.]] or
+empty is not a school.
+
+<<read one register export>>=
+NAME_COLUMN = "Skola"
+UNIT_COLUMN = "Skol-enhetskod"
+KOMMUN_COLUMN = "Skolkommun"
+HUVUDMAN_COLUMN = "Typ av huvudman"
+SUPPRESSED = "."
+
+
+def read_export(path):
+    """Return the school-unit rows of one mirrored SIRIS export."""
+    with open(path, encoding="utf-8-sig", newline="") as export:
+        return parse_export(export.read().splitlines())
+
+
+def parse_export(lines):
+    """Return the school-unit rows among the lines of an export."""
+    header = None
+    for number, line in enumerate(lines):
+        if HUVUDMAN_COLUMN in line.split(";"):
+            header = number
+            break
+    if header is None:
+        raise ValueError(f"no header row naming {HUVUDMAN_COLUMN!r}")
+    rows = csv.DictReader(lines[header:], delimiter=";")
+    return [row for row in rows if cell(row, UNIT_COLUMN)]
+
+
+def cell(row, column):
+    """Return one register cell, reading a suppressed cell as empty."""
+    value = (row.get(column) or "").strip()
+    return "" if value == SUPPRESSED else value
+@
+
+The fixtures are the two shapes of preamble, so that the header
+detection is exercised against both, and the rows are the cases the
+sections below are about.
+Writing them to a file rather than passing the text along is what puts
+a real byte order mark in front of a real [[open]].
+
+<<register fixtures>>=
+GRUNDSKOLA = (
+    "\ufeffStatistik från Skolverket, https://www.skolverket.se\n"
+    "\n"
+    "Grundskola - Antal elever per årskurs\n"
+    "Valt läsår: 2020/21\n"
+    "\n"
+    "Skola;Skol-enhetskod;Skolkommun;Kommun-kod;Typ av huvudman;Huvudman\n"
+    "Lendahlsskolan F-3;11111111;Ale;1440;Kommunal;Ale kommun\n"
+    "Lendahlsskolan åk 4-6;22222222;Ale;1440;Kommunal;Ale kommun\n"
+    "Vasaskolan;33333333;Gävle;2180;Kommunal;Gävle kommun\n"
+    "Vasaskolan;44444444;Hedemora;2083;Enskild;Vasa AB\n"
+    "Katedralskolan;55555555;Stockholm;0180;Kommunal;Stockholms stad\n"
+    "Rapportbeskrivning och definitioner etc.\n"
+    "Rapporten visar antal elever per årskurs.\n"
+)
+GYMNASIESKOLA = (
+    "\ufeffStatistik från Skolverket, https://www.skolverket.se\n"
+    "\n"
+    "Gymnasieskola - Antal elever\n"
+    "Valt läsår: 2023/24\n"
+    "\n"
+    "\n"
+    "Skola;Skol-enhetskod;Skolkommun;Kommun-kod;Typ av huvudman;Huvudman\n"
+    "Ale gymnasium;17221836;Ale;1440;Kommunal;Ale kommun\n"
+    "Fria gymnasiet;66666666;Gävle;2180;Enskild;Fria AB\n"
+    "Naturbruk Sötåsen;77777777;Töreboda;1473;Landsting;Västra Götaland\n"
+    "Blackebergs gymnasium 52791537;52791537;Stockholm;0180;"
+    "Kommunal;Stockholms stad\n"
+    "Blackebergs gymnasium 85152591;85152591;Stockholm;0180;"
+    "Kommunal;Stockholms stad\n"
+)
+
+
+def write_export(directory, name, text):
+    """Write one register fixture into directory, and return its path."""
+    path = os.path.join(directory, name)
+    with open(path, "w", encoding="utf-8") as export:
+        export.write(text)
+    return path
+@
+
+Let us see both preambles skipped and the trailer left behind:
+
+<<lookup test functions>>=
+def test_the_header_is_found_wherever_the_preamble_ends():
+    with tempfile.TemporaryDirectory() as directory:
+        rows = read_export(
+            write_export(directory, "gymnasieskola-2023.csv",
+                         GYMNASIESKOLA))
+    assert len(rows) == 5
+    assert cell(rows[0], NAME_COLUMN) == "Ale gymnasium"
+
+
+def test_the_reports_trailing_prose_is_not_a_school():
+    with tempfile.TemporaryDirectory() as directory:
+        rows = read_export(
+            write_export(directory, "grundskola-2020.csv", GRUNDSKOLA))
+    assert len(rows) == 5
+    assert not any("Rapportbeskrivning" in cell(row, NAME_COLUMN)
+                   for row in rows)
+@
+
+\paragraph{Meeting the student's spelling}
+
+Two strings that name the same school are rarely the same string.
+The student types in a browser, and a browser on one operating system
+may send [[å]] as one code point and on another as an [[a]] followed by
+a combining ring, which compare unequal; composing both to the same
+normal form settles that before anything else does.
+Case and stray whitespace go the same way, and so does the punctuation
+that trails an answer someone ended with a full stop.
+
+<<normalise what students and the register write differently>>=
+def normalize(text):
+    """Return text in the form the register indexes are keyed on."""
+    text = unicodedata.normalize("NFC", text or "")
+    return re.sub(r"\s+", " ", text).strip(" .,;:-").casefold()
+@
+
+What remains is a difference of substance rather than spelling: the
+register names units, and a student names a school.
+A school with more than a few hundred pupils is usually several units
+split by the grades they teach, and the register writes the split into
+the name---\enquote{Lendahlsskolan F-3} and \enquote{Lendahlsskolan
+4-6}, \enquote{Kyrkebyskolan åk 7-9}, \enquote{Nossebro skola år
+0-5}---while the student writes \enquote{Lendahlsskolan}.
+This is not a rare shape: 15.7\% of the grundskola unit names across
+the mirrored years end in such a span, against three names in 12,944
+for gymnasieskola, which is why the problem shows up at the stages
+where the schools are big and the students are small.
+
+Cutting the span off and matching the base name merges the siblings,
+and that is only sound if siblings agree about their huvudman.
+Across all 23 mirrored files---75,232 unit-years---they always do, so
+the merge never has to choose (which is checked below rather than
+trusted).
+The pattern stretches a little to cover how the register writes the
+span, since \enquote{åk}, \enquote{år} and neither all occur in front
+of one, and it is anchored at the end so that a digit that is part of a
+name survives.
+The separator is the plain hyphen and only that: of the 11,282 dashes
+in the mirrored school names, every one is U+002D, so admitting the
+typographic dashes would widen the pattern against nothing.
+
+<<normalise what students and the register write differently>>=
+GRADE_SPAN = re.compile(
+    r"\s+(?:åk|år)?\s*(?:f|\d{1,2})\s*-\s*(?:åk|år)?\s*\d{1,2}\s*$",
+    re.IGNORECASE,
+)
+
+
+def normalize_school(name):
+    """Return the base name of a school, without its grade span."""
+    return normalize(GRADE_SPAN.sub("", (name or "").strip()))
+@
+
+The grade span is not the register's only way of writing a split into
+the name.
+Where a school is divided some other way---Stockholm's large municipal
+gymnasier above all---the register appends the unit's own code, and
+\enquote{Blackebergs gymnasium} appears three times over as
+\enquote{Blackebergs gymnasium 52791537} and its two siblings.
+This one we can remove exactly rather than recognise by shape, because
+the code we would be stripping is in the row we are stripping it from,
+which is why it is done here on the register's side and not in
+[[normalize_school]]: a student never writes a unit code, so the
+answer's side has nothing to strip.
+It is 0.5\% of the mirrored unit names in all---but 25 of the roughly
+1,300 gymnasium units of läsår 2023/24, and they are Stockholm's
+municipal ones, so leaving them unmatched would thin out exactly the
+group the analysis contrasts the friskolor against.
+
+<<normalise what students and the register write differently>>=
+def unit_name(row):
+    """Return a unit's school name without its own code appended.
+
+    The register disambiguates the units of one school by adding the
+    unit code to the name; students write the name alone.
+    """
+    name = cell(row, NAME_COLUMN)
+    code = cell(row, UNIT_COLUMN)
+    if code and name.endswith(" " + code):
+        name = name[: -len(code)].strip()
+    return name
+@
+
+The municipality needs less, and needs it in the other direction.
+Students write \enquote{Gävle kommun} or \enquote{Stockholms stad}
+where the register writes \enquote{Gävle} and \enquote{Stockholm}, so
+the trailing word comes off.
+That leaves the genitive [[s]] of \enquote{Stockholms stad} behind, and
+stemming it away is exactly what we must not do---it would turn
+\enquote{Höganäs} into \enquote{Höganä}.
+The register side is where the ambiguity is absent, so that is the side
+that gets the extra key: below, each municipality is indexed under its
+own name and under that name with an [[s]], which is safe because no
+Swedish municipality's name is another's plus an [[s]].
+
+<<normalise what students and the register write differently>>=
+KOMMUN_SUFFIXES = ("kommun", "stad")
+
+
+def normalize_kommun(name):
+    """Return a municipality name without a kommun or stad suffix."""
+    words = normalize(name).split()
+    if len(words) > 1 and words[-1] in KOMMUN_SUFFIXES:
+        words = words[:-1]
+    return " ".join(words)
+@
+
+<<lookup test functions>>=
+def test_a_grade_span_is_not_part_of_the_school_name():
+    assert normalize_school("Lendahlsskolan F-3") == "lendahlsskolan"
+    assert normalize_school("Lendahlsskolan åk 4-6") == "lendahlsskolan"
+    assert normalize_school("Nossebro skola år 0-5") == "nossebro skola"
+    assert normalize_school("Vasaskolan") == "vasaskolan"
+
+
+def test_a_number_that_is_part_of_the_name_survives():
+    assert normalize_school("Skolan 2000") == "skolan 2000"
+
+
+def test_a_municipality_may_be_written_with_its_suffix():
+    assert normalize_kommun("Gävle kommun") == "gävle"
+    assert normalize_kommun("Stockholms stad") == "stockholms"
+    assert normalize_kommun("Höganäs kommun") == "höganäs"
+@
+
+\paragraph{The index}
+
+An index maps the pair we can form from an answer---base name and
+municipality---to the huvudman.
+The pair is what makes the lookup possible at all: school names repeat
+across the country, and the name alone is ambiguous for about one
+grundskola unit in eleven, whereas the pair is unique.
+It stays unique after the grade spans come off, since collapsing
+siblings only ever merges units of one school in one municipality.
+
+Both of the register's disambiguators are gone by the time the key is
+built, so a group is every unit of one school in one municipality
+however that school was split.
+The merge is where a contradiction would hide, so it is checked rather
+than assumed: across the mirror it joins 3,076 such groups, and not one
+of them disagrees about its huvudman.
+A group whose units disagree about the huvudman is stored as [[None]],
+which the lookup reports as unsettled instead of picking one; and it
+says so on the way past, because a group like that means either the
+register or our pattern has changed, and both are worth knowing about.
+
+<<index one register export>>=
+def index_export(rows):
+    """Return {(school, municipality): huvudman} for one export.
+
+    Sibling units of one school share a base name and a municipality
+    and are merged.  A group whose units disagree about the huvudman
+    maps to None, which the lookup declines to resolve.
+    """
+    <<gather the huvudmän of each school>>
+    <<merge the units that agree, and warn about those that do not>>
+    <<index each municipality under its genitive too>>
+    return index
+@
+
+<<gather the huvudmän of each school>>=
+merged = collections.defaultdict(set)
+for row in rows:
+    key = (normalize_school(unit_name(row)),
+           normalize_kommun(cell(row, KOMMUN_COLUMN)))
+    merged[key].add(huvudman_token(cell(row, HUVUDMAN_COLUMN)))
+@
+
+<<merge the units that agree, and warn about those that do not>>=
+index = {}
+for (school, kommun), types in merged.items():
+    if len(types) == 1:
+        index[(school, kommun)] = next(iter(types))
+        continue
+    index[(school, kommun)] = None
+    print(f"warning: the units of {school!r} in {kommun!r} are under"
+          f" different huvudmän ({', '.join(sorted(types))});"
+          f" leaving that school to the coder")
+@
+
+The genitive keys are added afterwards and only where nothing is there
+already, so a municipality that really is named this way keeps its own
+entry.
+
+<<index each municipality under its genitive too>>=
+for (school, kommun), huvudman in list(index.items()):
+    index.setdefault((school, kommun + "s"), huvudman)
+@
+
+\paragraph{The register's vocabulary and ours}
+
+The register does not write its huvudman types the way we want to code
+them, and it has not written them the same way throughout: the
+gymnasium exports say \enquote{Landsting} up to läsår 2018/19 and
+\enquote{Region} from 2019/20, for the same twelve schools, because the
+landsting were renamed regions in 2020 and the register followed.
+A study that read the labels literally would find a school type
+appearing and another vanishing in the middle of its data, so the
+labels are mapped onto our tokens deliberately, and the old name and
+the new both land on [[region]].
+
+The table also holds tokens the two mirrored exports never produce.
+[[statlig]] belongs to specialskolan and sameskolan, which are separate
+school forms with their own exports; [[utlandsskola]] belongs to the
+Swedish schools abroad, which the register carries under a placeholder
+huvudman; and [[abroad]] is for schooling that was never Swedish.
+Those three are the coder's to apply, and they are listed here because
+the sheet's vocabulary is one vocabulary whether the register or the
+coder wrote the value.
+Komvux belongs in the same list: a municipality is the huvudman of its
+komvux by law even when the teaching is contracted out to Hermods or
+NTI (skollagen 23 kap.\ 2 §), so a komvux answer is [[kommunal]]
+regardless of whose name is over the door---and no lookup would find
+it, since komvux units are in neither export.
+
+<<the register's vocabulary and ours>>=
+UNKNOWN = "unknown"
+ABROAD = "abroad"
+HUVUDMAN_TOKENS = {
+    "kommunal": "kommunal",
+    "enskild": "enskild",
+    "region": "region",
+    "landsting": "region",
+    "statlig": "statlig",
+    "stat": "statlig",
+}
+
+
+def huvudman_token(value):
+    """Return the study's token for a register huvudman type."""
+    return HUVUDMAN_TOKENS.get(normalize(value), UNKNOWN)
+@
+
+<<lookup test functions>>=
+def test_the_registers_vocabulary_becomes_the_studys_tokens():
+    assert huvudman_token("Kommunal") == "kommunal"
+    assert huvudman_token("Enskild") == "enskild"
+    assert huvudman_token("Region") == "region"
+    assert huvudman_token("Landsting") == "region"
+    assert huvudman_token("") == UNKNOWN
+@
+
+Now the index itself, on the two cases it exists for.
+Siblings that agree must become one school, and a name borne by two
+municipalities must stay two schools:
+
+<<lookup test functions>>=
+def grundskola_index():
+    """Return the index of the grundskola fixture."""
+    with tempfile.TemporaryDirectory() as directory:
+        return index_export(read_export(
+            write_export(directory, "grundskola-2020.csv", GRUNDSKOLA)))
+
+
+def gymnasieskola_index():
+    """Return the index of the gymnasieskola fixture."""
+    with tempfile.TemporaryDirectory() as directory:
+        return index_export(read_export(write_export(
+            directory, "gymnasieskola-2023.csv", GYMNASIESKOLA)))
+
+
+def test_sibling_units_merge_into_one_school():
+    index = grundskola_index()
+    assert index[("lendahlsskolan", "ale")] == "kommunal"
+
+
+def test_a_namesake_is_told_apart_by_its_municipality():
+    index = grundskola_index()
+    assert index[("vasaskolan", "gävle")] == "kommunal"
+    assert index[("vasaskolan", "hedemora")] == "enskild"
+@
+
+The unit code the register appends to a name must go the same way, and
+the answer that carries neither code nor split must still land on the
+one school:
+
+<<lookup test functions>>=
+def test_an_appended_unit_code_is_not_part_of_the_school_name():
+    index = gymnasieskola_index()
+    assert index[("blackebergs gymnasium", "stockholm")] == "kommunal"
+    assert suggest("Blackebergs gymnasium, Stockholm", index) == (
+        "kommunal", "matched")
+
+
+def test_the_registers_own_vocabulary_of_types_survives_the_years():
+    index = gymnasieskola_index()
+    assert index[("naturbruk sötåsen", "töreboda")] == "region"
+@
+
+And the merge that must not happen quietly.
+The fixture gives one school two units under two huvudmän, which the
+register has never done, and the index must both say so and refuse to
+answer:
+
+<<register fixtures>>=
+CONTRADICTORY = (
+    "\ufeffStatistik från Skolverket, https://www.skolverket.se\n"
+    "\n"
+    "Grundskola - Antal elever per årskurs\n"
+    "Valt läsår: 2020/21\n"
+    "\n"
+    "Skola;Skol-enhetskod;Skolkommun;Kommun-kod;Typ av huvudman;Huvudman\n"
+    "Delade skolan F-6;88888888;Ale;1440;Kommunal;Ale kommun\n"
+    "Delade skolan 7-9;99999999;Ale;1440;Enskild;Delad AB\n"
+)
+<<lookup test functions>>=
+def test_siblings_under_different_huvudman_warn_instead_of_merging():
+    with tempfile.TemporaryDirectory() as directory:
+        rows = read_export(
+            write_export(directory, "grundskola-2020.csv", CONTRADICTORY))
+    warnings = io.StringIO()
+    with contextlib.redirect_stdout(warnings):
+        index = index_export(rows)
+    assert "warning" in warnings.getvalue()
+    assert index[("delade skolan", "ale")] is None
+    assert suggest("Delade skolan, Ale", index) == (UNKNOWN, "ambiguous")
+@
+
+\paragraph{Reading the answer}
+
+The item asks for the name and the municipality on one line, separated
+by a comma, and it is the \emph{rightmost} comma that separates them: a
+school called \enquote{Sjölins Gymnasium, Södermalm} keeps its comma,
+and splitting on the first one would hand us a municipality called
+\enquote{Södermalm}.
+An answer without a comma is all name and no place, which is what the
+lookup then has to work with.
+
+<<read one school answer>>=
+def parse_answer(answer):
+    """Split a school answer into its school and its place.
+
+    The rightmost comma separates them, so a school whose own name
+    contains one survives; an answer without a comma is all school.
+    """
+    text = " ".join((answer or "").split())
+    school, _, place = text.rpartition(",")
+    return (school.strip(), place.strip()) if school else (text, "")
+@
+
+The stems tell students who went to school outside Sweden to write the
+country where the municipality would go, and those answers have no
+huvudman to find---the register covers Sweden.
+Recognising them is the one place this program uses a list it cannot
+finish, and it is arranged so that being unfinished cannot do harm.
+A place we recognise as a country is coded [[abroad]]; a place we do
+not recognise is [[unknown]] and appears in the run's summary, which is
+where the coder is looking anyway.
+So the list only ever saves the coder work---it can turn an
+[[unknown]] into an [[abroad]], never a school into a country.
+\enquote{Sverige} is deliberately absent for the same reason: a student
+who writes it has given us no municipality, and that is a case for the
+coder rather than one to guess at.
+
+<<read one school answer>>=
+COUNTRIES = {
+    "afghanistan", "australia", "australien", "bangladesh", "belgien",
+    "bosnien", "brasilien", "canada", "chile", "china", "danmark",
+    "denmark", "england", "eritrea", "estland", "etiopien", "finland",
+    "france", "frankrike", "germany", "greece", "grekland", "india",
+    "indien", "irak", "iran", "iraq", "ireland", "irland", "island",
+    "italien", "italy", "japan", "kanada", "kina", "kosovo",
+    "kroatien", "lettland", "libanon", "litauen", "nederländerna",
+    "netherlands", "norge", "norway", "pakistan", "polen", "poland",
+    "rumänien", "russia", "ryssland", "schweiz", "scotland", "serbien",
+    "somalia", "spain", "spanien", "storbritannien", "switzerland",
+    "syria", "syrien", "thailand", "turkey", "turkiet", "tyskland",
+    "ukraina", "ukraine", "ungern", "usa", "vietnam", "österrike",
+}
+@
+
+The lookup returns the token and, beside it, how it arrived at that
+token.
+The two are not the same thing: [[unknown]] is what an empty answer,
+an unrecognised school and a contradictory register all produce, and
+the summary has to tell them apart even though the sheet should not.
+
+<<suggest the huvudman for one answer>>=
+def suggest(answer, index):
+    """Return the huvudman token for one answer, and how it was found."""
+    school, place = parse_answer(answer)
+    if not school:
+        return UNKNOWN, "blank"
+    if normalize(place or school) in COUNTRIES:
+        return ABROAD, "abroad"
+    key = (normalize_school(school), normalize_kommun(place))
+    if key not in index:
+        return UNKNOWN, "unmatched"
+    if index[key] is None:
+        return UNKNOWN, "ambiguous"
+    return index[key], "matched"
+@
+
+<<lookup test functions>>=
+def test_a_school_is_looked_up_by_its_name_and_municipality():
+    index = grundskola_index()
+    assert suggest("Vasaskolan, Gävle", index) == ("kommunal", "matched")
+    assert suggest("Vasaskolan, Hedemora", index) == ("enskild", "matched")
+    assert suggest("Lendahlsskolan, Ale", index) == ("kommunal", "matched")
+
+
+def test_the_municipality_may_carry_its_suffix_or_its_genitive():
+    index = grundskola_index()
+    assert suggest("Vasaskolan, Gävle kommun", index)[0] == "kommunal"
+    assert suggest("Katedralskolan, Stockholms stad", index)[0] == "kommunal"
+
+
+def test_a_country_is_schooling_abroad():
+    index = grundskola_index()
+    assert suggest("Deutsche Schule, Tyskland", index) == (ABROAD, "abroad")
+    assert suggest("Finland", index) == (ABROAD, "abroad")
+
+
+def test_a_blank_answer_is_unknown_rather_than_missing():
+    index = grundskola_index()
+    assert suggest("", index) == (UNKNOWN, "blank")
+    assert suggest("   ", index) == (UNKNOWN, "blank")
+
+
+def test_a_school_the_register_does_not_have_is_left_unmatched():
+    index = grundskola_index()
+    assert suggest("Ingenstansskolan, Ale", index) == (UNKNOWN, "unmatched")
+@
+
+\paragraph{Loading a register for each stage}
+
+Each stage names the export it wants, and the loader gives it the
+mirrored year nearest to that---the year itself when we have it, and
+the closest one otherwise, so that a student outside the nominal
+cohort is still looked up somewhere rather than nowhere.
+Two stages may land in the same file, and it is read once: the
+grundskola exports run to half a megabyte apiece, and re-parsing one
+per stage would be work done for nothing.
+An empty directory is fatal rather than silently unmatched, because
+every answer would come out [[unknown]] and the summary would look
+exactly like a cohort that went to school abroad.
+
+<<load the register each stage needs>>=
+def load_registers(directory=REGISTER_DIRECTORY):
+    """Return {stage: (index, year)} for the four school stages."""
+    registers, parsed = {}, {}
+    for stage in SCHOOL_STAGES:
+        form, wanted = STAGE_REGISTERS[stage]
+        year = nearest_year(form, wanted, directory)
+        path = os.path.join(directory, f"{form}-{year}.csv")
+        if path not in parsed:
+            parsed[path] = index_export(read_export(path))
+        registers[stage] = (parsed[path], year)
+    return registers
+
+
+def nearest_year(form, wanted, directory):
+    """Return the mirrored läsår of form closest to wanted."""
+    years = []
+    for path in glob.glob(os.path.join(directory, f"{form}-*.csv")):
+        year = os.path.splitext(os.path.basename(path))[0].rsplit("-", 1)[-1]
+        if year.isdigit():
+            years.append(int(year))
+    if not years:
+        sys.exit(f"no {form} exports in {directory}/;"
+                 f" run `make skolenheter' to mirror them")
+    return min(years, key=lambda year: (abs(year - wanted), year))
+@
+
+\paragraph{Filling in the sheet}
+
+Filling the sheet is a walk over the rows and, within each, over the
+four stages paired with the item they read and the column they write.
+The three lists are the ones derived from the stage names in
+\cref{app:quiz-analysis}, so they are the same length and in the same
+order by construction rather than by care.
+The counts come back keyed by stage and outcome, and the answers that
+matched nothing come back in full, since those are what the coder has
+to look up by hand and a count of them would not help.
+
+<<fill in the suggested columns>>=
+def fill_sheet(rows, registers):
+    """Fill the suggested huvudman columns; return what happened."""
+    outcomes = collections.Counter()
+    unmatched = collections.Counter()
+    for row in rows:
+        for stage, item, column in zip(SCHOOL_STAGES, STAGE_ITEMS,
+                                       SUGGESTED_HUVUDMAN):
+            answer = row.get(item, "")
+            token, outcome = suggest(answer, registers[stage][0])
+            row[column] = token
+            outcomes[(stage, outcome)] += 1
+            if outcome == "unmatched":
+                unmatched[(stage, " ".join(answer.split()))] += 1
+    return outcomes, unmatched
+@
+
+<<lookup test functions>>=
+def test_every_stage_gets_a_suggestion_from_its_own_register():
+    with tempfile.TemporaryDirectory() as directory:
+        write_export(directory, "grundskola-2020.csv", GRUNDSKOLA)
+        write_export(directory, "gymnasieskola-2023.csv", GYMNASIESKOLA)
+        registers = load_registers(directory)
+        row = {"School: lågstadiet": "Lendahlsskolan, Ale",
+               "School: mellanstadiet": "Vasaskolan, Hedemora",
+               "School: högstadiet": "",
+               "School: gymnasiet": "Fria gymnasiet, Gävle"}
+        outcomes, unmatched = fill_sheet([row], registers)
+    assert row["suggested_huvudman: lågstadiet"] == "kommunal"
+    assert row["suggested_huvudman: mellanstadiet"] == "enskild"
+    assert row["suggested_huvudman: högstadiet"] == UNKNOWN
+    assert row["suggested_huvudman: gymnasiet"] == "enskild"
+    assert outcomes[("gymnasiet", "matched")] == 1
+    assert not unmatched
+@
+
+The three grundskola stages want läsår 2014, 2017 and 2020 and this
+fixture directory has only 2020, so the fallback is what the test above
+already relied on; let us see it state which year it settled for:
+
+<<lookup test functions>>=
+def test_a_stage_falls_back_to_the_nearest_mirrored_year():
+    with tempfile.TemporaryDirectory() as directory:
+        write_export(directory, "grundskola-2016.csv", GRUNDSKOLA)
+        write_export(directory, "grundskola-2020.csv", GRUNDSKOLA)
+        write_export(directory, "gymnasieskola-2023.csv", GYMNASIESKOLA)
+        registers = load_registers(directory)
+    assert registers["lågstadiet"][1] == 2016
+    assert registers["mellanstadiet"][1] == 2016
+    assert registers["högstadiet"][1] == 2020
+    assert registers["gymnasiet"][1] == 2023
+@
+
+\paragraph{Saying what was and was not settled}
+
+The summary is the handover to the coder.
+It says which register year each stage was read from, so that a stage
+answered from a file four years off is visible rather than implied;
+it counts the outcomes; and it prints the unmatched answers themselves.
+
+Those are the ones for the bitemporal fallback, which is a manual
+route and stays one.
+Skolenhetsregistret's current API keeps units that have closed and
+answers as of a date: a [[GET]] of
+[[/skolenhetsregistret/v2/school-units/<code>]] with
+[[?search_date=YYYY-MM-DD]] returns the unit as it stood then, back to
+2013-10-01.
+It has no name search, though, so it can only be reached from a unit
+code---which is precisely what an unmatched answer does not give us.
+Automating it would mean guessing the code we failed to find, so the
+program stops at naming the answers a person should go and look up.
+
+<<report what the lookup settled>>=
+OUTCOMES = ("matched", "abroad", "ambiguous", "unmatched", "blank")
+
+
+def report(outcomes, unmatched, registers):
+    """Print what the lookup settled, and what it left for the coder."""
+    for stage in SCHOOL_STAGES:
+        form, _ = STAGE_REGISTERS[stage]
+        counts = ", ".join(
+            f"{outcomes[(stage, outcome)]} {outcome}"
+            for outcome in OUTCOMES if outcomes[(stage, outcome)]
+        )
+        print(f"{stage} (from {form} {registers[stage][1]}):"
+              f" {counts or 'nothing to look up'}")
+    if not unmatched:
+        return
+    print("\nnot found in the register; look these up by hand:")
+    for (stage, answer), count in unmatched.most_common():
+        print(f"  {stage}: {answer!r}" + (f" (x{count})" if count > 1 else ""))
+@
+
+\paragraph{Running it}
+
+The sheet is rewritten in place by default, because the suggested
+columns are the only ones written and the coder's work sits in the
+others; an [[--output]] is there for anyone who would rather keep the
+original.
+A sheet from before these columns existed is filled all the same---the
+columns are appended where they are missing---so an early coding run is
+not lost by adding the lookup to it.
+
+<<the lookup main>>=
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--sheet", default="quiz-coding-sheet.csv",
+                        help="the coding sheet to fill in")
+    parser.add_argument("--registers", default=REGISTER_DIRECTORY,
+                        help="directory of mirrored register exports")
+    parser.add_argument("--output",
+                        help="write here instead of over the sheet")
+    args = parser.parse_args()
+
+    with open(args.sheet, newline="") as sheet:
+        reader = csv.DictReader(sheet)
+        rows, fields = list(reader), list(reader.fieldnames or [])
+    if not rows:
+        sys.exit(f"{args.sheet} has no rows")
+
+    registers = load_registers(args.registers)
+    outcomes, unmatched = fill_sheet(rows, registers)
+    fields += [column for column in SUGGESTED_HUVUDMAN
+               if column not in fields]
+    with open(args.output or args.sheet, "w", newline="") as out:
+        writer = csv.DictWriter(out, fieldnames=fields, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(rows)
+    report(outcomes, unmatched, registers)
 @

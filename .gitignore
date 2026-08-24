@@ -41,6 +41,8 @@ quiz-knowledge-start.json
 quiz-knowledge-end.json
 analyze_quiz.py
 test_analyze_quiz.py
+lookup_schools.py
+test_lookup_schools.py
 analyze_episodes.py
 make_rspq.py
 analyze_rspq.py
