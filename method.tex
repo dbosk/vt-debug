@@ -976,13 +976,35 @@ correspond to the patterns in the students' reasoning.
 \label{ethics}
 
 Participation in the study is opt-in and requires informed consent; the
-students' grades are unaffected by participation, and the logs are collected
+students' grades are unaffected by participation, and the data is collected
 and analysed pseudonymously.
 (The consent item opens the background quiz, \cref{app:quiz}, an
 arrangement kept from the course's earlier diagnostic tests.)
+That one consent covers every source of student data the study has: the
+background quiz itself, school questions included
+(\cref{prior-knowledge}); the debugging quiz at the start and the end
+(\cref{prior-knowledge,end-measure}); both administrations of the
+R-SPQ-2F (\cref{approach-measure,app:rspq}); the learnlog data
+(\cref{learnlog-data}); the course-material use recorded by the learning
+platform and the interactive material (\cref{material-use}); and being
+asked about the think-aloud sessions (\cref{think-aloud}).
+The companion study's concept quizzes run in the same course under a
+consent item of their own, in the same wording; each study filters its
+extraction by the consent its own instrument collected.
 The learnlog data contains the students' source code and program
 interactions, but no more than what the students already submit with their
-lab solutions.
+lab solutions; it is, however, collected continuously, so it may catch
+self-study runs and not only lab work, and the students are told exactly
+what it records before they consent.
+The think-aloud subsample is asked separately and recorded only with
+explicit consent; the recordings are the most identifiable data the study
+holds, they are never published, and quotations from the transcripts are
+published only anonymised.
+The teachers and teaching assistants of the baseline
+(\cref{teacher-baseline}) are participants in their own right: they
+consent separately, declining has no bearing on their duties, and their
+data is pseudonymised like the students'.
+The agent episodes (\cref{teacher-baseline}) contain no personal data.
 The school questions (\cref{prior-knowledge}) collect personal data of a
 further kind---where a student went to school---under the same consent as
 the rest of the background quiz, and pseudonymously like everything else.
@@ -990,5 +1012,16 @@ The school names serve only the register lookup: once the huvudman type of
 each stage has been determined and verified (\cref{school-lookup}), it is
 the type that enters the analysis data, and the names and municipalities
 stay in the coding sheet.
-% XXX(#10) Ethical review application for prgi26 data collection: reference number
-% and details to be added.
+The analyses identify students by login ID rather than by name
+(\cref{app:student-identity}), and the coding sheet is the only place the
+name and the pseudonymised data meet; the open answers are pre-coded by a
+language model into columns of their own before a human coder verifies
+them (\cref{app:quiz-analysis}), and no answer is sent to such a model
+before the processing terms are settled in the review below.
+An application for ethical review of the course's data collection has
+been drafted (the working draft accompanies this paper's source as
+\texttt{ethics-application-prgi26.md}) but not yet filed; no collected
+data is used for research before the review is decided.
+% XXX(#10) Ethical review application for the prgi26 data collection:
+% drafted (ethics-application-prgi26.md), not yet filed; add the
+% reference number and its terms once decided.
