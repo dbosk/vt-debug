@@ -308,10 +308,22 @@ cannot share.
 A name can be shared, even here where there is only one course; the
 login ID cannot, which is why the quiz program attaches it and why we
 ask that program rather than read the name column ourselves.
+The file also holds consenting students only: the consent lives in
+the background quiz (\cref{ethics}), so the program fetches that
+report first and filters both administrations through the quiz
+program's own filter (\cref{app:consent-filter})---the same
+functions, so the two programs cannot disagree about who consented.
 
 <<write the rspq csv>>=
 def write_rspq(filename):
-    """Fetch both administrations and write the rspq.csv file."""
+    """Fetch both administrations and write the rspq.csv file.
+
+    Only rows of students who consented in the background quiz are
+    written.
+    """
+    consent = analyze_quiz.consenting(
+        analyze_quiz.fetch_report(analyze_quiz.QUIZ_TITLES["background"])
+    )
     fieldnames = ["student", "administration"] + [
         f"item{number}" for number in range(1, 21)
     ]
@@ -319,7 +331,10 @@ def write_rspq(filename):
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
         writer.writeheader()
         for which, title in SURVEY_TITLES.items():
-            for row in analyze_quiz.fetch_report(title):
+            rows = analyze_quiz.filter_consent(
+                analyze_quiz.fetch_report(title), consent
+            )
+            for row in rows:
                 student = analyze_quiz.student_of(row)
                 mapped = answers(row)
                 if mapped is None:

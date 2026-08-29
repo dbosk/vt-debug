@@ -825,7 +825,9 @@ answer to show is put in front of neither the coder nor the model.
 The quizzes are defined in quiz-background.json and the two
 quiz-knowledge-*.json files; all four files are tangled from the same
 literate source (the appendix of the paper).  The results come straight
-from Canvas via canvaslms; the item titles are the column keys.
+from Canvas via canvaslms; the item titles are the column keys.  Only
+rows of students who answered yes to the consent item of the
+background quiz are kept.
 
 Requires canvaslms (and its configured credentials); the --llm option
 additionally requires the llm package with a configured model.
@@ -842,6 +844,7 @@ import sys
 <<the course and the item titles are the keys>>
 <<fetch the results from Canvas>>
 <<attach the login IDs>>
+<<the consent filter>>
 <<tabulate the closed items>>
 <<pre-code the open answers with an LLM>>
 <<write the coding sheet>>
@@ -885,7 +888,8 @@ QUIZ_TITLES = {
     "end": "Debugging quiz: what you know now",
 }
 STUDENT = "name"
-CLOSED_ITEMS = ["Consent", "How you learned", "Confidence", "Preparation"]
+CONSENT = "Consent"
+CLOSED_ITEMS = [CONSENT, "How you learned", "Confidence", "Preparation"]
 CODED_OPEN_ITEMS = ["Previous programming", "Debugging exercise"]
 SCHOOL_STAGES = ["lågstadiet", "mellanstadiet", "högstadiet", "gymnasiet"]
 STAGE_ITEMS = [f"School: {stage}" for stage in SCHOOL_STAGES]
@@ -1222,6 +1226,61 @@ def test_an_unreadable_roster_warns_and_keeps_the_rows():
     assert student_of(rows[0]) == f"{COURSE}/Bo Berg"
 @
 
+\subsubsection{Consent}
+\label{app:consent-filter}
+
+Consent is asked once, at the head of the background quiz, and covers
+all the study's instruments (\cref{ethics}); only the background
+report carries the [[Consent]] column, so analysing the debugging
+quizzes needs the background report's consent set.
+The set is keyed by [[student_of]] like every other join, and
+[[None]] is distinct from the empty set on purpose: nobody consenting
+must filter everything, while the item being absent means there is
+nothing to filter by, which the caller announces rather than guessing
+silently in either direction.
+
+<<the consent filter>>=
+def consenting(rows):
+    """Return the students who answered yes, or None without the column."""
+    if not rows:
+        return None
+    column = column_for(CONSENT, rows[0].keys())
+    if column is None:
+        return None
+    return {student_of(row) for row in rows
+            if (row[column] or "").strip().lower() in ("yes", "true")}
+
+
+def filter_consent(rows, students):
+    """Keep the rows of the consenting students; None keeps every row."""
+    if students is None:
+        print("note: no consent answers to filter by; keeping every row")
+        return rows
+    return [row for row in rows if student_of(row) in students]
+@
+
+The distinction between an empty set and no set is the part worth
+pinning down with a test:
+
+<<test functions>>=
+def test_the_consent_set_holds_exactly_the_yes_answers():
+    rows = [{STUDENT: "Ann", LOGIN_COLUMN: "ann@kth.se",
+             "1: Consent": "Yes"},
+            {STUDENT: "Bo", LOGIN_COLUMN: "bo@kth.se",
+             "1: Consent": "No"}]
+    assert consenting(rows) == {"ann@kth.se"}
+    assert filter_consent(rows, consenting(rows)) == rows[:1]
+
+
+def test_rows_without_a_consent_item_filter_nothing_but_say_so():
+    rows = [{STUDENT: "Ann", "1: Item 01": "Only rarely"}]
+    notes = io.StringIO()
+    with contextlib.redirect_stdout(notes):
+        kept = filter_consent(rows, consenting(rows))
+    assert kept == rows
+    assert "note" in notes.getvalue()
+@
+
 \subsubsection{Summaries and the coding sheet}
 
 Tabulating a closed item is counting its answer frequencies; we print
@@ -1370,9 +1429,21 @@ def test_the_coding_sheet_carries_the_login_beside_the_name():
 @
 
 The main function ties the pieces together: fetch (or read) the
-report, tabulate and summarise, and---for the background quiz, whose
-open items are the ones that get coded---pre-code if asked to and write
-the sheet.
+report, keep the consenting students' rows, tabulate and summarise,
+and---for the background quiz, whose open items are the ones that get
+coded---pre-code if asked to and write the sheet.
+The background report carries the consent item, so its own rows
+answer who consented; for the debugging quizzes the set comes from
+the background report, fetched by default or read from a saved copy
+with [[--consent-from]].
+The option is not mere convenience: a saved report has no login
+column, so its rows key by course and name
+(\cref{app:student-identity}), and a consent set keyed by fetched
+login IDs would match none of them---the two reports have to come the
+same way for the join to be a join.
+If every row is filtered away, the program says so and stops, since
+each summary below would otherwise report an empty cohort as if it
+were a finding.
 
 <<analysis main>>=
 def main():
@@ -1381,6 +1452,9 @@ def main():
                         help="which quiz to analyse")
     parser.add_argument("--results",
                         help="read this CSV instead of fetching from Canvas")
+    parser.add_argument("--consent-from",
+                        help="saved background report to read the consent"
+                             " set from (default: fetch the background quiz)")
     parser.add_argument("--llm", action="store_true",
                         help="pre-code the open answers with an LLM")
     parser.add_argument("--coding-sheet", default="quiz-coding-sheet.csv",
@@ -1395,6 +1469,13 @@ def main():
     if not rows:
         sys.exit("no responses")
 
+    students = consenting(rows)
+    if students is None:
+        <<derive the consent set from the background report>>
+    rows = filter_consent(rows, students)
+    if not rows:
+        sys.exit("no consenting students")
+
     print(f"{len(rows)} students")
     for item in CLOSED_ITEMS:
         tabulate(rows, item)
@@ -1403,6 +1484,24 @@ def main():
         suggestions = llm_precode(rows) if args.llm else None
         write_coding_sheet(rows, args.coding_sheet, suggestions)
         print(f"\ncoding sheet written to {args.coding_sheet}")
+@
+
+A failed fetch of the background report is a reason to warn and keep
+every row, not to stop: the summaries are still meaningful, only the
+research extraction is not, and [[filter_consent]] announces exactly
+that.
+
+<<derive the consent set from the background report>>=
+if args.consent_from:
+    with open(args.consent_from, newline="") as infile:
+        students = consenting(list(csv.DictReader(infile)))
+else:
+    try:
+        students = consenting(fetch_report(QUIZ_TITLES["background"]))
+    except Exception as error:
+        print(f"warning: cannot fetch the background report for"
+              f" the consent set: {error}")
+        students = None
 @
 
 The test file gets an entry point of its own, so that

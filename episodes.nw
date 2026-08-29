@@ -46,6 +46,11 @@ The one exception is a row the quiz program read back from a saved
 report, which carries the course-and-name fallback of
 \cref{app:student-identity} instead---visibly not a login ID, and so
 visibly unjoined.
+All three files hold consenting students only (\cref{ethics}):
+[[rspq.csv]] by construction, filtered through the quiz program's
+consent filter (\cref{app:consent-filter}), and the two hand-written
+files by the coders, who extract episodes and classifications from
+the consenting students' data alone.
 
 The extraction of [[rspq.csv]] is automated the same way as the quiz
 results: the two R-SPQ-2F administrations are Canvas surveys, and the
