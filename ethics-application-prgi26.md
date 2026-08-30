@@ -368,7 +368,9 @@ been taken.*
 
 ## 13. To do before filing
 
-- [ ] Confirm portal and form (Ethical Review Authority via Prisma, or KTH
+- [ ] Confirm route and form (Ethical Review Authority via Ethix,
+      etikprovningsansokan.se — BankID-signed by the PI and an authorized
+      representative of KTH — or KTH
       internal route) — depends on §12.
 - [ ] Translate to Swedish.
 - [ ] Write the participant information sheet (student + staff variants,
