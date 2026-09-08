@@ -71,9 +71,9 @@ The debugging study's research questions (verbatim):
 - (RQ5) Do students who have experienced the course material's patterns of
   variation generate more, and more complete, patterns of variation in their
   debugging than students who study on their own?
-- (RQ6) How does the type of principal (*huvudman*) of the schools a student
-  attended before the course relate to the approach to learning they bring to
-  it, and to how they fare in it?
+- (RQ6) How do the schools a student attended before the course — their
+  type of principal (*huvudman*), and the schools themselves — relate to the
+  approach to learning they bring to it, and to how they fare in it?
 - Methodological: (MQ1) Do the patterns of variation coded from the recorded
   edit–run cycles correspond to the patterns in the debugger's reasoning?
   (MQ2) Do the different classifications of the students' approaches to
@@ -128,17 +128,21 @@ Chronologically:
 10. **Register lookup** (RQ6): each student-supplied school name and
     municipality is looked up in locally mirrored yearly exports of
     Skolverket's school-unit register to determine the school's *huvudman*
-    type (municipal/independent) per stage. Only the huvudman type enters the
-    analysis data; the school names and municipalities stay in the coding
-    sheet. No student data is sent anywhere for the lookup — the register
-    mirrors are local files.
+    type (municipal/independent) per stage and the school unit itself. What
+    enters the analysis data is the huvudman type per stage and a
+    pseudonymous code per school unit, so that classes of schools and, where
+    enough students attended the same school, individual schools can be
+    compared; the school names and municipalities, and the key from code to
+    unit, stay in the coding sheet. No student data is sent anywhere for the
+    lookup — the register mirrors are local files.
 
 The teaching is the course's ordinary teaching and is **not varied or
 manipulated for research purposes**.
 
 Analysis: debugging episodes are segmented from the learnlog data and coded
 for patterns of variation; think-aloud recordings validate the coding (MQ1);
-R-SPQ-2F scores, quiz scores and huvudman types enter statistical comparisons;
+R-SPQ-2F scores, quiz scores, huvudman types and school codes enter
+statistical comparisons;
 free-text answers are coded by hand, with a language model drafting suggested
 codes in separate columns, always human-verified (§7). The two studies' data
 are joined on the pseudonym key (login ID); each study's analysis filters by
@@ -169,7 +173,7 @@ the consent its own instrument collected (§6).
 | Source | Content | Personal-data category | Identifiers | Pseudonymisation | Retention |
 |---|---|---|---|---|---|
 | Background quiz | experience, confidence, open debugging exercise (free text) | ordinary | platform name + login ID | analysis keys on login ID; name only in coding sheet | archived securely for at least 10 years (KTH's rule, in the wording of KTH's consent template) |
-| School-background items | school name + municipality per stage, gymnasieprogram, basår (all optional) | ordinary, but a socio-economic proxy (see §5c, §9) | as above | names/municipalities stay in the coding sheet; only huvudman type enters analysis | as above |
+| School-background items | school name + municipality per stage, gymnasieprogram, basår (all optional) | ordinary, but a socio-economic proxy (see §5c, §9) | as above | names/municipalities and the school key stay in the coding sheet; huvudman type and a pseudonymous school code enter analysis | as above |
 | Concept diagnostics (16 quizzes) | chosen alternatives, scores | ordinary (study performance) | as above | login ID key | as above |
 | Debugging quizzes | answers, scores | ordinary (study performance) | as above | login ID key | as above |
 | R-SPQ-2F (twice) | 20 Likert items per administration | ordinary (learning approach; not a clinical instrument) | as above | login ID key | as above |
@@ -193,10 +197,14 @@ Explicit statements:
   identifiable and stay in the coding sheet, the only place they meet the
   data. The school-background answers, in combination, could indirectly
   identify a student with an unusual school path; this is why the raw names
-  and municipalities never leave the coding sheet and only the per-stage
-  huvudman type (a binary/ternary category) enters the analysis. The
-  think-aloud subsample is small; its reporting is aggregate and quotes are
-  anonymised.
+  and municipalities never leave the coding sheet. The analysis data carries
+  the per-stage huvudman type and a pseudonymous school code, which together
+  with the other columns could still single out such a student inside the
+  analysis data — data that is itself pseudonymised and access-restricted
+  (§7). No school is named in anything published; results for single
+  schools are reported, if at all, under their codes and only for schools
+  that at least five students of the cohort attended. The think-aloud
+  subsample is small; its reporting is aggregate and quotes are anonymised.
 
 ## 6. Consent procedure and non-participation
 
@@ -320,8 +328,10 @@ Risks:
   opt-in.
 - *Identifiability in small subsamples:* the think-aloud and staff groups are
   small; reporting is aggregate and quotes anonymised.
-- *School-background re-identification:* mitigated by keeping names and
-  municipalities in the coding sheet and analysing only huvudman type (§5c);
+- *School-background re-identification:* mitigated by keeping names,
+  municipalities and the school key in the coding sheet, analysing schools
+  under pseudonymous codes, and reporting them only as classes of schools
+  or, for single schools, anonymised and above a minimum group size (§5c);
   every school item is individually optional.
 - *Incidental disclosure* in free text, program output, or recordings
   (redaction rule, §5b).
@@ -342,6 +352,9 @@ logging and the recordings are the points a reviewer should weigh most.
 
 - Results are reported in aggregate; free-text answers, commit content and
   transcript excerpts are quoted only anonymised.
+- Schools are never named; school-level results appear only as classes of
+  schools (huvudman type, programme, basår) or, for single schools, under
+  pseudonymous codes and only for groups of at least five students.
 - Recordings (audio/video) are never published.
 - The course and institution are anonymised in the published papers before
   submission (tracked as vt-debug#6).
