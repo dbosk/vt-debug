@@ -64,7 +64,11 @@ Att samtycka innebär att följande får användas i forskningen:
 -   **Skolbakgrund:** om du valt att ange skolor och kommuner slår vi
     upp dem i Skolverkets skolenhetsregister för att avgöra om skolan
     var kommunal eller fristående. Uppslagningen görs i en lokal kopia
-    av registret, så inga uppgifter om dig skickas någonstans.
+    av registret, så inga uppgifter om dig skickas någonstans. Skolorna
+    anonymiseras i analysen: varje skola får en kod, och resultat för
+    enskilda skolor redovisas bara om minst fem studenter gått där,
+    aldrig med skolans namn. Skolnamn och kommuner stannar i
+    kodningsfilen.
 -   **Tänka-högt-sessioner:** ett mindre antal frivilliga bjuds in till
     inspelade sessioner (Zoom med ljud och bild, plus learnlog) där man
     felsöker och samtidigt berättar högt vad man tänker. De sker bara om
