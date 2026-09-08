@@ -8,8 +8,8 @@ collection and the basis for the participant information
 `participant-information-prgi26-staff.md`, §11). It was drafted as a review
 application, which is why it keeps an application's structure.
 
-**Language:** English; the participant information is in Swedish and
-English.
+**Language:** English; the student information sheet is in Swedish (the
+teacher's reviewed wording), the staff sheet in Swedish and English.
 
 **Covers the data collection behind:** the companion papers
 [dbosk/vt-debug](https://github.com/dbosk/vt-debug) (debugging study) and
@@ -351,8 +351,9 @@ logging and the recordings are the points a reviewer should weigh most.
 ## 11. Accompanying documents
 
 1. Participant information sheets — `participant-information-prgi26.md`
-   (students; Swedish and English; published as a Canvas page in the course
-   and linked from the consent item) and
+   (students; Swedish, as reviewed by the teacher in Canvas; a Canvas page in
+   the course, placed right before the consent quiz and linked from the
+   consent item) and
    `participant-information-prgi26-staff.md` (teachers and TAs of the
    expert baseline; handed over as a file). Both are synchronised copies in
    the two repositories, built to KTH's recipe (§12): the purpose of the
