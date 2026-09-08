@@ -226,8 +226,14 @@ do with the debugging items numbered from eleven below
 <<item: preparatory year>>
 @
 
-% XXX(#10) The consent wording must follow the approved ethics
-% application; update it when the application is decided.
+The wording is the fuller one of the ethics assessment (\cref{ethics}):
+it names every source the study uses---the quizzes and questionnaires,
+the submissions, the programming logs and the platform activity---so
+that the consent covers what is actually collected, and it links the
+participant information page, which describes what learnlog records and
+when, so that the consent is informed in the GDPR's sense.
+The companion study's course-level concept quiz opens with the same
+item, so a student who has answered one recognises the next.
 
 <<item: consent>>=
 {
@@ -235,7 +241,7 @@ do with the debugging items numbered from eleven below
   "points_possible": 0,
   "entry": {
     "title": "Consent",
-    "item_body": "<p>I consent to my answers in these quizzes, and my submissions in the course, being used pseudonymised in computing education research. My participation does not affect my grade.</p>",
+    "item_body": "<p>I consent to my answers in the course's quizzes and questionnaires, my course submissions, the logs of my programming work that the course's tools record, and my activity in the course's learning platform, being used pseudonymised in computing education research. Recorded sessions happen only if I separately agree to them. My participation is voluntary, does not affect my grade, and I can withdraw at any time by contacting the responsible researcher. I have read <a href='https://canvas.kth.se/courses/63874/pages/information-om-forskningsstudien'>the information page about the study</a>.</p>",
     "interaction_type_slug": "true-false",
     "interaction_data": {"true_choice": "Yes", "false_choice": "No"},
     "scoring_data": {"value": true},
