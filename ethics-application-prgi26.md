@@ -451,7 +451,8 @@ kept in the PI's mailbox, not in the repository.*
       the background quiz and the course-level concept quiz with the new
       consent item; hand the staff sheet to the teachers and TAs.
 - [ ] Consent form for the recorded sessions (students and staff): adapt
-      KTH's template.
+      KTH's template — *deferred 2026-09-08: recordings will most likely not
+      happen; worked out if and when they do.*
 - [ ] Fill the remaining [TO FILL] placeholders: department, personnel,
       expected N, storage systems, hosting for the learnlog repositories.
 - [ ] Confirm FeedbackFruits research export and Zoom recording terms (§7).
