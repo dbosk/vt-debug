@@ -1,11 +1,11 @@
 ---
 title: Information om forskningsstudien
 regex: ^Information om forskningsstudien$
-published: true
 front_page: false
 editing_roles: teachers
 modules:
-- module: ^Översikt$
+- module: ^Översikt Python-delen$
+  position: 3
 ---
 ## Information till dig som deltar i forskningsstudien i programmeringskursen
 
