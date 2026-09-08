@@ -40,6 +40,21 @@ The quiz titles name debugging explicitly, since the companion study's
 concept quizzes run in the same course and the two sets must stay
 distinguishable for students and analysis alike.
 
+The descriptions also place the quizzes in the course's modules: the
+[[modules]] entry names a module by a regular expression, the position
+in it, and what completes the item, and [[canvaslms]] places the quiz
+there once it is created.
+The background quiz and the start-of-course debugging quiz close the
+module that introduces the Python part of the course, together with
+the start-of-course questionnaire of \cref{app:rspq}; every later
+Python module requires that module, so the students meet the pre-tests
+before the first week's material and must submit them to move on, as
+with the sibling terminal quizzes.
+The end-of-course debugging quiz joins the module that closes the
+course, followed by the end-of-course questionnaire.
+The positions continue the items already in those modules, and Canvas
+renumbers should the modules change.
+
 <<[[quiz-background.json]]>>=
 {
   "quiz_type": "new",
@@ -47,6 +62,8 @@ distinguishable for students and analysis alike.
     "title": "Diagnostic quiz: your programming background",
     "instructions": "<p>This quiz maps your programming background so that we can adapt the course. It is not graded and there are no wrong answers. Please answer on your own, without help from others or from tools.</p>",
     "points_possible": 0,
+    "modules": [{"module": "^Översikt Python-delen$", "position": 5,
+                 "completion_requirement": "must_submit"}],
     <<scheduling settings>>
     "quiz_settings": {
       <<interaction settings>>
@@ -66,6 +83,8 @@ distinguishable for students and analysis alike.
     "title": "Debugging quiz: what you know already",
     "instructions": "<p>This quiz checks what you already know about finding and fixing errors in programs, so that we can adapt the course. The questions show Python code; if you have not programmed before, answer as well as you can&mdash;guessing is fine, and a low score is expected and completely okay. You will see your score afterwards, but not the correct answers&mdash;the course will teach you those. The score does not affect your grade. Please answer on your own, without help from others or from tools.</p>",
     "points_possible": 8,
+    "modules": [{"module": "^Översikt Python-delen$", "position": 6,
+                 "completion_requirement": "must_submit"}],
     <<scheduling settings>>
     "quiz_settings": {
       <<interaction settings>>
@@ -91,6 +110,8 @@ before measures preparation, not what the course left behind.
     "title": "Debugging quiz: what you know now",
     "instructions": "<p>This quiz repeats the debugging questions from the start-of-course quiz, so that we can see what you have learned during the course. Afterwards you will see your score and, for each question, the correct answer. The score does not affect your grade. Please answer on your own, without preparation, help or tools.</p>",
     "points_possible": 8,
+    "modules": [{"module": "^Avslutande diagnostiskt prov$", "position": 2,
+                 "completion_requirement": "must_submit"}],
     <<scheduling settings>>
     "quiz_settings": {
       <<interaction settings>>

@@ -52,6 +52,26 @@ ITEM_TITLES = [f"Item {number:02d}" for number in range(1, 21)]
 SURVEY_FILES = {which: f"rspq-{which}.json" for which in SURVEY_TITLES}
 @
 
+The descriptions also place the surveys in the course's modules, as
+the quizzes of \cref{app:quiz} do: a [[modules]] entry names the
+module by a regular expression, the position in it, and what completes
+the item.
+The start survey follows the background quiz and the debugging quiz at
+the end of the module that introduces the Python part, which every
+later Python module requires; the end survey follows the end-of-course
+debugging quiz in the module that closes the course.
+The students must submit the survey to complete the module, as with
+the quizzes.
+
+<<the instrument as constants>>=
+MODULES = {
+    "start": [{"module": "^Översikt Python-delen$", "position": 7,
+               "completion_requirement": "must_submit"}],
+    "end": [{"module": "^Avslutande diagnostiskt prov$", "position": 3,
+             "completion_requirement": "must_submit"}],
+}
+@
+
 The items and the five responses are those of the questionnaire as
 printed in the appendix of \textcite{RSPQ2F}, verbatim
 (\cref{approach-measure}); choosing response \(k\) scores \(k\) on the
@@ -208,6 +228,7 @@ def survey(which):
             "title": SURVEY_TITLES[which],
             "instructions": INSTRUCTIONS[which],
             "points_possible": 0,
+            "modules": MODULES[which],
             "time_limit": None,
             "due_at": None,
             "unlock_at": None,
