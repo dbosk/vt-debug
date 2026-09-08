@@ -7,7 +7,7 @@ title: Information till lärare och assistenter som deltar i forskningsstudien
 
 ### Vad studien handlar om
 
-Kursen ingår i en forskningsstudie i datalogididaktik om hur studenter
+Kursen ingår i en forskningsstudie i datadidaktik om hur studenter
 felsöker sina program och vilka missuppfattningar de har om
 programmering. Som jämförelsepunkt för studenternas felsökning vill vi
 också se hur erfarna programmerare felsöker: vilka mönster ni använder
