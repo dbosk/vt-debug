@@ -1016,12 +1016,25 @@ The analyses identify students by login ID rather than by name
 (\cref{app:student-identity}), and the coding sheet is the only place the
 name and the pseudonymised data meet; the open answers are pre-coded by a
 language model into columns of their own before a human coder verifies
-them (\cref{app:quiz-analysis}), and no answer is sent to such a model
-before the processing terms are settled in the review below.
-An application for ethical review of the course's data collection has
-been drafted (the working draft accompanies this paper's source as
-\texttt{ethics-application-prgi26.md}) but not yet filed; no collected
-data is used for research before the review is decided.
-% XXX(#10) Ethical review application for the prgi26 data collection:
-% drafted (ethics-application-prgi26.md), not yet filed; add the
-% reference number and its terms once decided.
+them (\cref{app:quiz-analysis}), and the model sees only anonymised
+text---the analysis program strips the identifiers and redacts
+incidental sensitive content before the call and joins the suggested
+codes back itself---so no answer is sent to a model before that step is
+in place.
+The collection was assessed against the Swedish Ethics Review Act
+\autocite{Etikprovningslagen} with the institution's checklist: it
+processes only ordinary personal data (a school's type of principal is
+not a special category, the R-SPQ-2F measures approach to learning, and
+the recordings are not processed to identify anyone), the teaching is
+not manipulated for research, and there is neither an intervention nor
+an obvious risk of harm, so the act does not apply and no approval from
+the Ethics Review Authority is required; the institution's
+research-ethics advisor confirmed the assessment on 2026-09-01.
+The personal data is processed under the GDPR with the institution as
+controller: the students receive written information on the purpose,
+the data---what learnlog records and when, in particular---its handling
+and their rights, linked from the consent item; consent is opt-in and
+can be withdrawn at any time, and the analysis uses pseudonymised data
+only.
+The assessment accompanies this paper's source as
+\texttt{ethics-application-prgi26.md}.
