@@ -82,7 +82,8 @@ Answered descriptively, and by testing \cref{h:school}:
 The background quiz asks which schools the student went to
 (\cref{prior-knowledge}); the principal of each is looked up in
 Skolverket's register once the answers are coded (\cref{school-lookup}).
-We then relate the huvudman type to the approach measure
+We then relate the huvudman type, and the school itself where enough
+students share one, to the approach measure
 (\cref{approach-measure,end-measure}) and to the outcomes the study
 already has---the debugging test and its gain
 (\cref{prior-knowledge,end-measure}), the companion study's concept
@@ -912,6 +913,11 @@ model that pre-codes the other open answers; the model never sees the
 school answers at all, because who ran a school is a fact to be looked up
 rather than a judgement to be made.
 The coder verifies each suggestion, and the verified column is the datum.
+Alongside the type, the lookup records the register's code for the school
+unit, which the coding sheet replaces with a study code of its own before
+anything leaves it: the analysis data carries that code, so that one
+school can be told from another without being named, and the key from
+code to unit stays in the sheet with the names and municipalities.
 Four of the codes are the register's own categories---\emph{kommunal},
 \emph{enskild}, \emph{region} and \emph{statlig}---and three cover what
 the register cannot settle: \emph{abroad} for schooling outside Sweden,
@@ -939,6 +945,11 @@ across the stages; the headline comparison is the binary one, kommunal
 against enskild, at each stage and above all at gymnasiet, where
 \cref{h:school} expects the difference to be clearest, and the remaining
 codes are reported as they fall rather than pooled into either side.
+Below the classes of schools we look at the schools themselves: where at
+least five students of the cohort attended the same unit at a stage,
+that unit's students are compared with the rest on the same measures,
+under the unit's code; smaller groups are not compared, and no unit is
+named anywhere.
 Against that split we report the R-SPQ-2F deep and surface scores
 (\cref{approach-measure,end-measure}) and the outcomes the study already
 collects: the debugging test at the start and at the end and the gain
@@ -976,19 +987,68 @@ correspond to the patterns in the students' reasoning.
 \label{ethics}
 
 Participation in the study is opt-in and requires informed consent; the
-students' grades are unaffected by participation, and the logs are collected
+students' grades are unaffected by participation, and the data is collected
 and analysed pseudonymously.
 (The consent item opens the background quiz, \cref{app:quiz}, an
 arrangement kept from the course's earlier diagnostic tests.)
+That one consent covers every source of student data the study has: the
+background quiz itself, school questions included
+(\cref{prior-knowledge}); the debugging quiz at the start and the end
+(\cref{prior-knowledge,end-measure}); both administrations of the
+R-SPQ-2F (\cref{approach-measure,app:rspq}); the learnlog data
+(\cref{learnlog-data}); the course-material use recorded by the learning
+platform and the interactive material (\cref{material-use}); and being
+asked about the think-aloud sessions (\cref{think-aloud}).
+The companion study's concept quizzes run in the same course under a
+consent item of their own, in the same wording; each study filters its
+extraction by the consent its own instrument collected.
 The learnlog data contains the students' source code and program
 interactions, but no more than what the students already submit with their
-lab solutions.
+lab solutions; it is, however, collected continuously, so it may catch
+self-study runs and not only lab work, and the students are told exactly
+what it records before they consent.
+The think-aloud subsample is asked separately and recorded only with
+explicit consent; the recordings are the most identifiable data the study
+holds, they are never published, and quotations from the transcripts are
+published only anonymised.
+The teachers and teaching assistants of the baseline
+(\cref{teacher-baseline}) are participants in their own right: they
+consent separately, declining has no bearing on their duties, and their
+data is pseudonymised like the students'.
+The agent episodes (\cref{teacher-baseline}) contain no personal data.
 The school questions (\cref{prior-knowledge}) collect personal data of a
 further kind---where a student went to school---under the same consent as
 the rest of the background quiz, and pseudonymously like everything else.
-The school names serve only the register lookup: once the huvudman type of
-each stage has been determined and verified (\cref{school-lookup}), it is
-the type that enters the analysis data, and the names and municipalities
-stay in the coding sheet.
-% XXX(#10) Ethical review application for prgi26 data collection: reference number
-% and details to be added.
+The school names serve only the register lookup: once the huvudman type
+and the unit of each stage have been determined and verified
+(\cref{school-lookup}), the type and a pseudonymous code for the unit
+enter the analysis data, and the names, the municipalities and the key
+from code to unit stay in the coding sheet; no school is named in what is
+published, and single schools are compared only in groups of at least
+five students.
+The analyses identify students by login ID rather than by name
+(\cref{app:student-identity}), and the coding sheet is the only place the
+name and the pseudonymised data meet; the open answers are pre-coded by a
+language model into columns of their own before a human coder verifies
+them (\cref{app:quiz-analysis}), and the model sees only anonymised
+text---the analysis program strips the identifiers and redacts
+incidental sensitive content before the call and joins the suggested
+codes back itself---so no answer is sent to a model before that step is
+in place.
+The collection was assessed against the Swedish Ethics Review Act
+\autocite{Etikprovningslagen} with the institution's checklist: it
+processes only ordinary personal data (a school's type of principal is
+not a special category, the R-SPQ-2F measures approach to learning, and
+the recordings are not processed to identify anyone), the teaching is
+not manipulated for research, and there is neither an intervention nor
+an obvious risk of harm, so the act does not apply and no approval from
+the Ethics Review Authority is required; the institution's
+research-ethics advisor confirmed the assessment on 2026-09-01.
+The personal data is processed under the GDPR with the institution as
+controller: the students receive written information on the purpose,
+the data---what learnlog records and when, in particular---its handling
+and their rights, linked from the consent item; consent is opt-in and
+can be withdrawn at any time, and the analysis uses pseudonymised data
+only.
+The assessment accompanies this paper's source as
+\texttt{ethics-application-prgi26.md}.
